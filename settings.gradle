@@ -1,0 +1,3 @@
+rootProject.name = "mongo-spark-lab"
+
+include 'client', 'server'
