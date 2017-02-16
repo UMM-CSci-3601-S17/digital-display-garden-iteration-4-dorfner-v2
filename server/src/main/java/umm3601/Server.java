@@ -6,6 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import umm3601.todo.ToDoController;
 import umm3601.user.UserController;
+import umm3601.mongotest.Mongotest;
 
 import java.io.IOException;
 
@@ -16,6 +17,10 @@ public class Server {
         Gson gson = new Gson();
         UserController userController = new UserController();
         ToDoController toDoController = new ToDoController();
+
+        // Connect to default mongo Database:
+        Mongotest mongotest = new Mongotest();
+        mongotest.connectToMongo();
 
         options("/*", (request, response) -> {
 
@@ -28,7 +33,7 @@ public class Server {
             if (accessControlRequestMethod != null) {
                 response.header("Access-Control-Allow-Methods", accessControlRequestMethod);
             }
-
+ 
             return "OK";
         });
 
