@@ -49,27 +49,14 @@ public class Server {
         // List users
         get("api/users", (req, res) -> {
             res.type("application/json");
-            return gson.toJson(userController.listUsers(req.queryMap().toMap()));
+            return userController.listUsers(req.queryMap().toMap());
         });
 
         // See specific user
         get("api/users/:id", (req, res) -> {
             res.type("application/json");
             String id = req.params("id");
-            return gson.toJson(userController.getUser(id));
-        });
-
-        // List todos
-        get("api/todos", (req, res) -> {
-            res.type("application/json");
-            return gson.toJson(toDoController.listToDos(req.queryMap().toMap()));
-        });
-
-        // See specific todo
-        get("api/todos/:id", (req, res) -> {
-            res.type("application/json");
-            String id = req.params("id");
-            return gson.toJson(toDoController.getToDo(id));
+            return userController.getUser(id);
         });
 
         // Handle "404" file not found requests:

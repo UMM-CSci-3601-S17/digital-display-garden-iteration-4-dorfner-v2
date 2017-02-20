@@ -1,43 +1,70 @@
 package umm3601.user;
 
 import com.google.gson.Gson;
+import com.mongodb.MongoClient;
+import com.mongodb.ServerAddress;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import static com.mongodb.client.model.Filters.*;
+import com.mongodb.util.JSON;
+import org.bson.Document;
+import org.bson.types.ObjectId;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Map;
 
 public class UserController {
 
-    private User[] users;
+    private final MongoDatabase db;
 
     public UserController() throws IOException {
-        Gson gson = new Gson();
-        FileReader reader = new FileReader("src/main/data/users.json");
-        users = gson.fromJson(reader, User[].class);
+        // Set up our server address
+        // (Default host: 'localhost', default port: 27017)
+        ServerAddress testAddress = new ServerAddress();
+
+        // Try connecting to the server
+        //MongoClient mongoClient = new MongoClient(testAddress, credentials);
+        MongoClient mongoClient = new MongoClient(); // Defaults!
+
+        // Try connecting to a database
+        db = mongoClient.getDatabase("testdb");
     }
 
     // List users
-    public User[] listUsers(Map<String, String[]> queryParams) {
-        User[] filteredUsers = users;
+    public String listUsers(Map<String, String[]> queryParams) {
+        MongoCollection<Document> documents = db.getCollection("users");
 
-        // Filter age if defined
-        if(queryParams.containsKey("age")) {
-            int age = Integer.parseInt(queryParams.get("age")[0]);
-            filteredUsers = filterUsersByAge(filteredUsers, age);
+        Document filterDoc = new Document();
+
+        if (queryParams.containsKey("age")) {
+            int targetAge = Integer.parseInt(queryParams.get("age")[0]);
+            filterDoc = filterDoc.append("age", targetAge);
         }
 
-        return filteredUsers;
-    }
+        FindIterable<Document> jsonUsers = documents.find(filterDoc);
 
-    // Filter users by age
-    public User[] filterUsersByAge(User[] filteredUsers, int age) {
-        return Arrays.stream(filteredUsers).filter(x -> x.age == age).toArray(User[]::new);
+        JSON json = new JSON();
+
+        String serialize = json.serialize(jsonUsers);
+
+        return serialize;
     }
 
     // Get a single user
-    public User getUser(String id) {
-        return Arrays.stream(users).filter(x -> x._id.equals(id)).findFirst().orElse(null);
+    public String getUser(String id) {
+        FindIterable<Document> jsonUsers
+                = db.getCollection("users")
+                    .find(eq("_id", new ObjectId(id)));
+
+        Iterator<Document> iterator = jsonUsers.iterator();
+
+        Document user = iterator.next();
+
+        return user.toJson();
     }
 
 }
