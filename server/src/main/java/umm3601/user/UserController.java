@@ -1,14 +1,19 @@
 package umm3601.user;
 
 import com.mongodb.MongoClient;
+import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Accumulators;
+import com.mongodb.client.model.Aggregates;
+import com.mongodb.client.model.Sorts;
 import com.mongodb.util.JSON;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -58,6 +63,19 @@ public class UserController {
         Document user = iterator.next();
 
         return user.toJson();
+    }
+
+    // Get the average age of all users by company
+    public String getAverageAgeByCompany() {
+        AggregateIterable<Document> documents
+                = userCollection.aggregate(
+                Arrays.asList(
+                        Aggregates.group("$company",
+                                Accumulators.avg("averageAge", "$age")),
+                        Aggregates.sort(Sorts.ascending("_id"))
+                ));
+        System.err.println(JSON.serialize(documents));
+        return JSON.serialize(documents);
     }
 
 }

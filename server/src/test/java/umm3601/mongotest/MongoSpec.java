@@ -1,28 +1,35 @@
 package umm3601.mongotest;
 
 import com.mongodb.MongoClient;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import static com.mongodb.client.model.Filters.*;
-import static com.mongodb.client.model.Projections.*;
+import com.mongodb.client.*;
+import com.mongodb.client.model.Accumulators;
+import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Sorts;
 import org.bson.Document;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static com.mongodb.client.model.Filters.*;
+import static com.mongodb.client.model.Projections.*;
+import static org.junit.Assert.*;
 
 /**
  * Some simple "tests" that demonstrate our ability to
  * connect to a Mongo database and run some basic queries
  * against it.
+ *
+ * Note that none of these are actually tests of any of our
+ * code; they are mostly demonstrations of the behavior of
+ * the MongoDB Java libraries. Thus if they test anything,
+ * they test that code, and perhaps our understanding of it.
+ *
+ * To test "our" code we'd want the tests to confirm that
+ * the behavior of methods in things like the UserController
+ * do the "right" thing.
  *
  * Created by mcphee on 20/2/17.
  */
@@ -58,7 +65,7 @@ public class MongoSpec {
         userDocuments.insertMany(testUsers);
     }
 
-    private List<Document> intoList(FindIterable<Document> documents) {
+    private List<Document> intoList(MongoIterable<Document> documents) {
         List<Document> users = new ArrayList<>();
         documents.into(users);
         return users;
@@ -148,6 +155,51 @@ public class MongoSpec {
         assertNotNull("First should have email", docs.get(0).get("email"));
         assertNull("First shouldn't have 'company'", docs.get(0).get("company"));
         assertNull("First should not have '_id'", docs.get(0).get("_id"));
+    }
+
+    @Test
+    public void ageCounts() {
+        AggregateIterable<Document> documents
+                = userDocuments.aggregate(
+                Arrays.asList(
+                        /*
+                         * Groups data by the "age" field, and then counts
+                         * the number of documents with each given age.
+                         * This creates a new "constructed document" that
+                         * has "age" as it's "_id", and the count as the
+                         * "ageCount" field.
+                         */
+                        Aggregates.group("$age",
+                                Accumulators.sum("ageCount", 1)),
+                        Aggregates.sort(Sorts.ascending("_id"))
+                )
+        );
+        List<Document> docs = intoList(documents);
+        assertEquals("Should be two distinct ages", 2, docs.size());
+        assertEquals(docs.get(0).get("_id"), 25);
+        assertEquals(docs.get(0).get("ageCount"), 1);
+        assertEquals(docs.get(1).get("_id"), 37);
+        assertEquals(docs.get(1).get("ageCount"), 2);
+    }
+
+    @Test
+    public void averageAge() {
+        AggregateIterable<Document> documents
+                = userDocuments.aggregate(
+                        Arrays.asList(
+                                Aggregates.group("$company",
+                                        Accumulators.avg("averageAge", "$age")),
+                                Aggregates.sort(Sorts.ascending("_id"))
+                        ));
+        List<Document> docs = intoList(documents);
+        assertEquals("Should be three companies", 3, docs.size());
+
+        assertEquals("Frogs, Inc.", docs.get(0).get("_id"));
+        assertEquals(37.0, docs.get(0).get("averageAge"));
+        assertEquals("IBM", docs.get(1).get("_id"));
+        assertEquals(37.0, docs.get(1).get("averageAge"));
+        assertEquals("UMM", docs.get(2).get("_id"));
+        assertEquals(25.0, docs.get(2).get("averageAge"));
     }
 
 }

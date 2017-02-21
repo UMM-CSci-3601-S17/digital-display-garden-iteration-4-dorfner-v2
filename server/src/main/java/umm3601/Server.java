@@ -49,6 +49,12 @@ public class Server {
             return userController.getUser(id);
         });
 
+        // Get average ages by company
+        get("api/avgUserAgeByCompany", (req, res) -> {
+            res.type("application/json");
+            return userController.getAverageAgeByCompany();
+        });
+
         // Handle "404" file not found requests:
         notFound((req, res) -> {
             res.type("text");
