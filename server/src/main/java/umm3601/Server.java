@@ -1,6 +1,5 @@
 package umm3601;
 
-import umm3601.mongotest.Mongotest;
 import umm3601.user.UserController;
 
 import java.io.IOException;
@@ -10,12 +9,6 @@ import static spark.Spark.*;
 
 public class Server {
     public static void main(String[] args) throws IOException {
-
-        /*
-         * You should probably delete this and the whole `mongotest` package after you've
-         * gotten what you need out of those examples.
-         */
-        testDatabaseConnection();
 
         UserController userController = new UserController();
 
@@ -65,13 +58,4 @@ public class Server {
 
     }
 
-    /**
-     * You should probably delete this and the whole `mongotest` package after you've
-     * gotten what you need out of those examples.
-     */
-    private static void testDatabaseConnection() {
-        // Connect to default mongo Database:
-        Mongotest mongotest = new Mongotest();
-        mongotest.connectToMongo();
-    }
 }

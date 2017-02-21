@@ -5,7 +5,7 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import static com.mongodb.client.model.Filters.*;
-//import static com.mongodb.client.model.Projections.*;
+import static com.mongodb.client.model.Projections.*;
 import com.mongodb.client.model.Sorts;
 import org.bson.Document;
 
@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 /**
  * Some simple "tests" that demonstrate our ability to
@@ -34,7 +36,7 @@ public class MongoSpec {
         MongoDatabase db = mongoClient.getDatabase("testingdb");
         userDocuments = db.getCollection("users");
         userDocuments.drop();
-        List<Document> testUsers = new ArrayList<Document>();
+        List<Document> testUsers = new ArrayList<>();
         testUsers.add(Document.parse("{\n" +
                 "                    name: \"Chris\",\n" +
                 "                    age: 25,\n" +
@@ -57,7 +59,7 @@ public class MongoSpec {
     }
 
     private List<Document> intoList(FindIterable<Document> documents) {
-        List<Document> users = new ArrayList<Document>();
+        List<Document> users = new ArrayList<>();
         documents.into(users);
         return users;
     }
@@ -99,22 +101,53 @@ public class MongoSpec {
         assertEquals("Second should be Pat", "Pat", docs.get(1).get("name"));
     }
 
-    /*
-        System.out.println("\nOVER 25 and IBMers");
-        documents.find(and(gt("age", 25), eq("company", "IBM"))).forEach(printBlock);
+    @Test
+    public void over25AndIbmers() {
+        FindIterable<Document> documents
+                = userDocuments.find(and(gt("age", 25),
+                                         eq("company", "IBM")));
+        List<Document> docs = intoList(documents);
+        assertEquals("Should be 1", 1, docs.size());
+        assertEquals("First should be Pat", "Pat", docs.get(0).get("name"));
+    }
 
-        System.out.println("\nJUST NAME AND EMAIL");
-        documents.find().projection(fields(include("name", "email"))).forEach(printBlock);
+    @Test
+    public void justNameAndEmail() {
+        FindIterable<Document> documents
+                = userDocuments.find().projection(fields(include("name", "email")));
+        List<Document> docs = intoList(documents);
+        assertEquals("Should be 3", 3, docs.size());
+        assertEquals("First should be Chris", "Chris", docs.get(0).get("name"));
+        assertNotNull("First should have email", docs.get(0).get("email"));
+        assertNull("First shouldn't have 'company'", docs.get(0).get("company"));
+        assertNotNull("First should have '_id'", docs.get(0).get("_id"));
+    }
 
-        System.out.println("\nJUST NAME AND EMAIL, NO IDs");
-        documents.find().projection(fields(include("name", "email"), excludeId())).forEach(printBlock);
+    @Test
+    public void justNameAndEmailNoId() {
+        FindIterable<Document> documents
+                = userDocuments.find()
+                .projection(fields(include("name", "email"), excludeId()));
+        List<Document> docs = intoList(documents);
+        assertEquals("Should be 3", 3, docs.size());
+        assertEquals("First should be Chris", "Chris", docs.get(0).get("name"));
+        assertNotNull("First should have email", docs.get(0).get("email"));
+        assertNull("First shouldn't have 'company'", docs.get(0).get("company"));
+        assertNull("First should not have '_id'", docs.get(0).get("_id"));
+    }
 
-        System.out.println("\nJUST NAME AND EMAIL, NO IDs, SORTED BY COMPANY");
-        documents.find()
+    @Test
+    public void justNameAndEmailNoIdSortedByCompany() {
+        FindIterable<Document> documents
+                = userDocuments.find()
                 .sort(Sorts.ascending("company"))
-                .projection(fields(include("name", "email"), excludeId()))
-                .forEach(printBlock);
-
-     */
+                .projection(fields(include("name", "email"), excludeId()));
+        List<Document> docs = intoList(documents);
+        assertEquals("Should be 3", 3, docs.size());
+        assertEquals("First should be Jamie", "Jamie", docs.get(0).get("name"));
+        assertNotNull("First should have email", docs.get(0).get("email"));
+        assertNull("First shouldn't have 'company'", docs.get(0).get("company"));
+        assertNull("First should not have '_id'", docs.get(0).get("_id"));
+    }
 
 }
