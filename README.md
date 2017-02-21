@@ -1,4 +1,5 @@
 ## UMM CSci 3601 Lab 4: Mongo, Spark, etc.
+[![Build Status](https://travis-ci.org/UMM-CSci-3601/3601-lab4_mongo.svg?branch=master)](https://travis-ci.org/UMM-CSci-3601/3601-lab4_mongo)
 
 In this lab, you'll be working to write a new todo API, using SparkJava,
 which pulls todo data from a Mongo database (rather than from 'flat' files).
