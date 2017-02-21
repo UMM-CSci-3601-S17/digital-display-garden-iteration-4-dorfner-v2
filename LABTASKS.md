@@ -25,7 +25,7 @@ data it sends out in reply to requests.
 - Re-implement the ToDo API, this time pulling data from MongoDB rather
 than from a flat JSON file.
 
-### 3 Meta 5 Me
+### Summary Information About ToDos - 3 Meta 5 Me
 
 - Implement an API which provides summary information about a group of
 ToDos in the following format:
