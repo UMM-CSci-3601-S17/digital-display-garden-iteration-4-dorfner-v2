@@ -22,10 +22,37 @@ data it sends out in reply to requests.
 
 ### More Todos!
 
-- Use :bangbang: INSERT MONGO LIBRARY HERE :bangbang: to re-implement
-a todo API, this time getting data from our Mongo database :bangbang:
-INSERT HOSTNAME HERE :bangbang:.
+- Re-implement the ToDo API, this time pulling data from MongoDB rather
+than from a flat JSON file.
 
-- Use the front-end tools you've used to build a nice interface for
-accessing this API.
+### 3 Meta 5 Me
 
+- Implement an API which provides summary information about a group of
+ToDos in the following format:
+
+````
+{
+  percentToDosComplete: Float,
+  categoriesPercentComplete: {
+    groceries: Float,
+    ...
+  }
+  ownersPercentComplete: {
+    ...
+  }
+}
+````
+
+### Make it pretty
+
+- Use the front-end tools you've learned about to build a nice interface for
+accessing these APIs:
+  - You must use [Glyphicons][glyphicons] somewhere
+  - You must use at least two of the following things:
+    - Navs
+    - Pagination
+    - Progress Bars
+    - Badges / Labels
+    - ngStyle directive
+
+[glyphicons]: https://getbootstrap.com/components/#glyphicons
