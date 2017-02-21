@@ -24,10 +24,16 @@ data it sends out in reply to requests.
 
 - Re-implement the ToDo API, this time pulling data from MongoDB rather
 than from a flat JSON file.
+- When displaying the ToDos in your Angular front-end, make thoughtful decisions
+about whether work like filtering should be done in Angular or via database queries.
+It would be reasonable, for example, to have the database filter out all the ToDos
+belonging to a single user, but let Angular filter by category or status.
 
-### Summary Information About ToDos - 3 Meta 5 Me
+### Summary Information About ToDos
 
-- Implement an API which provides summary information about a group of
+To see an example of using the database and the server to do some useful work
+(instead of having everything happen in Angular), implement an API endpoint
+`/api/todoSummary` which provides summary information about a group of
 ToDos in the following format:
 
 ````
@@ -38,21 +44,29 @@ ToDos in the following format:
     ...
   }
   ownersPercentComplete: {
+    Blanche: Float,
     ...
   }
 }
 ````
+
+So you should add a new endpoint to your Spark routes, and then have that call
+some method (possibly in a new class?) that queries the DB for the relevant data
+and assembles this JSON response. Note that you can use 
+[MongoDB aggregation](http://mongodb.github.io/mongo-java-driver/3.4/driver/tutorials/aggregation/)
+to do most of this calculation without having to actually download all the todos,
+organize, and count them yourself.
 
 ### Make it pretty
 
 - Use the front-end tools you've learned about to build a nice interface for
 accessing these APIs:
   - You must use [Glyphicons][glyphicons] somewhere
-  - You must use at least two of the following things:
-    - Navs
-    - Pagination
-    - Progress Bars
-    - Badges / Labels
-    - ngStyle directive
+  - You must use at least two of the following nifty Bootstrap features:
+    - [Navs](http://getbootstrap.com/components/#nav)
+    - [Pagination](http://getbootstrap.com/components/#pagination)
+    - [Progress Bars](http://getbootstrap.com/components/#progress)
+    - [Badges](http://getbootstrap.com/components/#badges) or [Labels](http://getbootstrap.com/components/#labels)
+    - [ngStyle directive](https://docs.angularjs.org/api/ng/directive/ngStyle)
 
 [glyphicons]: https://getbootstrap.com/components/#glyphicons
