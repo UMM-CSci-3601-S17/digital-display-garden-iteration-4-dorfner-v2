@@ -1,26 +1,23 @@
 package umm3601;
 
-import static spark.Spark.*;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import umm3601.todo.ToDoController;
-import umm3601.user.UserController;
 import umm3601.mongotest.Mongotest;
+import umm3601.user.UserController;
 
 import java.io.IOException;
+
+import static spark.Spark.*;
 
 
 public class Server {
     public static void main(String[] args) throws IOException {
 
-        Gson gson = new Gson();
-        UserController userController = new UserController();
-        ToDoController toDoController = new ToDoController();
+        /*
+         * You should probably delete this and the whole `mongotest` package after you've
+         * gotten what you need out of those examples.
+         */
+        testDatabaseConnection();
 
-        // Connect to default mongo Database:
-        Mongotest mongotest = new Mongotest();
-        mongotest.connectToMongo();
+        UserController userController = new UserController();
 
         options("/*", (request, response) -> {
 
@@ -66,5 +63,15 @@ public class Server {
             return "Sorry, we couldn't find that!";
         });
 
+    }
+
+    /**
+     * You should probably delete this and the whole `mongotest` package after you've
+     * gotten what you need out of those examples.
+     */
+    private static void testDatabaseConnection() {
+        // Connect to default mongo Database:
+        Mongotest mongotest = new Mongotest();
+        mongotest.connectToMongo();
     }
 }

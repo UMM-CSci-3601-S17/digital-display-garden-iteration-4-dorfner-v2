@@ -4,11 +4,12 @@ package umm3601.mongotest;
  * Inspired by:
  * http://mongodb.github.io/mongo-java-driver/3.4/driver/getting-started/quick-start/
  *
+ * You should probably remove this and the whole `mongotest` package once you've
+ * extracted what you need out of them.
  */
 
 import com.mongodb.Block;
 import com.mongodb.MongoClient;
-import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import static com.mongodb.client.model.Filters.*;
@@ -20,12 +21,7 @@ import org.bson.Document;
 public class Mongotest {
 
     public void connectToMongo() {
-        Block<Document> printBlock = new Block<Document>() {
-            @Override
-            public void apply(final Document document) {
-                System.out.println(document.toJson());
-            }
-        };
+        Block<Document> printBlock = document -> System.out.println(document.toJson());
 
         //// Set up our authentication credentials
         //// Thanks to: http://stackoverflow.com/a/21860551
@@ -43,7 +39,7 @@ public class Mongotest {
 
         // Set up our server address
         // (Default host: 'localhost', default port: 27017)
-        ServerAddress testAddress = new ServerAddress();
+        // ServerAddress testAddress = new ServerAddress();
 
         // Try connecting to the server
         //MongoClient mongoClient = new MongoClient(testAddress, credentials);
