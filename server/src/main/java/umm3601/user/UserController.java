@@ -1,43 +1,81 @@
 package umm3601.user;
 
-import com.google.gson.Gson;
+import com.mongodb.MongoClient;
+import com.mongodb.client.AggregateIterable;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Accumulators;
+import com.mongodb.client.model.Aggregates;
+import com.mongodb.client.model.Sorts;
+import com.mongodb.util.JSON;
+import org.bson.Document;
+import org.bson.types.ObjectId;
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Map;
+
+import static com.mongodb.client.model.Filters.eq;
 
 public class UserController {
 
-    private User[] users;
+    private final MongoCollection<Document> userCollection;
 
     public UserController() throws IOException {
-        Gson gson = new Gson();
-        FileReader reader = new FileReader("src/main/data/users.json");
-        users = gson.fromJson(reader, User[].class);
+        // Set up our server address
+        // (Default host: 'localhost', default port: 27017)
+        // ServerAddress testAddress = new ServerAddress();
+
+        // Try connecting to the server
+        //MongoClient mongoClient = new MongoClient(testAddress, credentials);
+        MongoClient mongoClient = new MongoClient(); // Defaults!
+
+        // Try connecting to a database
+        MongoDatabase db = mongoClient.getDatabase("test");
+
+        userCollection = db.getCollection("users");
     }
 
     // List users
-    public User[] listUsers(Map<String, String[]> queryParams) {
-        User[] filteredUsers = users;
+    public String listUsers(Map<String, String[]> queryParams) {
+        Document filterDoc = new Document();
 
-        // Filter age if defined
-        if(queryParams.containsKey("age")) {
-            int age = Integer.parseInt(queryParams.get("age")[0]);
-            filteredUsers = filterUsersByAge(filteredUsers, age);
+        if (queryParams.containsKey("age")) {
+            int targetAge = Integer.parseInt(queryParams.get("age")[0]);
+            filterDoc = filterDoc.append("age", targetAge);
         }
 
-        return filteredUsers;
-    }
+        FindIterable<Document> matchingUsers = userCollection.find(filterDoc);
 
-    // Filter users by age
-    public User[] filterUsersByAge(User[] filteredUsers, int age) {
-        return Arrays.stream(filteredUsers).filter(x -> x.age == age).toArray(User[]::new);
+        return JSON.serialize(matchingUsers);
     }
 
     // Get a single user
-    public User getUser(String id) {
-        return Arrays.stream(users).filter(x -> x._id.equals(id)).findFirst().orElse(null);
+    public String getUser(String id) {
+        FindIterable<Document> jsonUsers
+                = userCollection
+                    .find(eq("_id", new ObjectId(id)));
+
+        Iterator<Document> iterator = jsonUsers.iterator();
+
+        Document user = iterator.next();
+
+        return user.toJson();
+    }
+
+    // Get the average age of all users by company
+    public String getAverageAgeByCompany() {
+        AggregateIterable<Document> documents
+                = userCollection.aggregate(
+                Arrays.asList(
+                        Aggregates.group("$company",
+                                Accumulators.avg("averageAge", "$age")),
+                        Aggregates.sort(Sorts.ascending("_id"))
+                ));
+        System.err.println(JSON.serialize(documents));
+        return JSON.serialize(documents);
     }
 
 }
