@@ -26,7 +26,7 @@ pretty annoying to deal with.
 - The familiar **run** Gradle task will still run your SparkJava server.
 (which is available at ``localhost:4567``)
 - The **build** task will still _build_ the entire project (but not run it)
-- The **runClient** task will build and run the client side of your project (available at localhost:9000)
+- The **runClient** task will build and run the client side of your project (available at ``localhost:9000``)
 
 The major difference between this lab and lab #3 is that, here, your data
 (users and todos) will be stored in a database rather than as "flat" JSON files
@@ -37,7 +37,7 @@ test database. You don't *really* need to worry about how this is set up,
 but you *do* need to know a couple of tricks to help you use it:
 
 - To load new seed data into your local test database, use the gradle task:
-*seedMongoDB*.
+**seedMongoDB**.
 - *Seed* data is stored in the aptly named JSON files.
 
 ## Testing and Continuous Integration
