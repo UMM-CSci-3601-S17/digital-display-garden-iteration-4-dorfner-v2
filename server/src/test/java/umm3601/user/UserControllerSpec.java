@@ -1,9 +1,9 @@
 package umm3601.user;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.util.JSON;
 import org.bson.*;
 import org.bson.codecs.*;
 import org.bson.codecs.configuration.CodecRegistries;
@@ -54,20 +54,15 @@ public class UserControllerSpec
                 "                    company: \"Frogs, Inc.\",\n" +
                 "                    email: \"jamie@frogs.com\"\n" +
                 "                }"));
-        Document sam = Document.parse("{\n" +
-                "                    name: \"Sam\",\n" +
-                "                    age: 45,\n" +
-                "                    company: \"Frogs, Inc.\",\n" +
-                "                    email: \"sam@frogs.com\"\n" +
-                "                }");
         ObjectId samsId = new ObjectId();
+        BasicDBObject sam = new BasicDBObject("_id", samsId);
+        sam = sam.append("name", "Sam")
+                .append("age", 45)
+                .append("company", "Frogs, Inc.")
+                .append("email", "sam@frogs.com");
         samsIdString = samsId.toHexString();
-        System.out.println(samsIdString);
-        sam.put("_id", JSON.serialize(samsId));
-        System.out.println(sam);
-        testUsers.add(sam);
-        System.out.println(testUsers);
         userDocuments.insertMany(testUsers);
+        userDocuments.insertOne(Document.parse(sam.toJson()));
 
         // It might be important to construct this _after_ the DB is set up
         // in case there are bits in the constructor that care about the state
@@ -98,9 +93,7 @@ public class UserControllerSpec
     public void getAllUsers() {
         Map<String, String[]> emptyMap = new HashMap<>();
         String jsonResult = userController.listUsers(emptyMap);
-        System.out.println(jsonResult);
         BsonArray docs = parseJsonArray(jsonResult);
-        System.out.println(docs);
 
         assertEquals("Should be 4 users", 4, docs.size());
         List<String> names = docs
@@ -117,9 +110,7 @@ public class UserControllerSpec
         Map<String, String[]> argMap = new HashMap<>();
         argMap.put("age", new String[] { "37" });
         String jsonResult = userController.listUsers(argMap);
-        System.out.println(jsonResult);
         BsonArray docs = parseJsonArray(jsonResult);
-        System.out.println(docs);
 
         assertEquals("Should be 2 users", 2, docs.size());
         List<String> names = docs
@@ -134,10 +125,7 @@ public class UserControllerSpec
     @Test
     public void getSamById() {
         String jsonResult = userController.getUser(samsIdString);
-        System.out.println(jsonResult);
         Document sam = Document.parse(jsonResult);
-        System.out.println(sam);
-
         assertEquals("Name should match", "Sam", sam.get("name"));
     }
 }
