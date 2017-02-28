@@ -1,15 +1,12 @@
-## UMM CSci 3601 Lab 4: Mongo, Spark, etc.
-[![Build Status](https://travis-ci.org/UMM-CSci-3601/3601-lab4_mongo.svg?branch=master)](https://travis-ci.org/UMM-CSci-3601/3601-lab4_mongo)
+## UMM CSci Production Template
+#### Based on Lab #4
 
-In this lab, you'll be working to re-implement the ToDO API, this time pulling
-data from a Mongo Database rather than a flat JSON file. You will also be implementing
-a new *summary* API which returns results of processing ToDO data. 
-You will also be implementing a simple client-side application to view this data.
+This is a modification of Lab #4 which includes a slightly different
+gradle configuration
 
 ## Setup
 
-As in the previous lab, you'll be using IntelliJ. Once you've all joined your
-group using GitHub classroom, you can clone your repository using IntelliJ:
+Cloning the project inside IntelliJ:
 
 - When prompted to create a new IntelliJ project, select **yes**.
 - Select **import project from existing model** and select **Gradle.**
@@ -23,26 +20,9 @@ pretty annoying to deal with.
 
 ## Running your project
 
-- The familiar **run** Gradle task will still run your SparkJava server.
-(which is available at ``localhost:4567``)
-- The **build** task will still _build_ the entire project (but not run it)
-- The **runClient** task will build and run the client side of your project (available at ``localhost:9000``)
-
-The major difference between this lab and lab #3 is that, here, your data
-(users and todos) will be stored in a database rather than as "flat" JSON files
-within the server source code.
-
-For the most part, you will be using a local installation of Mongo as a
-test database. You don't *really* need to worry about how this is set up,
-but you *do* need to know a couple of tricks to help you use it:
-
-- To load new seed data into your local test database, use the gradle task:
-**seedMongoDB**.
-- *Seed* data is stored in the aptly named JSON files.
+> ToDo: Write this section
 
 ## Testing and Continuous Integration
-
-This things are mostly the same as they were in Lab #3.
 
 Turn on your repo in [Travis CI][travis], replace the build status image in this README, and push your changes. That will trigger a build with Travis.
 
