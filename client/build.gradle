@@ -20,3 +20,10 @@ task runClient(type: NodeTask) {
 runClient.dependsOn(yarn_install)
 task runClientTests() {}
 runClientTests.dependsOn(yarn_run_test)
+
+
+task buildProdClient(type: NodeTask) {
+    script = file("node_modules/webpack/bin/webpack.js")
+    args = ["--config", "./webpack.prod.js", "--colors"] 
+}
+buildProdClient.dependsOn(yarn_install)
