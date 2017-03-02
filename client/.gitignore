@@ -4,4 +4,4 @@ node
 !typings/globals/node
 yarn
 
-dist/
+build/

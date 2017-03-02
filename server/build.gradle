@@ -20,6 +20,17 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 
+distributions {
+    main {
+        contents {
+	    into('client') {
+		from { project(':client').build.outputs.files }
+		fileMode = 0755
+	    }
+	}
+    }
+}
+
 task runWithTests {
     group = "application"
     description = "Runs the server as a JVM application after testing both it and the client"

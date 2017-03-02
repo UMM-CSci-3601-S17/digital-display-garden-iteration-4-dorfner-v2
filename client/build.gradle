@@ -31,6 +31,10 @@ runClientTests.dependsOn(yarn_run_test)
 task build(type: NodeTask) {
     group = 'Build'
     description = 'Builds the client side of the application using webpack'
+
+    def build = file("build");
+    outputs.dir build
+
     script = file("node_modules/webpack/bin/webpack.js")
     args = ["--config", "./webpack.prod.js", "--colors"] 
 }
