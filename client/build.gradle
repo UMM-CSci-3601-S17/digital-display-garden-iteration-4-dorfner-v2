@@ -13,7 +13,13 @@ node {
     nodeModulesDir = file("${project.projectDir}/")
 }
 
+task clean(type: Delete) {
+	delete 'build'
+}
+
 task runClient(type: NodeTask) {
+    group = 'Application'
+    description = 'Builds the client and runs a live-reloading copy at localhost:9000'
     script = file("node_modules/webpack-dev-server/bin/webpack-dev-server.js")
     args = ["--config", "./webpack.dev.js", "--colors"]
 }
@@ -22,8 +28,11 @@ task runClientTests() {}
 runClientTests.dependsOn(yarn_run_test)
 
 
-task buildProdClient(type: NodeTask) {
+task build(type: NodeTask) {
+    group = 'Build'
+    description = 'Builds the client side of the application using webpack'
     script = file("node_modules/webpack/bin/webpack.js")
     args = ["--config", "./webpack.prod.js", "--colors"] 
 }
-buildProdClient.dependsOn(yarn_install)
+build.dependsOn(yarn_install)
+build.dependsOn(runClientTests)
