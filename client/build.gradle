@@ -1,0 +1,42 @@
+// Client side build.gradle
+// Builds the client-side of the project
+
+plugins {
+    id 'com.moowork.node' version '1.1.1'
+}
+
+node {
+    version = '6.4.0'
+    download = true
+    workDir = file("${project.projectDir}/node")
+    yarnWorkDir = file("${project.projectDir}/yarn")
+    nodeModulesDir = file("${project.projectDir}/")
+}
+
+task clean(type: Delete) {
+	delete 'build'
+}
+
+task runClient(type: NodeTask) {
+    group = 'Application'
+    description = 'Builds the client and runs a live-reloading copy at localhost:9000'
+    script = file("node_modules/webpack-dev-server/bin/webpack-dev-server.js")
+    args = ["--config", "./webpack.dev.js", "--colors"]
+}
+runClient.dependsOn(yarn_install)
+task runClientTests() {}
+runClientTests.dependsOn(yarn_run_test)
+
+
+task build(type: NodeTask) {
+    group = 'Build'
+    description = 'Builds the client side of the application using webpack'
+
+    def build = file("build");
+    outputs.dir build
+
+    script = file("node_modules/webpack/bin/webpack.js")
+    args = ["--config", "./webpack.prod.js", "--colors"] 
+}
+build.dependsOn(yarn_install)
+build.dependsOn(runClientTests)

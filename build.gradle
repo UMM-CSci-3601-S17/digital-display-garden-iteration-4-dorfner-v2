@@ -1,0 +1,29 @@
+evaluationDependsOn ":client"
+evaluationDependsOn ":server"
+
+// Assumes our test database is named "test"
+task clearMongoDB(type: Exec) {
+     group = 'Database'
+     description = 'Drops the local MongoDB test database'
+     executable "mongo"
+     args = ["test", "--eval", "printjson(db.dropDatabase())"]
+}
+
+task seedToDoData(type: Exec) {
+     group = 'Database'
+     description = 'Seeds the todos collection on local test DB using todos.seed.json'
+     executable = "mongoimport"
+     args = ["-d", "test", "-c", "todos", "--file", "todos.seed.json", "--jsonArray"]
+}
+
+task seedUserData(type: Exec) {
+     group = 'Database'
+     description = 'Seeds the users collection on local test DB using users.seed.json'
+     executable = "mongoimport"
+     args = ["-d", "test", "-c", "users", "--file", "users.seed.json", "--jsonArray"]
+}
+
+task seedMongoDB { }
+seedMongoDB.dependsOn(clearMongoDB)
+seedMongoDB.dependsOn(seedToDoData)
+seedMongoDB.dependsOn(seedUserData)
