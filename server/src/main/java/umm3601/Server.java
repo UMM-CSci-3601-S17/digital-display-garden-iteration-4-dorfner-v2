@@ -1,5 +1,6 @@
 package umm3601;
 
+import umm3601.digitalDisplayGarden.ExcelParser;
 import umm3601.user.UserController;
 
 import java.io.IOException;
@@ -9,6 +10,8 @@ import static spark.Spark.*;
 
 public class Server {
     public static void main(String[] args) throws IOException {
+
+        ExcelParser.returnsAnyThing();
 
         UserController userController = new UserController();
 
