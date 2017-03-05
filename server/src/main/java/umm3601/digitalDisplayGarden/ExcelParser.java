@@ -17,12 +17,16 @@ public class ExcelParser {
         String[][] arrayRepresentation = extractFromXLSX();
         String[][] horizontallyCollapsed = collapseHorizontally(arrayRepresentation);
         String[][] verticallyCollapsed = collapseVertically(horizontallyCollapsed);
+        replaceNulls(verticallyCollapsed);
         for(int i = 0; i < 10; i++) {
             System.out.println();
         }
         System.out.println("---------------------- Collapsed Array -------------------");
         printDoubleArray(verticallyCollapsed);
         System.out.println("---------------------- Collapsed Array -------------------");
+
+        String[] keys = getKeys(verticallyCollapsed);
+        printArray(keys);
     }
 
     private static String[][] extractFromXLSX() {
@@ -123,12 +127,52 @@ public class ExcelParser {
     }
 
     private static String[][] trimArrayVertically(String[][] cellValues, int verticalBound){
-        String[][] trimmedArray = new String[verticalBound + 1][];
+        String[][] trimmedArray = new String[verticalBound][];
         for(int i = 1; i <= verticalBound; i++) {
-            trimmedArray[i] = new String[cellValues[i].length];
-            trimmedArray[i] = cellValues[i];
+            trimmedArray[i - 1] = new String[cellValues[i].length];
+            trimmedArray[i - 1] = cellValues[i];
         }
         return trimmedArray;
+    }
+
+    private static void replaceNulls(String[][] cellValues) {
+        for(int i = 0; i < cellValues.length; i++) {
+            for(int j = 0; j < cellValues[i].length; j++) {
+                if(cellValues[i][j] == null) {
+                    cellValues[i][j] = "";
+                }
+            }
+        }
+    }
+
+    private static String[] getKeys(String[][] cellValues){
+        String[] keys = new String[cellValues[0].length];
+
+
+        for(int i = 0; i < cellValues[0].length; i++){
+            keys[i] = cellValues[0][i];
+            for(int j = 1; j < 3; j++){
+                keys[i] = keys[i] + cellValues[j][i];
+            }
+        }
+
+        for (int i = 0; i < keys.length; i++){
+            if(keys[i].equals("#")) keys[i] = "id";
+            if(keys[i].equals("Common Name")) keys[i] = "commonName";
+            if(keys[i].equals("Cultivar")) keys[i] = "cultivar";
+            if(keys[i].equals("Source")) keys[i] = "source";
+            if(keys[i].equals("Garden  Location")) keys[i] = "gardenLocation";
+        }
+
+        return keys;
+    }
+
+    private static void printArray(String[] input){
+        System.out.print("[");
+        for(String str : input){
+            System.out.print(str + ", ");
+        }
+        System.out.println("]");
     }
 
     private static void printDoubleArray(String[][] input){
