@@ -1,5 +1,8 @@
 package umm3601.digitalDisplayGarden;
 
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -8,7 +11,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+
+import org.bson.Document;
 
 public class ExcelParser {
     private static final String FILE_NAME = "/home/Dogxx000/IdeaProjects/digital-display-garden-iteration-1-claudearabo/server/src/main/java/umm3601/digitalDisplayGarden/AccessionList2016.xlsx";
@@ -25,8 +32,7 @@ public class ExcelParser {
         printDoubleArray(verticallyCollapsed);
         System.out.println("---------------------- Collapsed Array -------------------");
 
-        String[] keys = getKeys(verticallyCollapsed);
-        printArray(keys);
+        populateDatabase(verticallyCollapsed);
     }
 
     private static String[][] extractFromXLSX() {
@@ -165,6 +171,24 @@ public class ExcelParser {
         }
 
         return keys;
+    }
+
+    private static void populateDatabase(String[][] cellValues){
+        MongoClient mongoClient = new MongoClient();
+        MongoDatabase test = mongoClient.getDatabase("test");
+        MongoCollection plants = test.getCollection("plants");
+
+        for (int i = 4; i < cellValues.length; i++){
+            String[] keys = getKeys(cellValues);
+            Map<String, String> map = new HashMap<String, String>();
+            for(int j = 0; j < cellValues[i].length; j++){
+                map.put(keys[j], cellValues[i][j]);
+            }
+
+            Document doc = new Document();
+            doc.putAll(map);
+            plants.insertOne(doc);
+        }
     }
 
     private static void printArray(String[] input){
