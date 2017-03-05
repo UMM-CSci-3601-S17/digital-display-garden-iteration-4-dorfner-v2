@@ -16,11 +16,12 @@ public class ExcelParser {
     public static void main(String[] args) {
         String[][] arrayRepresentation = extractFromXLSX();
         String[][] horizontallyCollapsed = collapseHorizontally(arrayRepresentation);
+        String[][] verticallyCollapsed = collapseVertically(horizontallyCollapsed);
         for(int i = 0; i < 10; i++) {
             System.out.println();
         }
         System.out.println("---------------------- Collapsed Array -------------------");
-        printDoubleArray(horizontallyCollapsed);
+        printDoubleArray(verticallyCollapsed);
         System.out.println("---------------------- Collapsed Array -------------------");
     }
 
@@ -101,20 +102,38 @@ public class ExcelParser {
         return null;
     }
 
-    private static String[][] trimArrayHorizontally(String[][] cellValues, int horirzontalBound){
+    private static String[][] collapseVertically(String[][] cellValues){
+        for(int i = cellValues.length - 1; i > 0; i--) {
+            if(!(cellValues[i][0] == null)) {
+                return trimArrayVertically(cellValues, i);
+            }
+        }
+        return null;
+    }
+
+    private static String[][] trimArrayHorizontally(String[][] cellValues, int horizontalBound){
         String[][] trimmedArray = new String[cellValues.length][];
         for(int j = 1; j < cellValues.length; j++) {
-            trimmedArray[j] = new String[horirzontalBound + 1];
-            for (int i = 0; i <= horirzontalBound; i++) {
+            trimmedArray[j] = new String[horizontalBound + 1];
+            for (int i = 0; i <= horizontalBound; i++) {
                 trimmedArray[j][i] = cellValues[j][i];
             }
         }
         return trimmedArray;
     }
 
+    private static String[][] trimArrayVertically(String[][] cellValues, int verticalBound){
+        String[][] trimmedArray = new String[verticalBound + 1][];
+        for(int i = 1; i <= verticalBound; i++) {
+            trimmedArray[i] = new String[cellValues[i].length];
+            trimmedArray[i] = cellValues[i];
+        }
+        return trimmedArray;
+    }
+
     private static void printDoubleArray(String[][] input){
         for(int i = 1; i < input.length; i++){
-            if (!input[i].equals(null)) {
+            if (!(input[i] == (null))) {
                 for (int j = 0; j < input[i].length; j++) {
                     //System.out.print(" | " + "i: " + i + " j: " + j + " value: " + input[i][j] );
                     System.out.print(" | " + input[i][j]);
