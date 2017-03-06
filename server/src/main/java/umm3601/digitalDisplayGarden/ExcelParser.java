@@ -25,20 +25,47 @@ public class ExcelParser {
         String[][] horizontallyCollapsed = collapseHorizontally(arrayRepresentation);
         String[][] verticallyCollapsed = collapseVertically(horizontallyCollapsed);
         replaceNulls(verticallyCollapsed);
+        populateDatabase(verticallyCollapsed);
+
+
+        //FOR TESTING
+        /*
+        System.out.println("---------------------- Raw XLSX data -------------------");
+        printDoubleArray(extractFromXLSX());
+        System.out.println("---------------------- Raw XLSX data -------------------");
         for(int i = 0; i < 10; i++) {
             System.out.println();
         }
-        System.out.println("---------------------- Collapsed Array -------------------");
-        printDoubleArray(verticallyCollapsed);
-        System.out.println("---------------------- Collapsed Array -------------------");
 
-        populateDatabase(verticallyCollapsed);
+        System.out.println("---------------------- Horizontally Collapsed Array -------------------");
+        printDoubleArray(horizontallyCollapsed);
+        System.out.println("---------------------- Horizontally Collapsed Array -------------------");
+
+
+        System.out.println("---------------------- Vertically (Fully) Collapsed Array -------------------");
+        printDoubleArray(verticallyCollapsed);
+        System.out.println("---------------------- Vertically (Fully) Collapsed Array -------------------");
+
+        System.out.println("---------------------- Replaced Null's with EmptyString -------------------");
+        replaceNulls(verticallyCollapsed);
+        printDoubleArray(verticallyCollapsed);
+        System.out.println("---------------------- Replaced Null's with EmptyString -------------------");
+        */
     }
 
+    /*
+    Uses Apache POI to extract information from xlsx file into a 2D array.
+    Here is where we got our starter code: http://www.mkyong.com/java/apache-poi-reading-and-writing-excel-file-in-java/
+    Look at example number 4, Apache POI library – Reading an Excel file.
+
+    This file originally just printed data, that is why there are several commented out lines in the code.
+    We have repurposed this method to put all data into a 2D String array and return it.
+     */
     private static String[][] extractFromXLSX() {
         try {
 
-            System.out.println("Attempting to read from file in: "+ new File(FILE_NAME).getCanonicalPath());
+            // Did this print to find where the root of the filepath was.
+            //System.out.println("Attempting to read from file in: "+ new File(FILE_NAME).getCanonicalPath());
             FileInputStream excelFile = new FileInputStream(new File(FILE_NAME));
 
             Workbook workbook = new XSSFWorkbook(excelFile);
@@ -66,23 +93,27 @@ public class ExcelParser {
                     //getCellTypeEnum shown as deprecated for version 3.15
                     //getCellTypeEnum ill be renamed to getCellType starting from version 4.0
                     if (currentCell.getCellTypeEnum() == CellType.STRING) {
-                        System.out.print(currentCell.getStringCellValue() + "--");
+                        //System.out.print(currentCell.getStringCellValue() + "--");
                         cellValues[currentCell.getRowIndex()][currentCell.getColumnIndex()] = currentCell.getStringCellValue();
                     } else if (currentCell.getCellTypeEnum() == CellType.NUMERIC) {
-                        System.out.print(currentCell.getNumericCellValue() + "--");
+                        //System.out.print(currentCell.getNumericCellValue() + "--");
                         cellValues[currentCell.getRowIndex()][currentCell.getColumnIndex()] = ("" + currentCell.getNumericCellValue());
                     }
 
                 }
-                System.out.println();
+                //System.out.println();
 
 
             }
 
-            System.out.println(cellValues.length);
-            System.out.println(cellValues[1].length);
-            printDoubleArray(cellValues);
+            /*
+            System.out.println(cellValues.length); //This is how tall the double array is
+            System.out.println(cellValues[1].length); //This is how wide it is
+            printDoubleArray(cellValues); //Double array representation.
+             */
+
             return cellValues;
+
         } catch (FileNotFoundException e) {
             System.out.println("EVERYTHING BLEW UP STOP STOP STOP");
             e.printStackTrace();
