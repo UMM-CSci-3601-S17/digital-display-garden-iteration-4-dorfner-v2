@@ -40,12 +40,18 @@ public class ExcelParser {
         System.out.println("---------------------- Horizontally Collapsed Array -------------------");
         printDoubleArray(horizontallyCollapsed);
         System.out.println("---------------------- Horizontally Collapsed Array -------------------");
-
+        for(int i = 0; i < 10; i++) {
+            System.out.println();
+        }
 
         System.out.println("---------------------- Vertically (Fully) Collapsed Array -------------------");
         printDoubleArray(verticallyCollapsed);
         System.out.println("---------------------- Vertically (Fully) Collapsed Array -------------------");
+        for(int i = 0; i < 10; i++) {
+            System.out.println();
+        }
 
+        // to make work, you should really copy past the replaceNulls & populateDataBase lines from above, to below this print statement
         System.out.println("---------------------- Replaced Null's with EmptyString -------------------");
         replaceNulls(verticallyCollapsed);
         printDoubleArray(verticallyCollapsed);
@@ -106,7 +112,7 @@ public class ExcelParser {
 
             }
 
-            /*
+            /* Our print statements to understand what this 2D array looks like.
             System.out.println(cellValues.length); //This is how tall the double array is
             System.out.println(cellValues[1].length); //This is how wide it is
             printDoubleArray(cellValues); //Double array representation.
@@ -125,24 +131,23 @@ public class ExcelParser {
         }
     }
 
+    // removes all columns that are completely null.
+    // Identify how much to shrink the array and calls a helper function to shrink it
     private static String[][] collapseHorizontally(String[][] cellValues){
         // scanning over columns
-        System.out.println("cellvalues.length: " + cellValues.length);
-        System.out.println("cellValues[1].length: " + cellValues[3].length);
-        for(int i = cellValues[1].length - 1; i > 0; i--){
+        for(int j = cellValues[1].length - 1; j > 0; j--){
             //scanning over the three rows of our "key row"
-            for(int j = 1; j <= 3; j++) {
-                System.out.print("i: " + i + " j: " + j);
-                System.out.println("  not equals null? " + !cellValues[i][j].equals(null));
-                if(!(cellValues[j][i] == null)){
-                    System.out.println("We are trimming the array at i: " + i +" and j: " + j);
-                    return trimArrayHorizontally(cellValues, i);
+            for(int i = 1; i <= 3; i++) {
+                if(!(cellValues[i][j] == null)){
+                    return trimArrayHorizontally(cellValues, j);
                 }
             }
         }
         return null;
     }
 
+    // removes all completely null rows
+    // Identify how much to shrink the array and calls a helper function to shrink it
     private static String[][] collapseVertically(String[][] cellValues){
         for(int i = cellValues.length - 1; i > 0; i--) {
             if(!(cellValues[i][0] == null)) {
@@ -152,6 +157,7 @@ public class ExcelParser {
         return null;
     }
 
+    // helper function for collapseHorizontally() decreases the number of columns in the array
     private static String[][] trimArrayHorizontally(String[][] cellValues, int horizontalBound){
         String[][] trimmedArray = new String[cellValues.length][];
         for(int j = 1; j < cellValues.length; j++) {
@@ -163,6 +169,7 @@ public class ExcelParser {
         return trimmedArray;
     }
 
+    // helper function for collapseHorizontally() decreases the number of rows in the array
     private static String[][] trimArrayVertically(String[][] cellValues, int verticalBound){
         String[][] trimmedArray = new String[verticalBound][];
         for(int i = 1; i <= verticalBound; i++) {
@@ -172,6 +179,7 @@ public class ExcelParser {
         return trimmedArray;
     }
 
+    // replaces all cells with null values with an empty string (avoids future null pointer exceptions)
     private static void replaceNulls(String[][] cellValues) {
         for(int i = 0; i < cellValues.length; i++) {
             for(int j = 0; j < cellValues[i].length; j++) {
@@ -182,6 +190,12 @@ public class ExcelParser {
         }
     }
 
+    /* Helper method for populateDatabase().
+    looks at rows 2 through 4 (xlsx file is 1 based) and:
+    1. Concatenates all content in rows 2 through 4 for a given column
+    2. Adds all keys into a 1D string array
+    3. Replaces certain key words so they match with the standard committee's requirements
+     */
     private static String[] getKeys(String[][] cellValues){
         String[] keys = new String[cellValues[0].length];
 
@@ -204,6 +218,8 @@ public class ExcelParser {
         return keys;
     }
 
+    // Moves row by row through the 2D array and adds content for every flower paired with keys into a document
+    // Uses the document to one at a time, add flower information into the database.
     private static void populateDatabase(String[][] cellValues){
         MongoClient mongoClient = new MongoClient();
         MongoDatabase test = mongoClient.getDatabase("test");
@@ -222,6 +238,11 @@ public class ExcelParser {
         }
     }
 
+    /*
+    ------------------------------- UTILITIES -----------------------------------
+     */
+
+    // prints a 1D array
     private static void printArray(String[] input){
         System.out.print("[");
         for(String str : input){
@@ -230,6 +251,11 @@ public class ExcelParser {
         System.out.println("]");
     }
 
+    /*
+    Prints a 2D array.
+    NOTE: If you uncomment the commented out line, and comment the one beneath it,
+    you will also see the indexes for every element as well as their content.
+     */
     private static void printDoubleArray(String[][] input){
         for(int i = 1; i < input.length; i++){
             if (!(input[i] == (null))) {
