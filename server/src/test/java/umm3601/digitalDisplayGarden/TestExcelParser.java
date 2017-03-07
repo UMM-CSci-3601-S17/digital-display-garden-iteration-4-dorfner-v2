@@ -4,9 +4,11 @@ package umm3601.digitalDisplayGarden;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import org.bson.conversions.Bson;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.mongodb.client.model.Filters.eq;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -68,6 +70,21 @@ public class TestExcelParser {
                 assertNotNull(cell);
             }
         }
+    }
+
+    @Test
+    public void testPopulateDatabase(){
+        String[][] plantArray = parser.extractFromXLSX();
+        plantArray = parser.collapseHorizontally(plantArray);
+        plantArray = parser.collapseVertically(plantArray);
+        parser.replaceNulls(plantArray);
+
+        parser.populateDatabase(plantArray);
+        MongoCollection plants = testDB.getCollection("plants");
+
+
+        assertEquals(1664, plants.count());
+        assertEquals(16, plants.count(eq("Sort", "104.0")));
     }
 
 

@@ -19,6 +19,7 @@ import static java.lang.Math.max;
 import org.bson.Document;
 
 public class ExcelParser {
+    //public static final String FILE_NAME = "/home/Dogxx000/IdeaProjects/digital-display-garden-iteration-1-claudearabo/server/src/main/java/umm3601/digitalDisplayGarden/AccessionList2016.xlsx";
     public static final String FILE_NAME = "/home/benek020/Downloads/IDPH_STD_Illinois_By_County_By_Sex.xlsx";
 
     public static void main(String[] args) {
@@ -154,10 +155,9 @@ public class ExcelParser {
     public static String[] getKeys(String[][] cellValues){
         String[] keys = new String[cellValues[0].length];
 
-
         for(int i = 0; i < cellValues[0].length; i++){
-            keys[i] = cellValues[0][i];
-            for(int j = 1; j < 3; j++){
+            keys[i] = cellValues[1][i];
+            for(int j = 2; j < 4; j++){
                 keys[i] = keys[i] + cellValues[j][i];
             }
         }
@@ -180,8 +180,9 @@ public class ExcelParser {
         MongoDatabase test = mongoClient.getDatabase("test");
         MongoCollection plants = test.getCollection("plants");
 
+        String[] keys = getKeys(cellValues);
+
         for (int i = 4; i < cellValues.length; i++){
-            String[] keys = getKeys(cellValues);
             Map<String, String> map = new HashMap<String, String>();
             for(int j = 0; j < cellValues[i].length; j++){
                 map.put(keys[j], cellValues[i][j]);
