@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.bson.Document;
+import sun.text.normalizer.UTF16;
 
 public class ExcelParser {
     private static final String FILE_NAME = "/home/Dogxx000/IdeaProjects/digital-display-garden-iteration-1-claudearabo/server/src/main/java/umm3601/digitalDisplayGarden/AccessionList2016.xlsx";
@@ -217,6 +218,10 @@ public class ExcelParser {
             if(keys[i].equals("Cultivar")) keys[i] = "cultivar";
             if(keys[i].equals("Source")) keys[i] = "source";
             if(keys[i].equals("Garden  Location")) keys[i] = "gardenLocation";
+            if(keys[i].contains(" ")) keys[i] = keys[i].replace(" ","");
+            if(keys[i].contains("=")) keys[i] = keys[i].replace("=", "");
+            if(keys[i].contains((UTF16.valueOf(0x00AE)))) keys[i].replaceAll(UTF16.valueOf(0x00AE), "");
+
         }
 
         return keys;
