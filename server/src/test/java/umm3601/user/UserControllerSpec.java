@@ -29,7 +29,7 @@ public class UserControllerSpec
     private UserController userController;
     private String samsIdString;
 
-    @Before
+
     public void clearAndPopulateDB() throws IOException {
         MongoClient mongoClient = new MongoClient();
         MongoDatabase db = mongoClient.getDatabase("test");
