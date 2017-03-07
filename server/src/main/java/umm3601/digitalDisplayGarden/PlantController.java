@@ -42,42 +42,30 @@ public class PlantController {
     public String listPlants(Map<String, String[]> queryParams) {
         Document filterDoc = new Document();
 
-        /*
-        if (queryParams.containsKey("age")) {
-            int targetAge = Integer.parseInt(queryParams.get("age")[0]);
-            filterDoc = filterDoc.append("age", targetAge);
-        }*/
+        if (queryParams.containsKey("gardenLocation")) {
+            String location =(queryParams.get("gardenLocation")[0]);
+            filterDoc = filterDoc.append("gardenLocation", location);
+        }
+
+
+        if (queryParams.containsKey("commonName")) {
+            String commonName =(queryParams.get("commonName")[0]);
+            filterDoc = filterDoc.append("commonName", commonName);
+        }
 
         FindIterable<Document> matchingPlants = plantCollection.find(filterDoc);
 
         return JSON.serialize(matchingPlants);
     }
 
-    // Get a single plant
-    public String getPlant(String id) {
-        FindIterable<Document> jsonPlants = plantCollection.find(eq("_id", new ObjectId(id)));
-        return JSON.serialize(jsonPlants);
-        /*
-        Iterator<Document> iterator = jsonPlants.iterator();
-
-        Document plant = iterator.next();
-
-        return plant.toJson();
-        */
-    }
-
-    // Get the average age of all plants by company
-    /*
-    public String getAverageAgeByCompany() {
+    public String getGardenLocations(){
         AggregateIterable<Document> documents
                 = plantCollection.aggregate(
                 Arrays.asList(
-                        Aggregates.group("$company",
-                                Accumulators.avg("averageAge", "$age")),
+                        Aggregates.group("$gardenLocation"),
                         Aggregates.sort(Sorts.ascending("_id"))
                 ));
         System.err.println(JSON.serialize(documents));
         return JSON.serialize(documents);
-    }*/
-
+    }
 }

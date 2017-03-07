@@ -2,6 +2,7 @@ package umm3601;
 
 import umm3601.digitalDisplayGarden.ExcelParser;
 import umm3601.user.UserController;
+import umm3601.digitalDisplayGarden.PlantController;
 
 import java.io.IOException;
 
@@ -13,6 +14,7 @@ public class Server {
 
 
         UserController userController = new UserController();
+        PlantController plantController = new PlantController();
 
         options("/*", (request, response) -> {
 
@@ -55,6 +57,17 @@ public class Server {
         get("api/avgUserAgeByCompany", (req, res) -> {
             res.type("application/json");
             return userController.getAverageAgeByCompany();
+        });
+
+        // List plants
+        get("api/plants", (req, res) -> {
+            res.type("application/json");
+            return plantController.listPlants(req.queryMap().toMap());
+        });
+
+        get("api/gardenLocations", (req, res) -> {
+            res.type("application/json");
+            return plantController.getGardenLocations();
         });
 
         // Handle "404" file not found requests:
