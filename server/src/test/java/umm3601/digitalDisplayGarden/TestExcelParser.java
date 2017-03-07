@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Created by benek020 on 3/6/17.
@@ -41,19 +42,35 @@ public class TestExcelParser {
     @Test
     public void testCollapse(){
         String[][] plantArray = parser.extractFromXLSX();
-        System.out.println(plantArray.length);
-        printDoubleArray(plantArray);
+        //System.out.println(plantArray.length);
+        //printDoubleArray(plantArray);
 
         plantArray = parser.collapseHorizontally(plantArray);
         plantArray = parser.collapseVertically(plantArray);
 
-        printDoubleArray(plantArray);
+        //printDoubleArray(plantArray);
 
         assertEquals(1668, plantArray.length);
         assertEquals(10, plantArray[30].length);
         assertEquals(10, plantArray[0].length);
         assertEquals(10, plantArray[3].length);
     }
+
+    @Test
+    public void testReplaceNulls(){
+        String[][] plantArray = parser.extractFromXLSX();
+        plantArray = parser.collapseHorizontally(plantArray);
+        plantArray = parser.collapseVertically(plantArray);
+        parser.replaceNulls(plantArray);
+
+        for (String[] row : plantArray){
+            for (String cell : row){
+                assertNotNull(cell);
+            }
+        }
+    }
+
+
 
     private static void printDoubleArray(String[][] input){
         for(int i = 0; i < input.length; i++){
