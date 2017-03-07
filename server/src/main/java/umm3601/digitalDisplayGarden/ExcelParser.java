@@ -21,6 +21,10 @@ public class ExcelParser {
     private static final String FILE_NAME = "/home/Dogxx000/IdeaProjects/digital-display-garden-iteration-1-claudearabo/server/src/main/java/umm3601/digitalDisplayGarden/AccessionList2016.xlsx";
 
     public static void main(String[] args) {
+        parseExel();
+    }
+
+    public static void parseExel() {
         String[][] arrayRepresentation = extractFromXLSX();
         String[][] horizontallyCollapsed = collapseHorizontally(arrayRepresentation);
         String[][] verticallyCollapsed = collapseVertically(horizontallyCollapsed);
