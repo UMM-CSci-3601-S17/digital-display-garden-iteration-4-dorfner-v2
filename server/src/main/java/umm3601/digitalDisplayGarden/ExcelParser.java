@@ -17,11 +17,11 @@ import java.util.Map;
 import static java.lang.Math.max;
 
 import org.bson.Document;
-import sun.text.normalizer.UTF16;
+//import sun.text.normalizer.UTF16;
 
 public class ExcelParser {
-    //public static final String FILE_NAME = "/home/Dogxx000/IdeaProjects/digital-display-garden-iteration-1-claudearabo/server/src/main/java/umm3601/digitalDisplayGarden/AccessionList2016.xlsx";
-    public static final String FILE_NAME = "/home/benek020/Downloads/IDPH_STD_Illinois_By_County_By_Sex.xlsx";
+    public static final String FILE_NAME = "/home/Dogxx000/IdeaProjects/digital-display-garden-iteration-1-claudearabo/server/src/main/java/umm3601/digitalDisplayGarden/AccessionList2016.xlsx";
+    //public static final String FILE_NAME = "/home/benek020/Downloads/IDPH_STD_Illinois_By_County_By_Sex.xlsx";
 
     public static void main(String[] args) {
         parseExel();
@@ -171,7 +171,7 @@ public class ExcelParser {
             if(keys[i].equals("Garden  Location")) keys[i] = "gardenLocation";
             if(keys[i].contains(" ")) keys[i] = keys[i].replace(" ","");
             if(keys[i].contains("=")) keys[i] = keys[i].replace("=", "");
-            if(keys[i].contains((UTF16.valueOf(0x00AE)))) keys[i].replaceAll(UTF16.valueOf(0x00AE), "");
+            //if(keys[i].contains((UTF16.valueOf(0x00AE)))) keys[i].replaceAll(UTF16.valueOf(0x00AE), "");
 
         }
 
