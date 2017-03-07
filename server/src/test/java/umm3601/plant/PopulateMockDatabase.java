@@ -15,10 +15,14 @@ import java.util.*;
 import static org.junit.Assert.assertEquals;
 
 public class PopulateMockDatabase {
+
+    public PopulateMockDatabase(){
+
+    }
+
     private PlantController plantController;
     private String begoniaIdString;
 
-    @Before
     public void clearAndPopulateDB() throws IOException {
         MongoClient mongoClient = new MongoClient();
         MongoDatabase db = mongoClient.getDatabase("test");
@@ -27,17 +31,17 @@ public class PopulateMockDatabase {
         List<Document> testPlants = new ArrayList<>();
         testPlants.add(Document.parse("{\n" +
                 "                    commonName: \"Angelonia\",\n" +
-                "                    cultivar: Angelface® Perfectly Pink,\n" +
+                "                    cultivar: \"Angelface® Perfectly Pink,\n" +
                 "                    gardenLocation: \"1S\",\n" +
-                "                    Comments: \"20x12'\"'\"\n" +
+                "                    Comments: \"20x12\", \n" +
                 "                    S=SeedV=Veg: \"V\", \n" +
                 "                    id: \"16280.0\", \n" +
                 "                    source: \"PW\", \n" +
-                "                    HB=Hang BasketC=ContainerW=Wall: \"\", \n"+
+                "                    HB=Hang BasketC=ContainerW=Wall: \"\", \n" +
                 "                }"));
         testPlants.add(Document.parse("{\n" +
                 "                    commonName: \"Angelonia\",\n" +
-                "                    cultivar: Angelface® Super Blue,\n" +
+                "                    cultivar: \"Angelface® Super Blue,\n" +
                 "                    gardenLocation: \"1S\",\n" +
                 "                    Comments: \"\", \n" +
                 "                    S=SeedV=Veg: \"V\", \n" +
@@ -47,7 +51,7 @@ public class PopulateMockDatabase {
                 "                }"));
         testPlants.add(Document.parse("{\n" +
                 "                    commonName: \"Angelonia\",\n" +
-                "                    cultivar: Angelface® Super Pink,\n" +
+                "                    cultivar: \"Angelface® Super Pink,\n" +
                 "                    gardenLocation: \"1S\",\n" +
                 "                    Comments: \"\", \n" +
                 "                    S=SeedV=Veg: \"V\", \n" +
@@ -75,3 +79,7 @@ public class PopulateMockDatabase {
         plantController = new PlantController();
     }
 }
+
+
+
+
