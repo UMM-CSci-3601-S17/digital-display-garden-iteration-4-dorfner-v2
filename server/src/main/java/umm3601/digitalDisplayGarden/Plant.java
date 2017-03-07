@@ -1,15 +1,28 @@
 package umm3601.digitalDisplayGarden;
 
+import org.bson.types.ObjectId;
+
+
 public class Plant {
-    public String _id;
-    public String plantID;
-    public String plantType;
+    public ObjectId _id;
     public String commonName;
     public String cultivar;
-    public String source;
+    public String HBaHangaBasketCaContainerWaWall;
     public String gardenLocation;
-    public int year;
-    public String pageURL;
-    public String[] plantImageURLs;
-    public String[] recognitions;
+    public String Comments;
+    public String id;
+    public String source;
+    public String SaSeedVaVeg;
+
 }
+
+
+//    public String _id;
+//    public String commonName;
+//    public String cultivar;
+//    public String gardenLocation;
+//    public String Comments;
+//    public String SaSeedVaVeg;
+//    public String id;
+//    public String source;
+//    public String HBaHangaBasketCaContainerWaWall;

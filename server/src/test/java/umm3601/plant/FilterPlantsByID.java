@@ -19,13 +19,13 @@ public class FilterPlantsByID {
 //    }
 
     @Test
-    public void testIDs() throws IOException {
+    public void findByID() throws IOException {
         PlantController plantController = new PlantController();
-        Plant filterIDPlants;
+        Plant[] filteredPlants;
         Gson gson = new Gson();
 
-        String rawPlants = plantController.getPlant("58bc8252a84aab6cbed02cea");
-        filterIDPlants = gson.fromJson(rawPlants, Plant.class);
-        assertEquals("Incorrect plant for ID: 58bc8252a84aab6cbed02cea", "16235.0", filterIDPlants.plantID);
+        String rawPlants = plantController.getPlant("16280.0");
+        filteredPlants = gson.fromJson(rawPlants, Plant[].class);
+        assertEquals("Incorrect", 1, filteredPlants.length);
     }
 }
