@@ -14,6 +14,7 @@ import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import static java.lang.Math.max;
 
 import org.bson.Document;
 
@@ -26,11 +27,6 @@ public class ExcelParser {
 
     public static void parseExel() {
         String[][] arrayRepresentation = extractFromXLSX();
-
-
-        for(int i = 0; i < 10; i++) {
-            System.out.println();
-        }
 
         String[][] horizontallyCollapsed = collapseHorizontally(arrayRepresentation);
         String[][] verticallyCollapsed = collapseVertically(horizontallyCollapsed);
@@ -50,24 +46,17 @@ public class ExcelParser {
      */
     public static String[][] extractFromXLSX() {
         try {
-
-            // Did this print to find where the root of the filepath was.
-            //System.out.println("Attempting to read from file in: "+ new File(FILE_NAME).getCanonicalPath());
             FileInputStream excelFile = new FileInputStream(new File(FILE_NAME));
 
             Workbook workbook = new XSSFWorkbook(excelFile);
             Sheet datatypeSheet = workbook.getSheetAt(0);
-            Iterator<Row> iterator = datatypeSheet.iterator();
 
-            // ---------- our stuff -----------
-            String[][] cellValues = new String[datatypeSheet.getLastRowNum() + 1][];
-            //Row currentRow = datatypeSheet.getRow(1);
-            // ---------- our stuff -----------
-
-            Cell firstCell = iterator.next().getCell(0);
+            String[][] cellValues = new String[datatypeSheet.getLastRowNum() + 1]
+                    [max(max(datatypeSheet.getRow(1).getLastCellNum(), datatypeSheet.getRow(2).getLastCellNum()),
+                    datatypeSheet.getRow(3).getLastCellNum())];
 
             for(Row currentRow : datatypeSheet) {
-                cellValues[currentRow.getRowNum()] = new String[currentRow.getLastCellNum()];
+                //cellValues[currentRow.getRowNum()] = new String[currentRow.getLastCellNum()];
 
                 for (Cell currentCell : currentRow) {
 
@@ -82,53 +71,7 @@ public class ExcelParser {
                 }
 
             }
-
-
-
             return cellValues;
-
-
-
-//            while (iterator.hasNext()) {
-//
-//
-//
-//                Row currentRow = iterator.next();
-//                Iterator<Cell> cellIterator = currentRow.iterator();
-//
-//                cellValues[currentRow.getRowNum()] = new String[currentRow.getLastCellNum() - 1];
-//
-//                while (cellIterator.hasNext()) {
-//
-//                    System.out.println("In the second iterator");
-//
-//                    Cell currentCell = cellIterator.next();
-//
-//
-//                    //getCellTypeEnum shown as deprecated for version 3.15
-//                    //getCellTypeEnum ill be renamed to getCellType starting from version 4.0
-//                    if (currentCell.getCellTypeEnum() == CellType.STRING) {
-//                        System.out.println("!!!!!!!!!!!!!!!!!!!");
-//                        cellValues[currentCell.getRowIndex()][currentCell.getColumnIndex()] = currentCell.getStringCellValue();
-//                    } else if (currentCell.getCellTypeEnum() == CellType.NUMERIC) {
-//                        System.out.print(currentCell.getNumericCellValue() + "--");
-//                        cellValues[currentCell.getRowIndex()][currentCell.getColumnIndex()] = ("" + currentCell.getNumericCellValue());
-//                    }
-//
-//                }
-//                System.out.println();
-//
-//
-//            }
-//
-//            /* Our print statements to understand what this 2D array looks like.
-//            System.out.println(cellValues.length); //This is how tall the double array is
-//            System.out.println(cellValues[1].length); //This is how wide it is
-//            printDoubleArray(cellValues); //Double array representation.
-//             */
-//            printDoubleArray(cellValues);
-//
-//            return cellValues;
 
         } catch (FileNotFoundException e) {
             System.out.println("EVERYTHING BLEW UP STOP STOP STOP");
@@ -140,7 +83,6 @@ public class ExcelParser {
             return null;
         }
 
-
     }
 
     // removes all columns that are completely null.
@@ -149,10 +91,9 @@ public class ExcelParser {
         // scanning over columns
         for(int j = cellValues[1].length - 1; j > 0; j--){
             //scanning over the three rows of our "key row"
-
-            System.out.println(cellValues[j]);
             for(int i = 1; i <= 3; i++) {
                 if(cellValues[i][j] != null){
+                    System.out.println("Trimming at column: " + j + ", and row: " + i);
                     return trimArrayHorizontally(cellValues, j);
                 }
             }
@@ -176,7 +117,7 @@ public class ExcelParser {
         String[][] trimmedArray = new String[cellValues.length][];
         for(int j = 1; j < cellValues.length; j++) {
             trimmedArray[j] = new String[horizontalBound + 1];
-            for (int i = 0; i <= horizontalBound; i++) {
+            for (int i = 0; i < horizontalBound + 1; i++) {
                 trimmedArray[j][i] = cellValues[j][i];
             }
         }
@@ -271,7 +212,7 @@ public class ExcelParser {
     you will also see the indexes for every element as well as their content.
      */
     public static void printDoubleArray(String[][] input){
-        for(int i = 1; i < input.length; i++){
+        for(int i = 0; i < input.length; i++){
             if (!(input[i] == (null))) {
                 for (int j = 0; j < input[i].length; j++) {
                     //System.out.print(" | " + "i: " + i + " j: " + j + " value: " + input[i][j] );

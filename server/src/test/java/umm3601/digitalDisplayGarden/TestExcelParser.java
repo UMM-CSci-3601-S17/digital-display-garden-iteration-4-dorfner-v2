@@ -16,36 +16,47 @@ public class TestExcelParser {
 
     public MongoClient mongoClient = new MongoClient();
     public MongoDatabase testDB;
-    public MongoCollection plants;
+    public ExcelParser parser;
 
     @Before
     public void clearAndPopulateDatabase(){
-        mongoClient.dropDatabase("test2");
-
-
-        testDB = mongoClient.getDatabase("test2");
-        plants = testDB.getCollection("plants");
+        mongoClient.dropDatabase("test");
+        testDB = mongoClient.getDatabase("test");
+        parser = new ExcelParser();
     }
 
 
 
     @Test
     public void testSpeadsheetToDoubleArray(){
-        plants.drop();
+        String[][] plantArray = parser.extractFromXLSX();
+        //printDoubleArray(plantArray);
 
-        ExcelParser parser = new ExcelParser();
-
-        String[][] doubleArray = parser.extractFromXLSX();
-        printDoubleArray(doubleArray);
-
-        assertEquals(1668, doubleArray.length);
-        assertEquals(doubleArray[40].length, doubleArray[1234].length);
-        assertEquals("ALEXANDER", doubleArray[5][2]);
+        assertEquals(1668, plantArray.length);
+        assertEquals(plantArray[40].length, plantArray[1234].length);
+        assertEquals("ALEXANDER", plantArray[5][2]);
 
     }
 
+    @Test
+    public void testCollapse(){
+        String[][] plantArray = parser.extractFromXLSX();
+        System.out.println(plantArray.length);
+        printDoubleArray(plantArray);
+
+        plantArray = parser.collapseHorizontally(plantArray);
+        plantArray = parser.collapseVertically(plantArray);
+
+        printDoubleArray(plantArray);
+
+        assertEquals(1667, plantArray.length);
+        assertEquals(10, plantArray[30].length);
+        assertEquals(10, plantArray[0].length);
+        assertEquals(10, plantArray[3].length);
+    }
+
     private static void printDoubleArray(String[][] input){
-        for(int i = 1; i < input.length; i++){
+        for(int i = 0; i < input.length; i++){
             if (!(input[i] == (null))) {
                 for (int j = 0; j < input[i].length; j++) {
                     //System.out.print(" | " + "i: " + i + " j: " + j + " value: " + input[i][j] );
