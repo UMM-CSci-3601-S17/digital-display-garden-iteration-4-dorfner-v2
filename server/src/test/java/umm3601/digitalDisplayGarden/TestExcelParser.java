@@ -49,7 +49,7 @@ public class TestExcelParser {
 
         printDoubleArray(plantArray);
 
-        assertEquals(1667, plantArray.length);
+        assertEquals(1668, plantArray.length);
         assertEquals(10, plantArray[30].length);
         assertEquals(10, plantArray[0].length);
         assertEquals(10, plantArray[3].length);

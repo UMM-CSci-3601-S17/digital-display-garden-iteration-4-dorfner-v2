@@ -115,7 +115,7 @@ public class ExcelParser {
     // helper function for collapseHorizontally() decreases the number of columns in the array
     public static String[][] trimArrayHorizontally(String[][] cellValues, int horizontalBound){
         String[][] trimmedArray = new String[cellValues.length][];
-        for(int j = 1; j < cellValues.length; j++) {
+        for(int j = 0; j < cellValues.length; j++) {
             trimmedArray[j] = new String[horizontalBound + 1];
             for (int i = 0; i < horizontalBound + 1; i++) {
                 trimmedArray[j][i] = cellValues[j][i];
@@ -127,7 +127,7 @@ public class ExcelParser {
     // helper function for collapseHorizontally() decreases the number of rows in the array
     public static String[][] trimArrayVertically(String[][] cellValues, int verticalBound){
         String[][] trimmedArray = new String[verticalBound][];
-        for(int i = 1; i <= verticalBound; i++) {
+        for(int i = 0; i <= verticalBound; i++) {
             trimmedArray[i - 1] = new String[cellValues[i].length];
             trimmedArray[i - 1] = cellValues[i];
         }
