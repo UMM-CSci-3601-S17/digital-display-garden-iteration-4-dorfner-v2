@@ -1,15 +1,15 @@
 package umm3601.digitalDisplayGarden;
 
 public class Plant {
-    String _id;
-    int plantID;
-    String plantType;
-    String commonName;
-    String cultivar;
-    String source;
-    String gardenLocation;
-    int year;
-    String pageURL;
-    String[] plantImageURLs;
-    String[] recognitions;
+    public String _id;
+    public String plantID;
+    public String plantType;
+    public String commonName;
+    public String cultivar;
+    public String source;
+    public String gardenLocation;
+    public int year;
+    public String pageURL;
+    public String[] plantImageURLs;
+    public String[] recognitions;
 }

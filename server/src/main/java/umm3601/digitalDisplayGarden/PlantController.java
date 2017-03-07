@@ -55,15 +55,15 @@ public class PlantController {
 
     // Get a single plant
     public String getPlant(String id) {
-        FindIterable<Document> jsonPlants
-                = plantCollection
-                .find(eq("_id", new ObjectId(id)));
-
+        FindIterable<Document> jsonPlants = plantCollection.find(eq("_id", new ObjectId(id)));
+        return JSON.serialize(jsonPlants);
+        /*
         Iterator<Document> iterator = jsonPlants.iterator();
 
         Document plant = iterator.next();
 
         return plant.toJson();
+        */
     }
 
     // Get the average age of all plants by company
