@@ -11,7 +11,7 @@ import java.io.IOException;
 
 import static junit.framework.TestCase.assertEquals;
 
-public class FilterPlantsByID {
+public class FilterPlantsByGardenLocation {
 //    @Before
 //    public void setUpDB() throws IOException{
 //        PopulateMockDatabase mockDatabase = new PopulateMockDatabase();
@@ -19,12 +19,12 @@ public class FilterPlantsByID {
 //    }
 
     @Test
-    public void findByID() throws IOException {
+    public void findByGardenLocation() throws IOException {
         PlantController plantController = new PlantController();
         Plant[] filteredPlants;
         Gson gson = new Gson();
 
-        String rawPlants = plantController.getPlant("16280.0");
+        String rawPlants = plantController.getGardenLocations();
         filteredPlants = gson.fromJson(rawPlants, Plant[].class);
         assertEquals("Incorrect", 1, filteredPlants.length);
     }

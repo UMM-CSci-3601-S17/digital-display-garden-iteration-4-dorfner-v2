@@ -23,9 +23,9 @@ public class FilterByCommonName {
         queryParams.put("commonName", new String[]{"Angelonia"});
         String rawPlants = plantController.listPlants(queryParams);
 
-        if(rawPlants.contains(UTF16.valueOf(0x00AE))){
-            rawPlants = rawPlants.replaceAll(UTF16.valueOf(0x00AE), "");
-        }
+//        if(rawPlants.contains(UTF16.valueOf(0x00AE))){
+//            rawPlants = rawPlants.replaceAll(UTF16.valueOf(0x00AE), "");
+//        }
 
         filteredPlants = gson.fromJson(rawPlants, Plant[].class);
         assertEquals("Incorrect number of plants with commonName Angelonia", 6, filteredPlants.length);
