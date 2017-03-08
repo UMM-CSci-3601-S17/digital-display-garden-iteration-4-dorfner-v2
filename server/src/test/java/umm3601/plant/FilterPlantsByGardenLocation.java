@@ -12,11 +12,11 @@ import java.io.IOException;
 import static junit.framework.TestCase.assertEquals;
 
 public class FilterPlantsByGardenLocation {
-//    @Before
-//    public void setUpDB() throws IOException{
-//        PopulateMockDatabase mockDatabase = new PopulateMockDatabase();
-//        mockDatabase.clearAndPopulateDB();
-//    }
+    @Before
+    public void setUpDB() throws IOException{
+        PopulateMockDatabase mockDatabase = new PopulateMockDatabase();
+        mockDatabase.clearAndPopulateDBAgain();
+    }
 
     @Test
     public void findByGardenLocation() throws IOException {
