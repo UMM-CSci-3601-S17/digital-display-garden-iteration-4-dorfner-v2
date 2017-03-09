@@ -15,4 +15,8 @@ export class PlantListService {
     getPlantById(id: string): Observable<Plant> {
         return this.http.request(this.plantUrl + "/" + id).map(res => res.json());
     }
+
+    getGardenLocations(): Observable<Plant[]> {
+        return this.http.request(API_URL + "/gardenLocations").map(res => res.json());
+    }
 }

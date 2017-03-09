@@ -1,10 +1,30 @@
-<ul class="list-group">
-    <li class="list-group-item list-group-item-info">
-        <input #input type="text" placeholder="Filter by name" (input)="searchTerm = $event.target.value">
-        <input #input type="number" placeholder="Filter by age" (input)="targetAge = $event.target.value">
-    </li>
-    <li class="list-group-item list-group-item-info">Plant Name</li>
-    <li *ngFor="let user of users | filterBy: {name: searchTerm} | filterBy: { age: targetAge }" class="list-group-item">
-        {{ user.name }} is {{ user.age }} years old
-    </li>
-</ul>
+<style>
+    .vertical-menu {
+        width: 200px;
+    }
+
+    .vertical-menu a {
+        background-color: #eee;
+        color: black;
+        display: block;
+        padding: 12px;
+        text-decoration: none;
+    }
+
+    .vertical-menu a:hover {
+        background-color: #ccc;
+    }
+
+    .vertical-menu a.active {
+        background-color: #4CAF50;
+        color: white;
+    }
+</style>
+<body>
+
+<h1>Digital Display Garden </h1>
+
+<div class="vertical-menu" >
+    <a href="#" class="active">Home</a>
+    <a href = "#" *ngFor="let location of locations" value ="{location._id}">{{location._id}}</a>
+</div>
