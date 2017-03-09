@@ -3,7 +3,6 @@ package umm3601.plant;
 import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;
-import sun.text.normalizer.UTF16;
 import umm3601.digitalDisplayGarden.Plant;
 import umm3601.digitalDisplayGarden.PlantController;
 
@@ -13,7 +12,7 @@ import java.util.Map;
 
 import static junit.framework.TestCase.assertEquals;
 
-public class FilterByCommonName {
+public class FilterByGardenLocation {
     @Before
     public void populateDB() throws IOException {
         PopulateMockDatabase db = new PopulateMockDatabase();
@@ -21,33 +20,32 @@ public class FilterByCommonName {
     }
 
     @Test
-    public void filterPlantsByCommonName() throws IOException {
+    public void findDataForGardenTen() throws  IOException {
         PlantController plantController = new PlantController();
         Plant[] filteredPlants;
         Gson gson = new Gson();
 
         Map<String, String[]> queryParams = new HashMap<>();
-        queryParams.put("commonName", new String[]{"Alternanthera"});
+        queryParams.put("gardenLocation", new String[]{"10.0"});
         String rawPlants = plantController.listPlants(queryParams);
         filteredPlants = gson.fromJson(rawPlants, Plant[].class);
-        assertEquals("Incorrect number of plants with commonName Alternanthera", 1, filteredPlants.length);
-        assertEquals("Incorrect commonName of plant", "Alternanthera", filteredPlants[0].commonName);
-        assertEquals("Incorrect cultivar of plant", "Experimental", filteredPlants[0].cultivar);
-//        if(rawPlants.contains(UTF16.valueOf(0x00AE))){
-//            rawPlants = rawPlants.replaceAll(UTF16.valueOf(0x00AE), "");
-//        }
+
+        assertEquals("Incorrect number of flowers for gardenLocation 10.0", 2, filteredPlants.length);
+        assertEquals("Incorrect contents for index 0", "Alternanthera", filteredPlants[0].commonName);
+        assertEquals("Incorrect contents for index 1", "Begonia", filteredPlants[1].commonName);
     }
 
     @Test
-    public void filterPlantsByPlantThatDoesntExist() throws IOException {
+    public void gardenOneHundred() throws IOException {
         PlantController plantController = new PlantController();
         Plant[] filteredPlants;
         Gson gson = new Gson();
 
         Map<String, String[]> queryParams = new HashMap<>();
-        queryParams.put("commonName", new String[]{"Bob"});
+        queryParams.put("gardenLocation", new String[]{"100.0"});
         String rawPlants = plantController.listPlants(queryParams);
         filteredPlants = gson.fromJson(rawPlants, Plant[].class);
-        assertEquals("Incorrect number of plants with commonName Bob", 0, filteredPlants.length);
+
+        assertEquals("Incorrect number of plants for gardenLocation 100", 0, filteredPlants.length);
     }
 }

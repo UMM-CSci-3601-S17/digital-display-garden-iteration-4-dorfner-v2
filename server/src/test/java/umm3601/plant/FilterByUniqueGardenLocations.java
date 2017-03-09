@@ -11,7 +11,7 @@ import java.io.IOException;
 
 import static junit.framework.TestCase.assertEquals;
 
-public class FilterPlantsByGardenLocation {
+public class FilterByUniqueGardenLocations {
     @Before
     public void setUpDB() throws IOException{
         PopulateMockDatabase mockDatabase = new PopulateMockDatabase();
