@@ -21,11 +21,13 @@ public class FilterPlantsByGardenLocation {
     @Test
     public void findByGardenLocation() throws IOException {
         PlantController plantController = new PlantController();
-        Plant[] filteredPlants;
+        GardenLocation[] filteredPlants;
         Gson gson = new Gson();
-
+        //System.out.println();
         String rawPlants = plantController.getGardenLocations();
-        filteredPlants = gson.fromJson(rawPlants, Plant[].class);
-        assertEquals("Incorrect", 1, filteredPlants.length);
+        filteredPlants = gson.fromJson(rawPlants, GardenLocation[].class);
+        assertEquals("Incorrect number of unique garden locations", 2, filteredPlants.length);
+        assertEquals("Incorrect zero index", "10.0", filteredPlants[0]._id);
+        assertEquals("Incorrect value for index 1", "7.0", filteredPlants[1]._id);
     }
 }
