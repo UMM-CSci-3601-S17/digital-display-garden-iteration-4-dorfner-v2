@@ -24,7 +24,7 @@ public class TestExcelParser {
     public void clearAndPopulateDatabase(){
         mongoClient.dropDatabase("test");
         testDB = mongoClient.getDatabase("test");
-        parser = new ExcelParser();
+        parser = new ExcelParser(true);
     }
 
 
