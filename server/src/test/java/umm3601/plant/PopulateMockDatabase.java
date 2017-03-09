@@ -91,7 +91,7 @@ public class PopulateMockDatabase {
         Map<String, String > alternanthera = new HashMap<>();
         alternanthera.put("commonName", "Alternanthera");
         alternanthera.put("cultivar", "Experimental");
-        //alternanthera.put("gardenLocation", "10.0");
+        alternanthera.put("gardenLocation", "10.0");
         alternanthera.put("Comments", "Name change from Purple Prince   14x18 spreader");
         alternanthera.put("HBHangBasketCContainerWWall", "");
         alternanthera.put("id", "16001.0");
@@ -106,7 +106,7 @@ public class PopulateMockDatabase {
         Map<String, String> begonia = new HashMap<>();
         begonia.put("commonName", "Begonia");
         begonia.put("cultivar", "Megawatt Rose Green Leaf");
-        begonia.put("gardenLocationnnnnnn", "10.0");
+        begonia.put("gardenLocation", "10.0");
         begonia.put("Comments", "Grow in same sun or shade area; grow close proximity to each other for comparison");
         begonia.put("HBHangBasketCContainerWWall", "");
         begonia.put("id", "16008.0");
@@ -116,7 +116,19 @@ public class PopulateMockDatabase {
         doc.putAll(begonia);
         plants.insertOne(doc);
 
-
+        //Third Plant Dianthus
+        Map<String, String> dianthus = new HashMap<>();
+        dianthus.put("commonName", "Dianthus");
+        dianthus.put("cultivar", "Jolt™ Pink F1");
+        dianthus.put("gardenLocation", "7.0");
+        dianthus.put("Comments", "");
+        dianthus.put("HBHangBasketCContainerWWall", "");
+        dianthus.put("id", "16040.0");
+        dianthus.put("source", "AAS");
+        dianthus.put("SSeedVVeg", "S");
+        doc = new Document();
+        doc.putAll(dianthus);
+        plants.insertOne(doc);
 
 //        //First Plant Alternanthera
 //        ObjectId alternantheraId = new ObjectId();
