@@ -83,7 +83,7 @@ public class TestExcelParser {
 
 
         assertEquals(1664, plants.count());
-        assertEquals(16, plants.count(eq("Sort", "104.0")));
+        assertEquals(16, plants.count(eq("Sort", "104")));
     }
 
 
