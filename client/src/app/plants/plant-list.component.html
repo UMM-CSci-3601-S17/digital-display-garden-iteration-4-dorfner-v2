@@ -1,3 +1,4 @@
+<dialog-component></dialog-component>
 <style>
     .vertical-menu {
         width: 200px;
@@ -35,10 +36,23 @@
     </li>
 
     <li *ngFor="let plant of plants | filterBy: {commonName: searchCommonName} " class="list-group-item">
-        {{"Common Name: " + plant.commonName}} <br>
-        {{"Cultivar: " +  plant.cultivar}} <br>
-        {{"Garden Location: " + plant.gardenLocation}}
+
+        <button (click)="showDialog = !showDialog" class="btn btn-link btn-block" >
+            {{"Common Name: " + plant.commonName}} <br>
+            {{"Cultivar: " +  plant.cultivar}} <br>
+            {{"Garden Location: " + plant.gardenLocation}}</button>
+        <dialog-component  [(visible)]="showDialog" *ngFor="let plant of plants">
+             <h1>{{plant.cultivar}} (This is the last flower in the list)</h1>
+            <h2>{{plant.commonName}}<br>Garden Location: {{plant.gardenLocation}}</h2>
+             <button name = {{plant.cultivar}} (click)="showDialog = !showDialog" class="btn">Close</button>
+        </dialog-component>
 
     </li>
+<!--when the following dialog box is included into the above link, the last flower is shown!-->
+
+
+
+
+
 
 </ul>
