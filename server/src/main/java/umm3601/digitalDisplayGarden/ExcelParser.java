@@ -182,6 +182,7 @@ public class ExcelParser {
         MongoClient mongoClient = new MongoClient();
         MongoDatabase test = mongoClient.getDatabase("test");
         MongoCollection plants = test.getCollection("plants");
+        plants.drop();
 
         String[] keys = getKeys(cellValues);
 
