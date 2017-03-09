@@ -17,13 +17,30 @@ export class PlantListComponent implements OnInit {
         // this.plants = this.plantListService.getPlants();
     }
 
-    ngOnInit(): void {
-        this.plantListService.getPlants().subscribe(
+    public getSelectedBed(): string{
+        return (<HTMLInputElement>document.getElementById("locationDropdown")).value;
+    }
+
+    public populateFlowers(): void{
+
+        var bed = this.getSelectedBed();
+        var filterUrl = "?gardenLocation=" + bed;
+
+        this.plantListService.getFlowersByFilter(filterUrl).subscribe (
             plants => this.plants = plants,
             err => {
                 console.log(err);
             }
         );
+    }
+
+    ngOnInit(): void {
+        // this.plantListService.getPlants().subscribe(
+        //     plants => this.plants = plants,
+        //     err => {
+        //         console.log(err);
+        //     }
+        // );
 
         this.plantListService.getGardenLocations().subscribe(
             locations => this.locations = locations,
