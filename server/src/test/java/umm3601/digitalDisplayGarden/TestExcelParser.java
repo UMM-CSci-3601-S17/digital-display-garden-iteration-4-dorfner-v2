@@ -4,7 +4,6 @@ package umm3601.digitalDisplayGarden;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import org.bson.conversions.Bson;
 import org.junit.Before;
 import org.junit.Test;
 

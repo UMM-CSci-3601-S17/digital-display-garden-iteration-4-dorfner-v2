@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import static java.lang.Math.max;
+import static java.lang.Math.round;
 
 import org.bson.Document;
 //import sun.text.normalizer.UTF16;
@@ -65,7 +66,8 @@ public class ExcelParser {
                     if (currentCell.getCellTypeEnum() == CellType.STRING) {
                         cellValues[currentCell.getRowIndex()][currentCell.getColumnIndex()] = currentCell.getStringCellValue();
                     } else if (currentCell.getCellTypeEnum() == CellType.NUMERIC) {
-                        cellValues[currentCell.getRowIndex()][currentCell.getColumnIndex()] = ("" + currentCell.getNumericCellValue());
+                        cellValues[currentCell.getRowIndex()][currentCell.getColumnIndex()] =
+                                Integer.toString((int)Math.round(currentCell.getNumericCellValue()));
                     }
 
                 }
