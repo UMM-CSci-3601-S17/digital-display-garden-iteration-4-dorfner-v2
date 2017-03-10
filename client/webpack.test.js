@@ -46,7 +46,7 @@ module.exports = {
         }),
         new DefinePlugin({
             'ENV': JSON.stringify('development'),
-            'API_URL': JSON.stringify('http://localhost:4567/api/')
+            'API_URL': JSON.stringify('http://bistromath.morris.umn.edu:2538/api/')
         })
     ],
     resolve: {
