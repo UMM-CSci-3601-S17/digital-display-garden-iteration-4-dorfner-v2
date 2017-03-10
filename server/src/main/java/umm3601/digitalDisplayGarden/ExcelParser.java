@@ -100,7 +100,6 @@ public class ExcelParser {
             //scanning over the three rows of our "key row"
             for(int i = 1; i <= 3; i++) {
                 if(cellValues[i][j] != null){
-                    System.out.println("Trimming at column: " + j + ", and row: " + i);
                     return trimArrayHorizontally(cellValues, j);
                 }
             }
