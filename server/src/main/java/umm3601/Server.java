@@ -4,6 +4,8 @@ import umm3601.user.UserController;
 import umm3601.digitalDisplayGarden.PlantController;
 
 import java.io.IOException;
+import java.net.URL;
+import java.net.URLClassLoader;
 
 import static spark.Spark.*;
 
@@ -15,7 +17,7 @@ public class Server {
 
         port(2538);
 
-        ExcelParser parser = new ExcelParser();
+        ExcelParser parser = new ExcelParser("/AccessionList2016.xlsx");
         parser.parseExel();
 
         // This users looks in the folder `public` for the static web artifacts,
