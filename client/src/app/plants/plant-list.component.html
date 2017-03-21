@@ -37,15 +37,13 @@
 
     <li *ngFor="let plant of plants | filterBy: {commonName: searchCommonName} " class="list-group-item">
 
-        <button (click)="showDialog = !showDialog" class="btn btn-link btn-block" >
+        <button (click)="plant.showDialog = true" class="btn btn-link btn-block" >
             {{"Common Name: " + plant.commonName}} <br>
             {{"Cultivar: " +  plant.cultivar}} <br>
             {{"Garden Location: " + plant.gardenLocation}}</button>
-        <dialog-component  [(visible)]="showDialog">
-        <h1>{{plant.cultivar}} (This is the last flower in the list)</h1>
-        <h2>{{plant.commonName}}<br>Garden Location: {{plant.gardenLocation}}</h2>
-        <button name = {{plant.cultivar}} (click)="showDialog = !showDialog" class="btn">Close</button>
-    </dialog-component>
+        <dialog-component  [(visible)]="plant.showDialog">
+            <plant-component [plant]=plant></plant-component>
+        </dialog-component>
     </li>
 <!--when the following dialog box is included into the above link, the last flower is shown!-->
 
