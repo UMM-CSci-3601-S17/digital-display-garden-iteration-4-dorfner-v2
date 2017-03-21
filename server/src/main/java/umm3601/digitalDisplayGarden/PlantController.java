@@ -10,6 +10,7 @@ import com.mongodb.client.model.Accumulators;
 import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Sorts;
 import com.mongodb.util.JSON;
+import org.bson.BsonInvalidOperationException;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
@@ -69,22 +70,54 @@ public class PlantController {
         return JSON.serialize(documents);
     }
 
-    public String addFlowerRating(String id, boolean like) {
+    public boolean addFlowerRating(String id, boolean like) {
 
-//        Document filterDoc = new Document();
-//        filterDoc.append("_id", new ObjectId(id));
-//
-//        Iterator<Document> iter = plantCollection.find(filterDoc).iterator();
-//
-//        Document foundDoc = iter.next();
+        Document filterDoc = new Document();
+
+        ObjectId objectId;
+
+        try {
+            objectId = new ObjectId(id);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+
+        filterDoc.append("_id", new ObjectId(id));
 
         Document rating = new Document();
         rating.append("like", like);
-        rating.append("ratingOnObjectOfId", new ObjectId(id));
+        rating.append("ratingOnObjectOfId", objectId);
 
-        plantCollection.updateOne(eq("_id", new ObjectId(id)), push("metadata.ratings", rating));
-        System.out.println("added a flower rating");
+        return null != plantCollection.findOneAndUpdate(filterDoc, push("metadata.ratings", rating));
+    }
 
-        return "";
+    public boolean flowerRatingParser(String json){
+        boolean like;
+        String id;
+
+        try {
+
+            Document parsedDocument = Document.parse(json);
+
+            if(parsedDocument.containsKey("id") && parsedDocument.get("id") instanceof String){
+                id = parsedDocument.getString("id");
+            } else {
+                return false;
+            }
+
+            if(parsedDocument.containsKey("like") && parsedDocument.get("like") instanceof Boolean){
+                like = parsedDocument.getBoolean("like");
+            } else {
+                return false;
+            }
+
+        } catch (BsonInvalidOperationException e){
+            e.printStackTrace();
+            return false;
+        } catch (org.bson.json.JsonParseException e){
+            return false;
+        }
+
+        return addFlowerRating(id, like);
     }
 }
