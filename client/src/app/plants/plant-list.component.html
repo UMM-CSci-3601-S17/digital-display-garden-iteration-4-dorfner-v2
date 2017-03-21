@@ -38,9 +38,8 @@
     <li *ngFor="let plant of plants | filterBy: {commonName: searchCommonName} " class="list-group-item">
 
         <button (click)="plant.showDialog = true" class="btn btn-link btn-block" >
-            {{"Common Name: " + plant.commonName}} <br>
-            {{"Cultivar: " +  plant.cultivar}} <br>
-            {{"Garden Location: " + plant.gardenLocation}}</button>
+            {{"Cultivar: " +  plant.cultivar}}<br>
+            {{"Common Name: " + plant.commonName}}</button>
         <dialog-component  [(visible)]="plant.showDialog">
             <plant-component [plant]=plant></plant-component>
         </dialog-component>
