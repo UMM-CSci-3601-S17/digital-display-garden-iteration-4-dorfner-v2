@@ -10,6 +10,7 @@ import { Component, OnInit, Input, Output, OnChanges, EventEmitter, trigger, sta
 export class PlantComponent implements OnInit {
     @Input() plant : Plant;
     @Input() showDialog : boolean;
+    private commented: Boolean = false;
     //public plant: Plant = null;
     private id: string;
 
@@ -29,10 +30,21 @@ export class PlantComponent implements OnInit {
         }
     }
 
+
+
     setId(id: string) {
         this.id = id;
         this.subscribeToServiceForId();
     }*/
+
+    private comment(comment: string): void {
+        if(!this.commented){
+            if(comment != null) {
+                this.plantListService.commentPlant(this.plant["_id"]["$oid"], comment)
+                    .subscribe(succeeded => this.commented = succeeded);
+            }
+        }
+    }
 
     ngOnInit(): void {
         //this.subscribeToServiceForId();

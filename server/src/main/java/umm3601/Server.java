@@ -82,7 +82,7 @@ public class Server {
         });
 
         // Posting a comment
-        post("api/plant/leaveComment", (req, res) -> {
+        post("api/plants/leaveComment", (req, res) -> {
             res.type("application/json");
             return plantController.storePlantComment(req.body());
         });
