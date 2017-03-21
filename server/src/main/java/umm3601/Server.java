@@ -15,7 +15,7 @@ public class Server {
 
         port(2538);
 
-        ExcelParser parser = new ExcelParser(false);
+        ExcelParser parser = new ExcelParser();
         parser.parseExel();
 
         // This users looks in the folder `public` for the static web artifacts,

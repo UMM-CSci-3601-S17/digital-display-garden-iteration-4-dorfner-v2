@@ -25,10 +25,8 @@ public class ExcelParser {
         parseExel();
     }
 
-    public ExcelParser(boolean testing){
-        if (testing){
-            FILE_NAME = "/home/benek020/Downloads/IDPH_STD_Illinois_By_County_By_Sex.xlsx";
-        }
+    public ExcelParser(){
+
     }
 
     public static void parseExel() {
@@ -39,7 +37,6 @@ public class ExcelParser {
         String[][] verticallyCollapsed = collapseVertically(horizontallyCollapsed);
         replaceNulls(verticallyCollapsed);
         populateDatabase(verticallyCollapsed);
-
     }
 
     /*
