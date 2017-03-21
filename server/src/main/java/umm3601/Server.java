@@ -27,6 +27,8 @@ public class Server {
         UserController userController = new UserController();
         PlantController plantController = new PlantController();
 
+        plantController.addFlowerRating("58d17090f1ee31284885e5e4", true);
+
         options("/*", (request, response) -> {
 
             String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");

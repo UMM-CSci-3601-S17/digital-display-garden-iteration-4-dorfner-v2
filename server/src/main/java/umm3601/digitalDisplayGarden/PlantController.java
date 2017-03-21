@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.*;
 
 import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Updates.push;
 
 public class PlantController {
 
@@ -66,5 +67,24 @@ public class PlantController {
                 ));
         System.err.println(JSON.serialize(documents));
         return JSON.serialize(documents);
+    }
+
+    public String addFlowerRating(String id, boolean like) {
+
+//        Document filterDoc = new Document();
+//        filterDoc.append("_id", new ObjectId(id));
+//
+//        Iterator<Document> iter = plantCollection.find(filterDoc).iterator();
+//
+//        Document foundDoc = iter.next();
+
+        Document rating = new Document();
+        rating.append("like", like);
+        rating.append("ratingOnObjectOfId", new ObjectId(id));
+
+        plantCollection.updateOne(eq("_id", new ObjectId(id)), push("metadata.ratings", rating));
+        System.out.println("added a flower rating");
+
+        return "";
     }
 }
