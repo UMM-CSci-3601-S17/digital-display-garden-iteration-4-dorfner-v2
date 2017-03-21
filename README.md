@@ -1,5 +1,7 @@
 ## UMM CSci Production Template
+[![Build Status](https://travis-ci.org/UMM-CSci-3601-S17/digital-display-garden-iteration-2-grimaldi.svg?branch=master)](https://travis-ci.org/UMM-CSci-3601-S17/digital-display-garden-iteration-2-grimaldi)
 #### Based on Lab #4
+
 
 This is a modification of Lab #4 which includes a slightly different
 gradle configuration
