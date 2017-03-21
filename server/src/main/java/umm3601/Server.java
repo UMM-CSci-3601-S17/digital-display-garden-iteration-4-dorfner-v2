@@ -4,8 +4,6 @@ import umm3601.user.UserController;
 import umm3601.digitalDisplayGarden.PlantController;
 
 import java.io.IOException;
-import java.net.URL;
-import java.net.URLClassLoader;
 
 import static spark.Spark.*;
 
