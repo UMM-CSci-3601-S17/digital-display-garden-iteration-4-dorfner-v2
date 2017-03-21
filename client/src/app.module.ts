@@ -9,12 +9,14 @@ import { KittensComponent }   from './app/kittens/kittens.component';
 import { UserListComponent } from './app/users/user-list.component';
 import { UserListService } from './app/users/user-list.service';
 import { PlantListComponent } from './app/plants/plant-list.component';
+import { PlantComponent } from './app/plants/plant.component';
 import { PlantListService } from './app/plants/plant-list.service';
 import { DialogComponent} from './app/dialog/dialog.component';
 import { routing } from './app/app.routes';
 import { FormsModule } from '@angular/forms';
 
 import { PipeModule } from './pipe.module';
+
 
 @NgModule({
     imports: [
@@ -32,6 +34,7 @@ import { PipeModule } from './pipe.module';
         NavbarComponent,
         UserListComponent,
         PlantListComponent,
+        PlantComponent,
         DialogComponent
     ],
     providers: [ UserListService, PlantListService ],
