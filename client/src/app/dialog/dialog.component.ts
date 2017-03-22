@@ -2,8 +2,10 @@
 import { Component, OnInit, Input, Output, OnChanges, EventEmitter, trigger, state, style, animate, transition } from '@angular/core';
 
 @Component({
+    //moduleId: module.id,
     selector: 'dialog-component',
     templateUrl: 'dialog.component.html',
+    //styles: [require('dialog.component.css')],
     animations: [
         trigger('dialog', [
             transition('void => *', [
