@@ -55,4 +55,39 @@ public class FlowerRating {
         assertFalse(plantController.addFlowerRating("jfd;laj;asjfoisaf", true));
         assertFalse(plantController.addFlowerRating("58d1c36efb0cac4e15afd201", true));
     }
+
+    @Test
+    public void FlowerRatingParserReturnsTrueWithValidInput() throws IOException{
+        PlantController plantController = new PlantController();
+
+        String json = "{like: true, id: \"58d1c36efb0cac4e15afd202\"}";
+
+        assertTrue(plantController.flowerRatingParser(json));
+
+        MongoClient mongoClient = new MongoClient();
+        MongoDatabase db = mongoClient.getDatabase("test");
+        MongoCollection plants = db.getCollection("plants");
+
+        FindIterable<Document> doc = plants.find(new Document().append("_id", new ObjectId("58d1c36efb0cac4e15afd202")));
+        Iterator<Document> iterator = doc.iterator();
+        Document result = iterator.next();
+
+        List<Document> ratings = (List<Document>) ((Document) result.get("metadata")).get("ratings");
+        assertEquals(1, ratings.size());
+
+        Document rating = ratings.get(0);
+        assertTrue(rating.getBoolean("like"));
+        assertEquals(new ObjectId("58d1c36efb0cac4e15afd202"),rating.get("ratingOnObjectOfId"));
+    }
+
+    @Test
+    public void FlowerRatingParserReturnsFalseWithInvalidInput() throws IOException {
+        PlantController plantController = new PlantController();
+
+        String json1 = "{like: true, id: \"dkjahfjafhlkasjdf\"}";
+        String json2 = "{like: true id: \"58d1c36efb0cac4e15afd201\"}";
+
+        assertFalse(plantController.flowerRatingParser(json1));
+        assertFalse(plantController.flowerRatingParser(json2));
+    }
 }
