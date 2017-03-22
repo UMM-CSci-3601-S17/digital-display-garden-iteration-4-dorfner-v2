@@ -10,9 +10,8 @@ import org.junit.Before;
 import org.junit.Test;
 import umm3601.digitalDisplayGarden.PlantController;
 
-import javax.print.Doc;
-
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 
 import java.io.IOException;
@@ -47,5 +46,13 @@ public class FlowerRating {
         Document rating = ratings.get(0);
         assertTrue(rating.getBoolean("like"));
         assertEquals(new ObjectId("58d1c36efb0cac4e15afd202"),rating.get("ratingOnObjectOfId"));
+    }
+
+    @Test
+    public void AddFlowerRatingReturnsFalseWithInvalidInput() throws IOException {
+        PlantController plantController = new PlantController();
+
+        assertFalse(plantController.addFlowerRating("jfd;laj;asjfoisaf", true));
+        assertFalse(plantController.addFlowerRating("58d1c36efb0cac4e15afd201", true));
     }
 }
