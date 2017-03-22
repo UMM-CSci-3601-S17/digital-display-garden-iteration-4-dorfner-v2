@@ -64,11 +64,6 @@ public class Server {
             return userController.getUser(id);
         });
 
-        get("aRandomPath", (request, response) -> {
-            plantController.addFlowerRating("58d1b87cfb0cac4557289158", true);
-            return "Hi!";
-        });
-
         // Get average ages by company
         get("api/avgUserAgeByCompany", (req, res) -> {
             res.type("application/json");
@@ -84,6 +79,11 @@ public class Server {
         get("api/gardenLocations", (req, res) -> {
             res.type("application/json");
             return plantController.getGardenLocations();
+        });
+
+        post("api/plants/rate", (req, res) -> {
+            res.type("application/json");
+            return plantController.flowerRatingParser(req.body());
         });
 
         // Handle "404" file not found requests:
