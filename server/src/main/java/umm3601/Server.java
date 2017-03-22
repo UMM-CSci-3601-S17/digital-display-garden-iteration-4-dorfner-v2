@@ -86,6 +86,12 @@ public class Server {
             return plantController.flowerRatingParser(req.body());
         });
 
+        // Posting a comment
+        post("api/plants/leaveComment", (req, res) -> {
+            res.type("application/json");
+            return plantController.storePlantComment(req.body());
+        });
+
         // Handle "404" file not found requests:
         notFound((req, res) -> {
             res.type("text");
