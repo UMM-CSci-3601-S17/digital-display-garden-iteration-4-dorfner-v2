@@ -15,7 +15,7 @@ public class Server {
 
         port(2538);
 
-        ExcelParser parser = new ExcelParser();
+        ExcelParser parser = new ExcelParser("/AccessionList2016.xlsx");
         parser.parseExel();
 
         // This users looks in the folder `public` for the static web artifacts,

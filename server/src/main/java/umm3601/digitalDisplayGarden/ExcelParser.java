@@ -6,30 +6,30 @@ import com.mongodb.client.MongoDatabase;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
 import java.util.HashMap;
 import java.util.Map;
 import static java.lang.Math.max;
-import static java.lang.Math.round;
 
 import org.bson.Document;
 //import sun.text.normalizer.UTF16;
 
 public class ExcelParser {
-    public static String FILE_NAME = "/home/Dogxx000/IdeaProjects/digital-display-garden-iteration-1-claudearabo/server/src/main/java/umm3601/digitalDisplayGarden/AccessionList2016.xlsx";
 
-    public static void main(String[] args) {
-        parseExel();
+    private String fileName;
+
+//    public static void main(String[] args) {
+//        parseExel();
+//    }
+
+    public ExcelParser(String fileName){
+        this.fileName = fileName;
     }
 
-    public ExcelParser(){
-
-    }
-
-    public static void parseExel() {
+    public void parseExel() {
 
         String[][] arrayRepresentation = extractFromXLSX();
 
@@ -47,9 +47,9 @@ public class ExcelParser {
     This file originally just printed data, that is why there are several commented out lines in the code.
     We have repurposed this method to put all data into a 2D String array and return it.
      */
-    public static String[][] extractFromXLSX() {
+    public String[][] extractFromXLSX() {
         try {
-            FileInputStream excelFile = new FileInputStream(new File(FILE_NAME));
+            InputStream excelFile = this.getClass().getResourceAsStream(fileName);
 
             Workbook workbook = new XSSFWorkbook(excelFile);
             Sheet datatypeSheet = workbook.getSheetAt(0);
