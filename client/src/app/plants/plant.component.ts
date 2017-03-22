@@ -11,6 +11,13 @@ export class PlantComponent implements OnInit {
     @Input() plant : Plant;
     @Input() showDialog : boolean;
     private commented: Boolean = false;
+
+    // The rating field can have 3 values:
+    // null - means that the plant hasn't been rated
+    // true - means that the plant was liked
+    // false - means the the plant was disliked
+    private rating: boolean = null;
+
     //public plant: Plant = null;
     private id: string;
 
@@ -43,6 +50,13 @@ export class PlantComponent implements OnInit {
                 this.plantListService.commentPlant(this.plant["_id"]["$oid"], comment)
                     .subscribe(succeeded => this.commented = succeeded);
             }
+        }
+    }
+
+    private ratePlant(like: boolean): void {
+        if(this.rating === null && like !== null) {
+            this.plantListService.ratePlant(this.plant["_id"]["$oid"], like)
+                .subscribe(succeeded => this.rating = like);
         }
     }
 
