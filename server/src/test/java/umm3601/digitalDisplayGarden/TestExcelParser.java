@@ -24,7 +24,7 @@ public class TestExcelParser {
     public void clearAndPopulateDatabase(){
         mongoClient.dropDatabase("test");
         testDB = mongoClient.getDatabase("test");
-        parser = new ExcelParser(true);
+        parser = new ExcelParser("/IDPH_STD_Illinois_By_County_By_Sex.xlsx");
     }
 
 
