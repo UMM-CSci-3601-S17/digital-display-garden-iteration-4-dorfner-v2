@@ -89,6 +89,8 @@ public class PopulateMockDatabase {
 
         //First Plant Alternanthera
         Document alternanthera = new Document();
+        alternanthera.append("_id", new ObjectId("58d1c36efb0cac4e15afd202"));
+
         alternanthera.append("commonName", "Alternanthera");
         alternanthera.append("cultivar", "Experimental");
         alternanthera.append("gardenLocation", "10.0");
@@ -108,6 +110,8 @@ public class PopulateMockDatabase {
 
         //Second Plant Begonia
         Document begonia = new Document();
+        begonia.append("_id", new ObjectId("58d1c36efb0cac4e15afd203"));
+
         begonia.append("commonName", "Begonia");
         begonia.append("cultivar", "Megawatt Rose Green Leaf");
         begonia.append("gardenLocation", "10.0");
@@ -126,6 +130,8 @@ public class PopulateMockDatabase {
 
         //Third Plant Dianthus
         Document dianthus = new Document();
+        dianthus.append("_id", new ObjectId("58d1c36efb0cac4e15afd204"));
+
         dianthus.append("commonName", "Dianthus");
         dianthus.append("cultivar", "Jolt™ Pink F1");
         dianthus.append("gardenLocation", "7.0");
@@ -141,20 +147,6 @@ public class PopulateMockDatabase {
 
         dianthus.append("metadata", metadataDoc2);
         plants.insertOne(dianthus);
-
-//        //First Plant Alternanthera
-//        ObjectId alternantheraId = new ObjectId();
-//        BasicDBObject alternanthera = new BasicDBObject();
-//        alternanthera = alternanthera.append("commonName", "Alternanthera")
-//                .append("cultivar", "Experimental")
-//                .append("gardenLocation", "13.0")
-//                .append("Comments", "Name change from Purple Prince   14x18 spreader")
-//                .append("HBHangBasketCContainerWWall", "")
-//                .append("id", "16001.0")
-//                .append("source", "PA")
-//                .append("SSeedVVeg", "S");
-//        hexAlternantheraID = alternantheraId.toHexString();
-//        plantDocuments.insertOne(Document.parse(alternanthera.toJson()));
 
 
     }
