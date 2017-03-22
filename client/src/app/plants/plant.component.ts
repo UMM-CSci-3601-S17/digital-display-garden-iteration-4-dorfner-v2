@@ -1,7 +1,7 @@
 
 import { PlantListService } from "./plant-list.service";
 import { Plant } from "./plant";
-import { Component, OnInit, Input, Output, OnChanges, EventEmitter, trigger, state, style, animate, transition } from '@angular/core';
+import { Component, OnInit, Input} from '@angular/core';
 
 @Component({
     selector: 'plant-component',

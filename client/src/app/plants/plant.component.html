@@ -1,7 +1,7 @@
 <div *ngIf="plant" (plant)="thisPlant" class="plant">
     <h2>{{plant.cultivar}}</h2>
-    <h2>{{plant.commonName}}<br>Garden Location: {{plant.gardenLocation}}</h2>
-    <button (click)="plant.showDialog = false" class="btn">Close</button>
+    <h2>{{plant.commonName}}</h2>
+    <button (click)="plant.showDialog = false" class="btn" style="float: right">Close</button>
 
     <br/>
     <br/>
