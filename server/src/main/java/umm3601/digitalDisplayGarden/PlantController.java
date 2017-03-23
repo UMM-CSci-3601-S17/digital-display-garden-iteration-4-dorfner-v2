@@ -175,7 +175,13 @@ public class PlantController {
         return true;
     }
 
-
+    /**
+     * Adds a like or dislike to the specified plant.
+     *
+     * @param id a hexstring specifiying the oid
+     * @param like true if this is a like, false if this is a dislike
+     * @return true iff the operation succeeded.
+     */
     public boolean addFlowerRating(String id, boolean like) {
 
         Document filterDoc = new Document();
@@ -197,6 +203,19 @@ public class PlantController {
         return null != plantCollection.findOneAndUpdate(filterDoc, push("metadata.ratings", rating));
     }
 
+    /**
+     * Accepts string representation of JSON object containing
+     * at least the following:
+     * <code>
+     *     {
+     *         id: String,
+     *         like: boolean
+     *     }
+     * </code>
+     *
+     * @param json string representation of a JSON object
+     * @return true iff the operation succeeded.
+     */
     public boolean flowerRatingParser(String json){
         boolean like;
         String id;
