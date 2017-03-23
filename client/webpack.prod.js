@@ -46,6 +46,7 @@ module.exports = {
         new DefinePlugin({
             'ENV': JSON.stringify('development'),
             'API_URL': JSON.stringify('http://174.138.76.93:2538/api/')
+            //TODO: The above IP address will need to be changed to the machine hosting this
         })
     ],
     resolve: {
