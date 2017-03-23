@@ -57,12 +57,12 @@ public class FlowerRating {
     }
 
     @Test
-    public void FlowerRatingParserReturnsTrueWithValidInput() throws IOException{
+    public void AddFlowerRatingReturnsTrueWithValidJsonInput() throws IOException{
         PlantController plantController = new PlantController();
 
         String json = "{like: true, id: \"58d1c36efb0cac4e15afd202\"}";
 
-        assertTrue(plantController.flowerRatingParser(json));
+        assertTrue(plantController.addFlowerRating(json));
 
         MongoClient mongoClient = new MongoClient();
         MongoDatabase db = mongoClient.getDatabase("test");
@@ -81,13 +81,13 @@ public class FlowerRating {
     }
 
     @Test
-    public void FlowerRatingParserReturnsFalseWithInvalidInput() throws IOException {
+    public void AddFlowerRatingReturnsFalseWithInvalidJsonInput() throws IOException {
         PlantController plantController = new PlantController();
 
         String json1 = "{like: true, id: \"dkjahfjafhlkasjdf\"}";
         String json2 = "{like: true id: \"58d1c36efb0cac4e15afd201\"}";
 
-        assertFalse(plantController.flowerRatingParser(json1));
-        assertFalse(plantController.flowerRatingParser(json2));
+        assertFalse(plantController.addFlowerRating(json1));
+        assertFalse(plantController.addFlowerRating(json2));
     }
 }

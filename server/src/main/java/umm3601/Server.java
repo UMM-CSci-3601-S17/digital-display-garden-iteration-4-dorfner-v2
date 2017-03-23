@@ -83,7 +83,7 @@ public class Server {
 
         post("api/plants/rate", (req, res) -> {
             res.type("application/json");
-            return plantController.flowerRatingParser(req.body());
+            return plantController.addFlowerRating(req.body());
         });
 
         // Posting a comment

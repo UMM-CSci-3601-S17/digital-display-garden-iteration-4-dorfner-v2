@@ -216,7 +216,7 @@ public class PlantController {
      * @param json string representation of a JSON object
      * @return true iff the operation succeeded.
      */
-    public boolean flowerRatingParser(String json){
+    public boolean addFlowerRating(String json){
         boolean like;
         String id;
 
