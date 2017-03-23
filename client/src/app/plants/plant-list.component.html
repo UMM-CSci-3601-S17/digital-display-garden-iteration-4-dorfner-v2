@@ -1,27 +1,3 @@
-<dialog-component></dialog-component>
-<style>
-    .vertical-menu {
-        width: 200px;
-    }
-
-    .vertical-menu a {
-        background-color: #eee;
-        color: black;
-        display: block;
-        padding: 12px;
-        text-decoration: none;
-    }
-
-    .vertical-menu a:hover {
-        background-color: #ccc;
-    }
-
-    .vertical-menu a.active {
-        background-color: #4CAF50;
-        color: white;
-    }
-</style>
-
 <h1>Digital Display Garden </h1>
 
 <ul class="list-group">
@@ -35,20 +11,12 @@
         <span >Plants</span>
     </li>
 
-    <li *ngFor="let plant of plants | filterBy: {commonName: searchCommonName} " class="list-group-item">
+    <li *ngFor="let plant of plants" class="list-group-item">
 
-        <button (click)="plant.showDialog = true" class="btn btn-link btn-block" >
+        <button [routerLink]="['/plants', plant.id]" class="btn btn-link btn-block" >
             {{"Cultivar: " +  plant.cultivar}}<br>
             {{"Common Name: " + plant.commonName}}</button>
-        <dialog-component  [(visible)]="plant.showDialog">
-            <plant-component [plant]=plant></plant-component>
-        </dialog-component>
+
     </li>
-<!--when the following dialog box is included into the above link, the last flower is shown!-->
-
-
-
-
-
 
 </ul>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PlantListService } from "./plant-list.service";
 import { Plant } from "./plant";
 import { FilterBy } from "./filter.pipe";
+import { Routes, Router } from '@angular/router';
 
 @Component({
     selector: 'plant-list-component',
@@ -33,6 +34,9 @@ export class PlantListComponent implements OnInit {
             }
         );
     }
+
+
+
 
     ngOnInit(): void {
         // this.plantListService.getPlants().subscribe(

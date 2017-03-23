@@ -124,6 +124,32 @@ public class PlantController {
 
     }
 
+    public String getPlantByPlantID(String plantID) {
+
+        FindIterable<Document> jsonPlant;
+        String returnVal;
+        try {
+
+            jsonPlant = plantCollection.find(eq("id", plantID))
+                    .projection(fields(include("commonName", "cultivar")));
+
+            Iterator<Document> iterator = jsonPlant.iterator();
+
+            if (iterator.hasNext()) {
+                //incrementMetadata(id, "pageViews");
+                returnVal = iterator.next().toJson();
+            } else {
+                returnVal = "null";
+            }
+
+        } catch (IllegalArgumentException e) {
+            returnVal = "null";
+        }
+
+        return returnVal;
+
+    }
+
     public String getGardenLocations(){
         AggregateIterable<Document> documents
                 = plantCollection.aggregate(

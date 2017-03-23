@@ -70,16 +70,27 @@ public class Server {
             return userController.getAverageAgeByCompany();
         });
 
+
+
         // List plants
         get("api/plants", (req, res) -> {
             res.type("application/json");
             return plantController.listPlants(req.queryMap().toMap());
         });
 
+        //Link to a Flower page
+        get("api/plants/:plantID", (req, res) -> {
+            res.type("application/json");
+            String id = req.params("plantID");
+            return plantController.getPlantByPlantID(id);
+        });
+
+        //List all Beds
         get("api/gardenLocations", (req, res) -> {
             res.type("application/json");
             return plantController.getGardenLocations();
         });
+
 
         // Posting a comment
         post("api/plants/leaveComment", (req, res) -> {
