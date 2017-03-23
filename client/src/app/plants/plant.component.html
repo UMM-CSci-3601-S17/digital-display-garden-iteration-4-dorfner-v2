@@ -7,37 +7,41 @@
     <br/>
 
     <h3>Leave Feedback for Flower</h3>
-    <div *ngIf="!commented">
-        <textarea [(ngModel)]="commentText" rows="5" wrap="on" style="width: 95%;"></textarea>
+    <span *ngIf="!commented">
+        <textarea [(ngModel)]="commentText" rows="5" wrap="on" style="width: 100%;"></textarea>
 
-        <button type="button" (click)="this.comment(commentText)">Leave a comment</button>
-    </div>
-    <div *ngIf="commented">
+    </span>
+    <span *ngIf="commented">
         Your comment has been submitted.
-    </div>
+        <br/>
+    </span>
 
 
-    <div *ngIf="rating === null">
+    <span *ngIf="rating === null">
         <button type="button" (click)="this.ratePlant(true)" style="border: none; background: inherit; outline: none;">
             <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
         </button>
         <button type="button" (click)="this.ratePlant(false)" style="border: none; background: inherit; outline: none;">
             <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
         </button>
-    </div>
+    </span>
 
-    <div *ngIf="rating === true">
+    <span *ngIf="rating === true">
         <button type="button" style="border: none; background: inherit; outline: none;" class="text-success">
             <span class="glyphicon glyphicon-thumbs-up " aria-hidden="true"></span>
             Liked!
         </button>
-    </div>
+    </span>
 
-    <div *ngIf="rating === false">
+    <span *ngIf="rating === false">
         <button type="button" style="border: none; background: inherit; outline: none;" class="text-success">
             <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
             Disliked!
         </button>
-    </div>
+    </span>
+
+    <span *ngIf="!commented">
+        <button type="button" (click)="this.comment(commentText)" style="float: right">Submit comment</button>
+    </span>
 
 </div>
