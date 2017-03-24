@@ -1,9 +1,8 @@
 
 import { PlantListService } from "./plant-list.service";
 import { Plant } from "./plant";
-import { Component, OnInit, Input} from '@angular/core';
-import { Params, Route, ActivatedRoute} from '@angular/router';
-import {Observable} from "rxjs";
+import { Component, OnInit} from '@angular/core';
+import { Params,  ActivatedRoute} from '@angular/router';
 
 @Component({
     selector: 'plant-component',

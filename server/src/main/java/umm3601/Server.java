@@ -1,6 +1,5 @@
 package umm3601;
 
-import umm3601.user.UserController;
 import umm3601.digitalDisplayGarden.PlantController;
 
 import java.io.IOException;
@@ -24,7 +23,6 @@ public class Server {
         // a problem which is resolved in `server/build.gradle`.
         staticFiles.location("/public");
 
-        UserController userController = new UserController();
         PlantController plantController = new PlantController();
 
         options("/*", (request, response) -> {
@@ -50,25 +48,6 @@ public class Server {
         // Redirects for the "home" page
         redirect.get("", "/");
         redirect.get("/", "http://localhost:9000");
-
-        // List users
-        get("api/users", (req, res) -> {
-            res.type("application/json");
-            return userController.listUsers(req.queryMap().toMap());
-        });
-
-        // See specific user
-        get("api/users/:id", (req, res) -> {
-            res.type("application/json");
-            String id = req.params("id");
-            return userController.getUser(id);
-        });
-
-        // Get average ages by company
-        get("api/avgUserAgeByCompany", (req, res) -> {
-            res.type("application/json");
-            return userController.getAverageAgeByCompany();
-        });
 
         // List plants
         get("api/plants", (req, res) -> {
