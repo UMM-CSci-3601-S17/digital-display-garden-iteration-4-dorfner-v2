@@ -1,6 +1,6 @@
 <div class="plant">
     <h2>{{plant.cultivar}}</h2>
-    <h2>{{plant.commonName}}</h2>
+    <h3>{{plant.commonName}}</h3>
 
     <br/>
     <br/>
@@ -19,23 +19,26 @@
         <span *ngIf="rating === null">
             <button type="button" (click)="this.ratePlant(true)" style="border: none; background: inherit; outline: none;">
                 <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+                {{plantFeedback.likeCount}}
             </button>
             <button type="button" (click)="this.ratePlant(false)" style="border: none; background: inherit; outline: none;">
                 <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
+                {{plantFeedback.dislikeCount}}
             </button>
         </span>
 
         <span *ngIf="rating === true">
             <button type="button" style="border: none; background: inherit; outline: none;" class="text-success">
                 <span class="glyphicon glyphicon-thumbs-up " aria-hidden="true"></span>
-                Liked!
+                Liked! <span class="label label-default">{{plantFeedback.likeCount}}</span>
             </button>
         </span>
 
         <span *ngIf="rating === false">
             <button type="button" style="border: none; background: inherit; outline: none;" class="text-success">
                 <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
-                Disliked!
+                Disliked <span class="label label-default">{{plantFeedback.dislikeCount}}</span>
+
             </button>
         </span>
 
@@ -44,4 +47,8 @@
         </span>
     </div>
     <button class="btn" style="float: right">Back</button>
+
+   <div>
+       {{plantFeedback.commentCount}} people have left feedback on this plant
+   </div>
 </div>

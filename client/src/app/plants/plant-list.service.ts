@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Plant } from './plant';
 import { Observable } from "rxjs";
+import {PlantFeedback} from "./plant.feedback";
 
 @Injectable()
 export class PlantListService {
@@ -16,6 +17,10 @@ export class PlantListService {
         return this.http.request(this.plantUrl + "/" + id).map(res => res.json());
     }
 
+    getFeedbackForPlantByPlantID(id: string): Observable<PlantFeedback> {
+        return this.http.request(this.plantUrl + "/" + id + "/counts").map(res => res.json());
+    }
+
 
     getGardenLocations(): Observable<Plant[]> {
         return this.http.request(API_URL + "/gardenLocations").map(res => res.json());
@@ -23,6 +28,8 @@ export class PlantListService {
     getFlowersByFilter(filterUrl: string): Observable<Plant[]> {
         return this.http.request(this.plantUrl + filterUrl).map(res => res.json());
     }
+
+
     commentPlant(id: string, comment: string): Observable<Boolean> {
         let returnObject = {
             plantId: id,

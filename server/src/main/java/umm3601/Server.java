@@ -62,6 +62,13 @@ public class Server {
             return plantController.getPlantByPlantID(id);
         });
 
+        //Get feedback counts for a plant
+        get("api/plants/:plantID/counts", (req, res) -> {
+            res.type("application/json");
+            String id = req.params("plantID");
+            return plantController.getFeedbackForPlantByPlantID(id);
+        });
+
         //List all Beds
         get("api/gardenLocations", (req, res) -> {
             res.type("application/json");
@@ -72,6 +79,7 @@ public class Server {
             res.type("application/json");
             return plantController.addFlowerRating(req.body());
         });
+
 
         // Posting a comment
         post("api/plants/leaveComment", (req, res) -> {
