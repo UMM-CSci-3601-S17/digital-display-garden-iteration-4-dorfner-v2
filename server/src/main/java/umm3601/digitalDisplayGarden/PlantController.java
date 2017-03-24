@@ -158,7 +158,18 @@ public class PlantController {
             Document parsedDocument = Document.parse(json);
 
             if (parsedDocument.containsKey("plantId") && parsedDocument.get("plantId") instanceof String) {
-                toInsert.put("commentOnObjectOfId", new ObjectId(parsedDocument.getString("plantId")));
+
+                FindIterable<Document> jsonPlant = plantCollection.find(eq("_id",
+                        new ObjectId(parsedDocument.getString("plantId"))));
+
+                Iterator<Document> iterator = jsonPlant.iterator();
+
+                if(iterator.hasNext()){
+                    toInsert.put("commentOnPlant", iterator.next().getString("id"));
+                } else {
+                    return false;
+                }
+
             } else {
                 return false;
             }
