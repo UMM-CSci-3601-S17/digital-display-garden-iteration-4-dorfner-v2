@@ -30,14 +30,14 @@ public class ExcelParser {
         this.fileName = fileName;
     }
 
-    public void parseExel() {
+    public void parseExel(String uploadId) {
 
         String[][] arrayRepresentation = extractFromXLSX();
 
         String[][] horizontallyCollapsed = collapseHorizontally(arrayRepresentation);
         String[][] verticallyCollapsed = collapseVertically(horizontallyCollapsed);
         replaceNulls(verticallyCollapsed);
-        populateDatabase(verticallyCollapsed);
+        populateDatabase(verticallyCollapsed, uploadId);
     }
 
     /*
@@ -182,7 +182,7 @@ public class ExcelParser {
 
     // Moves row by row through the 2D array and adds content for every flower paired with keys into a document
     // Uses the document to one at a time, add flower information into the database.
-    public static void populateDatabase(String[][] cellValues){
+    public static void populateDatabase(String[][] cellValues, String uploadId){
         MongoClient mongoClient = new MongoClient();
         MongoDatabase test = mongoClient.getDatabase("test");
         MongoCollection plants = test.getCollection("plants");
@@ -205,6 +205,7 @@ public class ExcelParser {
             metadataDoc.append("ratings", new BsonArray());
 
             doc.append("metadata", metadataDoc);
+            doc.append("uploadId", uploadId);
 
             plants.insertOne(doc);
         }
