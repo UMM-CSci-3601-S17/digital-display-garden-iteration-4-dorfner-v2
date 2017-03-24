@@ -18,7 +18,6 @@ export class PlantComponent implements OnInit {
     constructor(private plantListService: PlantListService, private route: ActivatedRoute) {
     }
 
-
     private comment(comment: string): void {
         if(!this.commented){
             if(comment != null) {

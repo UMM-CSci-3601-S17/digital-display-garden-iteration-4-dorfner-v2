@@ -39,13 +39,6 @@ export class PlantListComponent implements OnInit {
 
 
     ngOnInit(): void {
-        // this.plantListService.getPlants().subscribe(
-        //     plants => this.plants = plants,
-        //     err => {
-        //         console.log(err);
-        //     }
-        // );
-
         this.plantListService.getGardenLocations().subscribe(
             locations => this.locations = locations,
             err => {

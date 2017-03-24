@@ -34,8 +34,7 @@ import { PipeModule } from './pipe.module';
         NavbarComponent,
         UserListComponent,
         PlantListComponent,
-        PlantComponent,
-        DialogComponent
+        PlantComponent
     ],
     providers: [ UserListService, PlantListService ],
     bootstrap: [ AppComponent ]

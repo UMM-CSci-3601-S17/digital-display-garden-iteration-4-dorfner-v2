@@ -11,7 +11,7 @@ export class Plant {
     plantImageURLs: string[];
     recognitions: string[];
 
-    constructor (){
+    constructor () {
         this.id="";
         this.plantID="";
         this.plantType="";
