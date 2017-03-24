@@ -11,6 +11,7 @@ import { routing } from './app/app.routes';
 import { FormsModule } from '@angular/forms';
 
 import { PipeModule } from './pipe.module';
+import {AdminComponent} from "./app/admin/admin.component";
 
 
 
@@ -21,13 +22,14 @@ import { PipeModule } from './pipe.module';
         JsonpModule,
         routing,
         FormsModule,
-        PipeModule
+        PipeModule,
     ],
     declarations: [
         AppComponent,
         NavbarComponent,
         PlantListComponent,
-        PlantComponent
+        PlantComponent,
+        AdminComponent
     ],
     providers: [ PlantListService ],
     bootstrap: [ AppComponent ]
