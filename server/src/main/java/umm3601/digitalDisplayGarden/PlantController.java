@@ -10,21 +10,14 @@ import com.mongodb.client.model.Accumulators;
 import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Sorts;
 import com.mongodb.util.JSON;
-import org.bson.Document;
-import org.bson.types.ObjectId;
-
-import com.mongodb.MongoClient;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
 import org.bson.BsonInvalidOperationException;
 import org.bson.Document;
 import org.bson.types.ObjectId;
+
 import org.bson.conversions.Bson;
 
 import java.util.Iterator;
 
-import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Projections.include;
 import static com.mongodb.client.model.Updates.*;
 import static com.mongodb.client.model.Projections.fields;
@@ -33,6 +26,7 @@ import java.io.IOException;
 import java.util.*;
 
 import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Updates.push;
 
 public class PlantController {
 
@@ -181,4 +175,74 @@ public class PlantController {
         return true;
     }
 
+    /**
+     * Adds a like or dislike to the specified plant.
+     *
+     * @param id a hexstring specifiying the oid
+     * @param like true if this is a like, false if this is a dislike
+     * @return true iff the operation succeeded.
+     */
+    public boolean addFlowerRating(String id, boolean like) {
+
+        Document filterDoc = new Document();
+
+        ObjectId objectId;
+
+        try {
+            objectId = new ObjectId(id);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+
+        filterDoc.append("_id", new ObjectId(id));
+
+        Document rating = new Document();
+        rating.append("like", like);
+        rating.append("ratingOnObjectOfId", objectId);
+
+        return null != plantCollection.findOneAndUpdate(filterDoc, push("metadata.ratings", rating));
+    }
+
+    /**
+     * Accepts string representation of JSON object containing
+     * at least the following:
+     * <code>
+     *     {
+     *         id: String,
+     *         like: boolean
+     *     }
+     * </code>
+     *
+     * @param json string representation of a JSON object
+     * @return true iff the operation succeeded.
+     */
+    public boolean addFlowerRating(String json){
+        boolean like;
+        String id;
+
+        try {
+
+            Document parsedDocument = Document.parse(json);
+
+            if(parsedDocument.containsKey("id") && parsedDocument.get("id") instanceof String){
+                id = parsedDocument.getString("id");
+            } else {
+                return false;
+            }
+
+            if(parsedDocument.containsKey("like") && parsedDocument.get("like") instanceof Boolean){
+                like = parsedDocument.getBoolean("like");
+            } else {
+                return false;
+            }
+
+        } catch (BsonInvalidOperationException e){
+            e.printStackTrace();
+            return false;
+        } catch (org.bson.json.JsonParseException e){
+            return false;
+        }
+
+        return addFlowerRating(id, like);
+    }
 }

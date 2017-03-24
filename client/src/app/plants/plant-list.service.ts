@@ -29,4 +29,11 @@ export class PlantListService {
         };
         return this.http.post(this.plantUrl + "/" + "leaveComment", JSON.stringify(returnObject)).map(res => res.json());
     }
+    ratePlant(id: string, like: boolean): Observable<boolean> {
+        let returnObject = {
+            id: id,
+            like: like
+        };
+        return this.http.post(this.plantUrl + "/" + "rate", JSON.stringify(returnObject)).map(res => res.json());
+    }
 }

@@ -81,6 +81,11 @@ public class Server {
             return plantController.getGardenLocations();
         });
 
+        post("api/plants/rate", (req, res) -> {
+            res.type("application/json");
+            return plantController.addFlowerRating(req.body());
+        });
+
         // Posting a comment
         post("api/plants/leaveComment", (req, res) -> {
             res.type("application/json");

@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import static java.lang.Math.max;
 
+import org.bson.BsonArray;
 import org.bson.Document;
 //import sun.text.normalizer.UTF16;
 
@@ -197,6 +198,14 @@ public class ExcelParser {
 
             Document doc = new Document();
             doc.putAll(map);
+
+            // Initialize the empty metadata
+            Document metadataDoc = new Document();
+            metadataDoc.append("pageViews", 0);
+            metadataDoc.append("ratings", new BsonArray());
+
+            doc.append("metadata", metadataDoc);
+
             plants.insertOne(doc);
         }
     }
