@@ -10,37 +10,14 @@ import {Observable} from "rxjs";
     templateUrl: 'plant.component.html'
 })
 export class PlantComponent implements OnInit {
-    plant : Plant = {id:"", plantID:"", plantType:"", commonName:"",cultivar:"",source:"",gardenLocation:"",year:1987,pageURL:"",plantImageURLs:[], recognitions:[]};
+    plant : Plant = new Plant();
     private commented: Boolean = false;
-    //public plant: Plant = null;
     private id: string;
     private plantID: string;
 
     constructor(private plantListService: PlantListService, private route: ActivatedRoute) {
-        // this.plants = this.plantListService.getPlants();
-
-
-
     }
 
-    /*
-    private subscribeToServiceForId() {
-        if (this.id) {
-            this.plantListService.getPlantById(this.id).subscribe(
-                plant => this.plant = plant,
-                err => {
-                    console.log(err);
-                }
-            );
-        }
-    }
-
-
-
-    setId(id: string) {
-        this.id = id;
-        this.subscribeToServiceForId();
-    }*/
 
     private comment(comment: string): void {
         if(!this.commented){
@@ -52,10 +29,8 @@ export class PlantComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        //this.subscribeToServiceForId();
-        // console.log(this.plant.cultivar);
 
-        //
+        //This gets the ID from the URL params and sets and subscribes this.plant
         this.route.params
             .switchMap((params: Params) => this.plantListService.getPlantById(params['plantID']))
             .subscribe((plant: Plant) => this.plant = plant);
