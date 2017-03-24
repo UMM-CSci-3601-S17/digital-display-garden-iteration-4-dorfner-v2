@@ -167,6 +167,50 @@ public class PlantController {
 
     }
 
+    /**
+     *
+     * @param plantID The plant to get feedback of
+     * @return JSON for the number of comments, likes, and dislikes
+     * Of the form:
+     * {
+     *     commentCount: number
+     *     likeCount: number
+     *     dislikeCount: number
+     * }
+     */
+    public String getFeedbackForPlantByPlantID(String plantID) {
+        Document out = new Document();
+
+        Document filter = new Document();
+        filter.put("commentOnPlant", plantID);
+        long entries = commentCollection.count(filter);
+
+        //Get a plant by plantID
+        FindIterable doc = plantCollection.find(new Document().append("id", plantID));
+        Iterator iterator = doc.iterator();
+        Document result = (Document) iterator.next();
+        //Get metadata.rating array
+        List<Document> ratings = (List<Document>) ((Document) result.get("metadata")).get("ratings");
+
+        //Loop through all of the entries within the array, counting like=true(like) and like=false(dislike)
+        long likes = 0;
+        long dislikes = 0;
+        for(Document rating : ratings)
+        {
+            if(rating.get("like").equals(true))
+                likes++;
+            else if(rating.get("like").equals(false))
+                dislikes++;
+        }
+
+        out.put("commentCount", entries);
+        out.put("likeCount", likes);
+        out.put("dislikeCount", dislikes);
+        return JSON.serialize(out);
+    }
+
+
+
     public String getGardenLocations(){
         AggregateIterable<Document> documents
                 = plantCollection.aggregate(
