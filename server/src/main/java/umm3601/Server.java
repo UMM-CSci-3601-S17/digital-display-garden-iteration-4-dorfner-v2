@@ -82,10 +82,10 @@ public class Server {
             return plantController.getGardenLocations();
         });
 
-        get("api/commentLine", (req, res) -> {
-           res.type("application/json");
-           plantController.commentLoop();
-           return "hello";
+        get("api/exports/plantComments", (req, res) -> {
+            res.type("application/vnd.ms-excel");
+            plantController.writeComments(res.raw().getOutputStream());
+            return res;
         });
 
         // Posting a comment
