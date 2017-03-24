@@ -34,6 +34,12 @@ public class CommentWriter {
         rowCount = 1;
     }
 
+    /**
+     * Adds the given information as a new row to the sheet.
+     * @param id: plant ID number
+     * @param comment: comment left by visitor
+     * @param timestamp: time the user left the comment
+     */
     public void writeComment(String id, String comment, Date timestamp){
         Row row = sheet.createRow(rowCount);
 
@@ -49,6 +55,10 @@ public class CommentWriter {
         rowCount++;
     }
 
+    /**
+     * Writes the spreadsheet to the outputstream, then closes it.
+     * @throws IOException
+     */
     public void complete() throws IOException{
         workbook.write(outputStream);
         outputStream.close();
