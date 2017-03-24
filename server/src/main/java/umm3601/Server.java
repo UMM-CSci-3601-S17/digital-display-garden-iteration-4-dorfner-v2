@@ -78,7 +78,7 @@ public class Server {
             return plantController.listPlants(req.queryMap().toMap());
         });
 
-        //Link to a Flower page
+        //Get a plant
         get("api/plants/:plantID", (req, res) -> {
             res.type("application/json");
             String id = req.params("plantID");

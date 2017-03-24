@@ -124,6 +124,29 @@ public class PlantController {
 
     }
 
+    /**
+     * Takes a String representing an ID number of a plant
+     * and when the ID is found in the database returns a JSON document
+     * as a String of the following form
+     *
+     * <code>
+     * {
+     *  "plantID"        : String,
+     *  "commonName" : String,
+     *  "cultivar"   : String
+     * }
+     * </code>
+     *
+     * If the ID is invalid or not found, the following JSON value is
+     * returned
+     *
+     * <code>
+     *  null
+     * </code>
+     *
+     * @param plantID an ID number of a plant in the DB
+     * @return a string representation of a JSON value
+     */
     public String getPlantByPlantID(String plantID) {
 
         FindIterable<Document> jsonPlant;
