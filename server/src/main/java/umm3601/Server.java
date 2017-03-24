@@ -84,6 +84,11 @@ public class Server {
 
         get("api/exports/plantComments", (req, res) -> {
             res.type("application/vnd.ms-excel");
+            res.header("Content-Disposition", "attachment; filename=\"plant-comments.xlsx\"");
+            // Note that after flush() or close() is called on
+            // res.raw().getOutputStream(), the response can no longer be
+            // modified. Since writeComments(..) closes the OutputStream
+            // when it is done, it needs to be the last line of this function.
             plantController.writeComments(res.raw().getOutputStream());
             return res;
         });
