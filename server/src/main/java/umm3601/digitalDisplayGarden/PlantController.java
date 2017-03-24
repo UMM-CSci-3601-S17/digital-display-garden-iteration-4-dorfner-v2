@@ -183,27 +183,33 @@ public class PlantController {
 
         Document filter = new Document();
         filter.put("commentOnPlant", plantID);
-        long entries = commentCollection.count(filter);
+        long comments = commentCollection.count(filter);
+        long likes = 0;
+        long dislikes = 0;
+
 
         //Get a plant by plantID
         FindIterable doc = plantCollection.find(new Document().append("id", plantID));
-        Iterator iterator = doc.iterator();
-        Document result = (Document) iterator.next();
-        //Get metadata.rating array
-        List<Document> ratings = (List<Document>) ((Document) result.get("metadata")).get("ratings");
 
-        //Loop through all of the entries within the array, counting like=true(like) and like=false(dislike)
-        long likes = 0;
-        long dislikes = 0;
-        for(Document rating : ratings)
-        {
-            if(rating.get("like").equals(true))
-                likes++;
-            else if(rating.get("like").equals(false))
-                dislikes++;
+        Iterator iterator = doc.iterator();
+        if(iterator.hasNext()) {
+            Document result = (Document) iterator.next();
+
+            //Get metadata.rating array
+            List<Document> ratings = (List<Document>) ((Document) result.get("metadata")).get("ratings");
+
+            //Loop through all of the entries within the array, counting like=true(like) and like=false(dislike)
+            for(Document rating : ratings)
+            {
+                if(rating.get("like").equals(true))
+                    likes++;
+                else if(rating.get("like").equals(false))
+                    dislikes++;
+            }
         }
 
-        out.put("commentCount", entries);
+
+        out.put("commentCount", comments);
         out.put("likeCount", likes);
         out.put("dislikeCount", dislikes);
         return JSON.serialize(out);
