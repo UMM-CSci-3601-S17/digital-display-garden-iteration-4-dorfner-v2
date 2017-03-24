@@ -118,6 +118,55 @@ public class PlantController {
 
     }
 
+    /**
+     * Takes a String representing an ID number of a plant
+     * and when the ID is found in the database returns a JSON document
+     * as a String of the following form
+     *
+     * <code>
+     * {
+     *  "plantID"        : String,
+     *  "commonName" : String,
+     *  "cultivar"   : String
+     * }
+     * </code>
+     *
+     * If the ID is invalid or not found, the following JSON value is
+     * returned
+     *
+     * <code>
+     *  null
+     * </code>
+     *
+     * @param plantID an ID number of a plant in the DB
+     * @return a string representation of a JSON value
+     */
+    public String getPlantByPlantID(String plantID) {
+
+        FindIterable<Document> jsonPlant;
+        String returnVal;
+        try {
+
+            jsonPlant = plantCollection.find(eq("id", plantID))
+                    .projection(fields(include("commonName", "cultivar")));
+
+            Iterator<Document> iterator = jsonPlant.iterator();
+
+            if (iterator.hasNext()) {
+                //incrementMetadata(id, "pageViews");
+                returnVal = iterator.next().toJson();
+            } else {
+                returnVal = "null";
+            }
+
+        } catch (IllegalArgumentException e) {
+            returnVal = "null";
+        }
+
+        return returnVal;
+
+    }
+
     public String getGardenLocations(){
         AggregateIterable<Document> documents
                 = plantCollection.aggregate(

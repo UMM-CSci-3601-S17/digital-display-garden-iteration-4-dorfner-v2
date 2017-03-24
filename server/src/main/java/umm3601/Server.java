@@ -76,6 +76,14 @@ public class Server {
             return plantController.listPlants(req.queryMap().toMap());
         });
 
+        //Get a plant
+        get("api/plants/:plantID", (req, res) -> {
+            res.type("application/json");
+            String id = req.params("plantID");
+            return plantController.getPlantByPlantID(id);
+        });
+
+        //List all Beds
         get("api/gardenLocations", (req, res) -> {
             res.type("application/json");
             return plantController.getGardenLocations();

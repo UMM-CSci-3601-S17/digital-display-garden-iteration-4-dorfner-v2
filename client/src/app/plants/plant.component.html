@@ -1,7 +1,6 @@
-<div *ngIf="plant" (plant)="thisPlant" class="plant">
+<div class="plant">
     <h2>{{plant.cultivar}}</h2>
     <h2>{{plant.commonName}}</h2>
-    <button (click)="plant.showDialog = false" class="btn" style="float: right">Close</button>
 
     <br/>
     <br/>
@@ -44,4 +43,5 @@
             <button type="button" (click)="this.comment(commentText)" style="float: right">Submit comment</button>
         </span>
     </div>
+    <button class="btn" style="float: right">Close</button>
 </div>
