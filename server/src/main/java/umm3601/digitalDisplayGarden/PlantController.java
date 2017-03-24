@@ -20,6 +20,7 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.BsonInvalidOperationException;
 import org.bson.Document;
 import org.bson.types.ObjectId;
+
 import org.bson.conversions.Bson;
 
 import java.io.OutputStream;
@@ -35,6 +36,7 @@ import java.io.IOException;
 import java.util.*;
 
 import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Updates.push;
 
 public class PlantController {
 
@@ -107,6 +109,55 @@ public class PlantController {
         try {
 
             jsonPlant = plantCollection.find(eq("_id", new ObjectId(id)))
+                    .projection(fields(include("commonName", "cultivar")));
+
+            Iterator<Document> iterator = jsonPlant.iterator();
+
+            if (iterator.hasNext()) {
+                //incrementMetadata(id, "pageViews");
+                returnVal = iterator.next().toJson();
+            } else {
+                returnVal = "null";
+            }
+
+        } catch (IllegalArgumentException e) {
+            returnVal = "null";
+        }
+
+        return returnVal;
+
+    }
+
+    /**
+     * Takes a String representing an ID number of a plant
+     * and when the ID is found in the database returns a JSON document
+     * as a String of the following form
+     *
+     * <code>
+     * {
+     *  "plantID"        : String,
+     *  "commonName" : String,
+     *  "cultivar"   : String
+     * }
+     * </code>
+     *
+     * If the ID is invalid or not found, the following JSON value is
+     * returned
+     *
+     * <code>
+     *  null
+     * </code>
+     *
+     * @param plantID an ID number of a plant in the DB
+     * @return a string representation of a JSON value
+     */
+    public String getPlantByPlantID(String plantID) {
+
+        FindIterable<Document> jsonPlant;
+        String returnVal;
+        try {
+
+            jsonPlant = plantCollection.find(eq("id", plantID))
                     .projection(fields(include("commonName", "cultivar")));
 
             Iterator<Document> iterator = jsonPlant.iterator();
@@ -211,4 +262,74 @@ public class PlantController {
 
     }
 
+    /**
+     * Adds a like or dislike to the specified plant.
+     *
+     * @param id a hexstring specifiying the oid
+     * @param like true if this is a like, false if this is a dislike
+     * @return true iff the operation succeeded.
+     */
+    public boolean addFlowerRating(String id, boolean like) {
+
+        Document filterDoc = new Document();
+
+        ObjectId objectId;
+
+        try {
+            objectId = new ObjectId(id);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+
+        filterDoc.append("_id", new ObjectId(id));
+
+        Document rating = new Document();
+        rating.append("like", like);
+        rating.append("ratingOnObjectOfId", objectId);
+
+        return null != plantCollection.findOneAndUpdate(filterDoc, push("metadata.ratings", rating));
+    }
+
+    /**
+     * Accepts string representation of JSON object containing
+     * at least the following:
+     * <code>
+     *     {
+     *         id: String,
+     *         like: boolean
+     *     }
+     * </code>
+     *
+     * @param json string representation of a JSON object
+     * @return true iff the operation succeeded.
+     */
+    public boolean addFlowerRating(String json){
+        boolean like;
+        String id;
+
+        try {
+
+            Document parsedDocument = Document.parse(json);
+
+            if(parsedDocument.containsKey("id") && parsedDocument.get("id") instanceof String){
+                id = parsedDocument.getString("id");
+            } else {
+                return false;
+            }
+
+            if(parsedDocument.containsKey("like") && parsedDocument.get("like") instanceof Boolean){
+                like = parsedDocument.getBoolean("like");
+            } else {
+                return false;
+            }
+
+        } catch (BsonInvalidOperationException e){
+            e.printStackTrace();
+            return false;
+        } catch (org.bson.json.JsonParseException e){
+            return false;
+        }
+
+        return addFlowerRating(id, like);
+    }
 }

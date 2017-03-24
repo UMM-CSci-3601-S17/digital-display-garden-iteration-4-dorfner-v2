@@ -16,6 +16,7 @@ export class PlantListService {
         return this.http.request(this.plantUrl + "/" + id).map(res => res.json());
     }
 
+
     getGardenLocations(): Observable<Plant[]> {
         return this.http.request(API_URL + "/gardenLocations").map(res => res.json());
     }
@@ -28,5 +29,12 @@ export class PlantListService {
             comment: comment
         };
         return this.http.post(this.plantUrl + "/" + "leaveComment", JSON.stringify(returnObject)).map(res => res.json());
+    }
+    ratePlant(id: string, like: boolean): Observable<boolean> {
+        let returnObject = {
+            id: id,
+            like: like
+        };
+        return this.http.post(this.plantUrl + "/" + "rate", JSON.stringify(returnObject)).map(res => res.json());
     }
 }

@@ -1,6 +1,5 @@
 package umm3601;
 
-import umm3601.user.UserController;
 import umm3601.digitalDisplayGarden.PlantController;
 import umm3601.digitalDisplayGarden.CommentWriter;
 
@@ -25,7 +24,6 @@ public class Server {
         // a problem which is resolved in `server/build.gradle`.
         staticFiles.location("/public");
 
-        UserController userController = new UserController();
         PlantController plantController = new PlantController();
 
         options("/*", (request, response) -> {
@@ -52,34 +50,28 @@ public class Server {
         redirect.get("", "/");
         redirect.get("/", "http://localhost:9000");
 
-        // List users
-        get("api/users", (req, res) -> {
-            res.type("application/json");
-            return userController.listUsers(req.queryMap().toMap());
-        });
-
-        // See specific user
-        get("api/users/:id", (req, res) -> {
-            res.type("application/json");
-            String id = req.params("id");
-            return userController.getUser(id);
-        });
-
-        // Get average ages by company
-        get("api/avgUserAgeByCompany", (req, res) -> {
-            res.type("application/json");
-            return userController.getAverageAgeByCompany();
-        });
-
         // List plants
         get("api/plants", (req, res) -> {
             res.type("application/json");
             return plantController.listPlants(req.queryMap().toMap());
         });
 
+        //Get a plant
+        get("api/plants/:plantID", (req, res) -> {
+            res.type("application/json");
+            String id = req.params("plantID");
+            return plantController.getPlantByPlantID(id);
+        });
+
+        //List all Beds
         get("api/gardenLocations", (req, res) -> {
             res.type("application/json");
             return plantController.getGardenLocations();
+        });
+
+        post("api/plants/rate", (req, res) -> {
+            res.type("application/json");
+            return plantController.addFlowerRating(req.body());
         });
 
         get("api/exports/plantComments", (req, res) -> {

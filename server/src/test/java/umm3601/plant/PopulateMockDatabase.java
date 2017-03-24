@@ -88,61 +88,65 @@ public class PopulateMockDatabase {
         db.drop();
 
         //First Plant Alternanthera
-        Map<String, String > alternanthera = new HashMap<>();
-        alternanthera.put("commonName", "Alternanthera");
-        alternanthera.put("cultivar", "Experimental");
-        alternanthera.put("gardenLocation", "10.0");
-        alternanthera.put("Comments", "Name change from Purple Prince   14x18 spreader");
-        alternanthera.put("HBHangBasketCContainerWWall", "");
-        alternanthera.put("id", "16001.0");
-        alternanthera.put("source", "PA");
-        alternanthera.put("SSeedVVeg", "S");
-        //alternanthera.put("garden", "hello!");
-        Document doc = new Document();
-        doc.putAll(alternanthera);
-        plants.insertOne(doc);
+        Document alternanthera = new Document();
+        alternanthera.append("_id", new ObjectId("58d1c36efb0cac4e15afd202"));
+
+        alternanthera.append("commonName", "Alternanthera");
+        alternanthera.append("cultivar", "Experimental");
+        alternanthera.append("gardenLocation", "10.0");
+        alternanthera.append("Comments", "Name change from Purple Prince   14x18 spreader");
+        alternanthera.append("HBHangBasketCContainerWWall", "");
+        alternanthera.append("id", "16001.0");
+        alternanthera.append("source", "PA");
+        alternanthera.append("SSeedVVeg", "S");
+
+        Document metadataDoc = new Document();
+        metadataDoc.append("pageViews", 0);
+        metadataDoc.append("ratings", new BsonArray());
+        
+        alternanthera.append("metadata", metadataDoc);
+        //alternanthera.append("garden", "hello!");
+        plants.insertOne(alternanthera );
 
         //Second Plant Begonia
-        Map<String, String> begonia = new HashMap<>();
-        begonia.put("commonName", "Begonia");
-        begonia.put("cultivar", "Megawatt Rose Green Leaf");
-        begonia.put("gardenLocation", "10.0");
-        begonia.put("Comments", "Grow in same sun or shade area; grow close proximity to each other for comparison");
-        begonia.put("HBHangBasketCContainerWWall", "");
-        begonia.put("id", "16008.0");
-        begonia.put("source", "PA");
-        begonia.put("SSeedVVeg", "S");
-        doc = new Document();
-        doc.putAll(begonia);
-        plants.insertOne(doc);
+        Document begonia = new Document();
+        begonia.append("_id", new ObjectId("58d1c36efb0cac4e15afd203"));
+
+        begonia.append("commonName", "Begonia");
+        begonia.append("cultivar", "Megawatt Rose Green Leaf");
+        begonia.append("gardenLocation", "10.0");
+        begonia.append("Comments", "Grow in same sun or shade area; grow close proximity to each other for comparison");
+        begonia.append("HBHangBasketCContainerWWall", "");
+        begonia.append("id", "16008.0");
+        begonia.append("source", "PA");
+        begonia.append("SSeedVVeg", "S");
+
+        Document metadataDoc1 = new Document();
+        metadataDoc1.append("pageViews", 0);
+        metadataDoc1.append("ratings", new BsonArray());
+
+        begonia.append("metadata", metadataDoc1);
+        plants.insertOne(begonia);
 
         //Third Plant Dianthus
-        Map<String, String> dianthus = new HashMap<>();
-        dianthus.put("commonName", "Dianthus");
-        dianthus.put("cultivar", "Jolt™ Pink F1");
-        dianthus.put("gardenLocation", "7.0");
-        dianthus.put("Comments", "");
-        dianthus.put("HBHangBasketCContainerWWall", "");
-        dianthus.put("id", "16040.0");
-        dianthus.put("source", "AAS");
-        dianthus.put("SSeedVVeg", "S");
-        doc = new Document();
-        doc.putAll(dianthus);
-        plants.insertOne(doc);
+        Document dianthus = new Document();
+        dianthus.append("_id", new ObjectId("58d1c36efb0cac4e15afd204"));
 
-//        //First Plant Alternanthera
-//        ObjectId alternantheraId = new ObjectId();
-//        BasicDBObject alternanthera = new BasicDBObject();
-//        alternanthera = alternanthera.append("commonName", "Alternanthera")
-//                .append("cultivar", "Experimental")
-//                .append("gardenLocation", "13.0")
-//                .append("Comments", "Name change from Purple Prince   14x18 spreader")
-//                .append("HBHangBasketCContainerWWall", "")
-//                .append("id", "16001.0")
-//                .append("source", "PA")
-//                .append("SSeedVVeg", "S");
-//        hexAlternantheraID = alternantheraId.toHexString();
-//        plantDocuments.insertOne(Document.parse(alternanthera.toJson()));
+        dianthus.append("commonName", "Dianthus");
+        dianthus.append("cultivar", "Jolt™ Pink F1");
+        dianthus.append("gardenLocation", "7.0");
+        dianthus.append("Comments", "");
+        dianthus.append("HBHangBasketCContainerWWall", "");
+        dianthus.append("id", "16040.0");
+        dianthus.append("source", "AAS");
+        dianthus.append("SSeedVVeg", "S");
+
+        Document metadataDoc2 = new Document();
+        metadataDoc2.append("pageViews", 0);
+        metadataDoc2.append("ratings", new BsonArray());
+
+        dianthus.append("metadata", metadataDoc2);
+        plants.insertOne(dianthus);
 
 
     }
