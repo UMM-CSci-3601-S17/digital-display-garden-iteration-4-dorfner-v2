@@ -10,8 +10,13 @@
         <textarea [(ngModel)]="commentText" rows="5" wrap="on" style="width: 100%;"></textarea>
 
     </span>
-    <span *ngIf="commented">
-        Your comment has been submitted.
+    <span *ngIf="commented" >
+        <br/>
+        &ensp; <!--Makes the following text indented, &ensp; is whitespace-->
+        <span style="font-size:18px;color:#008119;background-color:#d6ebd6">
+            <strong>Your feedback has been submitted.</strong>
+        </span>
+        <br/>
         <br/>
     </span>
 
