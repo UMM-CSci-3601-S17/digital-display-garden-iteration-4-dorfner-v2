@@ -32,6 +32,11 @@ export class PlantComponent implements OnInit {
             if(comment != null) {
                 this.plantListService.commentPlant(this.plant["_id"]["$oid"], comment)
                     .subscribe(succeeded => this.commented = succeeded);
+
+                //Update comment numbers
+                this.route.params
+                    .switchMap((params: Params) => this.plantListService.getFeedbackForPlantByPlantID(params['plantID']))
+                    .subscribe((plantFeedback: PlantFeedback) => this.plantFeedback = plantFeedback);
             }
         }
     }
@@ -42,6 +47,7 @@ export class PlantComponent implements OnInit {
                 .subscribe(succeeded => this.rating = like);
         }
 
+        //Update flower rating numbers
         this.route.params
             .switchMap((params: Params) => this.plantListService.getFeedbackForPlantByPlantID(params['plantID']))
             .subscribe((plantFeedback: PlantFeedback) => this.plantFeedback = plantFeedback);
@@ -51,10 +57,12 @@ export class PlantComponent implements OnInit {
 
     ngOnInit(): void {
 
-        //This gets the ID from the URL params and sets and subscribes this.plant
+        //This gets the ID from the URL params and sets and asks the server for the Plant with that ID
         this.route.params
             .switchMap((params: Params) => this.plantListService.getPlantById(params['plantID']))
             .subscribe((plant: Plant) => this.plant = plant);
+
+        //Asks the server for a PlantFeedback object corresponding
         this.route.params
             .switchMap((params: Params) => this.plantListService.getFeedbackForPlantByPlantID(params['plantID']))
             .subscribe((plantFeedback: PlantFeedback) => this.plantFeedback = plantFeedback);
