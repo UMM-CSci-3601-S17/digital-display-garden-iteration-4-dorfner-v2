@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 
 import { PipeModule } from './pipe.module';
 import {AdminComponent} from "./app/admin/admin.component";
+import {ExportComponent} from "./app/admin/export.component";
 
 
 
@@ -29,7 +30,8 @@ import {AdminComponent} from "./app/admin/admin.component";
         NavbarComponent,
         PlantListComponent,
         PlantComponent,
-        AdminComponent
+        AdminComponent,
+        ExportComponent
     ],
     providers: [ PlantListService ],
     bootstrap: [ AppComponent ]
