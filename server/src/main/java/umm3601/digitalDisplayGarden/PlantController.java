@@ -22,9 +22,11 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.bson.conversions.Bson;
 
+import java.io.OutputStream;
 import java.util.Iterator;
 
 import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.exists;
 import static com.mongodb.client.model.Projections.include;
 import static com.mongodb.client.model.Updates.*;
 import static com.mongodb.client.model.Projections.fields;
@@ -190,6 +192,23 @@ public class PlantController {
         }
 
         return true;
+    }
+
+    public void writeComments(OutputStream outputStream) throws IOException{
+
+           FindIterable iter = commentCollection.find(exists("commentOnPlant"));
+           Iterator iterator = iter.iterator();
+
+           CommentWriter commentWriter = new CommentWriter(outputStream);
+
+           while (iterator.hasNext()) {
+               Document comment = (Document) iterator.next();
+               commentWriter.writeComment(comment.getString("commentOnPlant"),
+                       comment.getString("comment"),
+                       ((ObjectId) comment.get("_id")).getDate());
+           }
+           commentWriter.complete();
+
     }
 
 }

@@ -2,6 +2,7 @@ package umm3601;
 
 import umm3601.user.UserController;
 import umm3601.digitalDisplayGarden.PlantController;
+import umm3601.digitalDisplayGarden.CommentWriter;
 
 import java.io.IOException;
 
@@ -79,6 +80,12 @@ public class Server {
         get("api/gardenLocations", (req, res) -> {
             res.type("application/json");
             return plantController.getGardenLocations();
+        });
+
+        get("api/commentLine", (req, res) -> {
+           res.type("application/json");
+           plantController.commentLoop();
+           return "hello";
         });
 
         // Posting a comment
