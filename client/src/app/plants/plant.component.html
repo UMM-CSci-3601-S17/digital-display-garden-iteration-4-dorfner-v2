@@ -1,12 +1,12 @@
 <div class="plant">
     <h2>{{plant.cultivar}}</h2>
-    <h3>{{plant.commonName}}</h3>
+    <h3 style="color:#606000">{{plant.commonName}}</h3>
 
     <br/>
 
     <h3>Leave Feedback for Flower</h3>
     <span *ngIf="!commented">
-        <textarea [(ngModel)]="commentText" rows="5" wrap="on" style="resize:vertical;width: 100%;"></textarea>
+        <textarea [(ngModel)]="commentText" rows="5" wrap="on" style="resize:vertical;width: 100%;color:#4e3e0a; font-size:18px"></textarea>
 
     </span>
     <span *ngIf="commented" >
