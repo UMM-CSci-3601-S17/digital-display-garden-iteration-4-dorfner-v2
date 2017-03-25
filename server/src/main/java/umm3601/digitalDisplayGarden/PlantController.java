@@ -242,6 +242,8 @@ public class PlantController {
                 return false;
             }
 
+            toInsert.append("uploadId", getLiveUploadId());
+
             commentCollection.insertOne(toInsert);
 
         } catch (BsonInvalidOperationException e){
