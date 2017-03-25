@@ -27,6 +27,7 @@ import java.io.OutputStream;
 import java.util.Iterator;
 
 import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.exists;
 import static com.mongodb.client.model.Projections.include;
 import static com.mongodb.client.model.Updates.*;
@@ -256,9 +257,13 @@ public class PlantController {
         return true;
     }
 
-    public void writeComments(OutputStream outputStream) throws IOException{
+    public void writeComments(OutputStream outputStream, String uploadId) throws IOException{
 
-           FindIterable iter = commentCollection.find(exists("commentOnPlant"));
+          FindIterable iter = commentCollection.find(
+                   and(
+                           exists("commentOnPlant"),
+                           eq("uploadId", uploadId)
+                   ));
            Iterator iterator = iter.iterator();
 
            CommentWriter commentWriter = new CommentWriter(outputStream);
@@ -270,7 +275,6 @@ public class PlantController {
                        ((ObjectId) comment.get("_id")).getDate());
            }
            commentWriter.complete();
-
     }
 
     /**
