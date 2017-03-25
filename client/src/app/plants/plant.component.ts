@@ -23,8 +23,11 @@ export class PlantComponent implements OnInit {
     //public plant: Plant = null;
     private id: string;
     private plantID: string;
+    private srcBed : string;
 
     constructor(private plantListService: PlantListService, private route: ActivatedRoute) {
+        this.srcBed = this.route.snapshot.params["srcBed"];
+        console.log(this.srcBed);
     }
 
     private comment(comment: string): void {
@@ -52,6 +55,7 @@ export class PlantComponent implements OnInit {
             .switchMap((params: Params) => this.plantListService.getFeedbackForPlantByPlantID(params['plantID']))
             .subscribe((plantFeedback: PlantFeedback) => this.plantFeedback = plantFeedback);
     }
+
 
 
 
