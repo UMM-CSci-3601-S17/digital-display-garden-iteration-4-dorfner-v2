@@ -69,6 +69,12 @@ public class Server {
             return plantController.getGardenLocations();
         });
 
+        // List all uploadIds
+        get("api/uploadIds", (req, res) -> {
+            res.type("application/json");
+            return plantController.listUploadIds();
+        });
+
         post("api/plants/rate", (req, res) -> {
             res.type("application/json");
             return plantController.addFlowerRating(req.body());

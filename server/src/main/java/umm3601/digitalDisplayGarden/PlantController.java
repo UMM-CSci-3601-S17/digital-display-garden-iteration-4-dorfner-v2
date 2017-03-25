@@ -332,4 +332,23 @@ public class PlantController {
 
         return addFlowerRating(id, like);
     }
+
+    /**
+     *
+     * @return a sorted JSON array of all the distinct uploadIds in the DB
+     */
+    public String listUploadIds() {
+        AggregateIterable<Document> documents
+                = plantCollection.aggregate(
+                Arrays.asList(
+                        Aggregates.group("$uploadId"),
+                        Aggregates.sort(Sorts.ascending("_id"))
+                ));
+        List<String> lst = new LinkedList<>();
+        for(Document d: documents) {
+            lst.add(d.getString("_id"));
+        }
+        return JSON.serialize(lst);
+//        return JSON.serialize(plantCollection.distinct("uploadId","".getClass()));
+    }
 }
