@@ -2,10 +2,7 @@ package umm3601.digitalDisplayGarden;
 
 import com.google.gson.Gson;
 import com.mongodb.MongoClient;
-import com.mongodb.client.AggregateIterable;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.*;
 import com.mongodb.client.model.Accumulators;
 import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Sorts;
@@ -217,7 +214,7 @@ public class PlantController {
 
 
 
-    public String getGardenLocations(){
+    public String getPlantsByGardenLocations(){
         AggregateIterable<Document> documents
                 = plantCollection.aggregate(
                 Arrays.asList(
@@ -226,6 +223,17 @@ public class PlantController {
                 ));
         System.err.println(JSON.serialize(documents));
         return JSON.serialize(documents);
+    }
+
+    public String[] getGardenLocations(){
+        Document filter = new Document();
+        DistinctIterable<String>  bedIterator = plantCollection.distinct("gardenLocation", filter, String.class);
+        List<String> beds = new ArrayList<String>();
+        for(String s : bedIterator)
+        {
+            beds.add(s);
+        }
+        return beds.toArray(new String[beds.size()]);
     }
 
     /**
