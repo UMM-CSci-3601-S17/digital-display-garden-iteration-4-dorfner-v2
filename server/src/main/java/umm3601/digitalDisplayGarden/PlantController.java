@@ -42,6 +42,7 @@ public class PlantController {
 
     private final MongoCollection<Document> plantCollection;
     private final MongoCollection<Document> commentCollection;
+    private final MongoCollection<Document> configCollection;
 
     public PlantController() throws IOException {
         // Set up our server address
@@ -57,6 +58,14 @@ public class PlantController {
 
         plantCollection = db.getCollection("plants");
         commentCollection = db.getCollection("comments");
+        configCollection = db.getCollection("config");
+    }
+
+    public String getLiveUploadId() {
+        FindIterable<Document> findIterable = configCollection.find(exists("liveUploadId"));
+        Iterator<Document> iterator = findIterable.iterator();
+        Document doc = iterator.next();
+        return doc.getString("liveUploadId");
     }
 
     // List plants

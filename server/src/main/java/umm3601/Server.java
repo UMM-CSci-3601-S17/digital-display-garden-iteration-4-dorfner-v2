@@ -1,5 +1,6 @@
 package umm3601;
 
+import com.mongodb.util.JSON;
 import umm3601.digitalDisplayGarden.PlantController;
 import umm3601.digitalDisplayGarden.CommentWriter;
 
@@ -80,7 +81,7 @@ public class Server {
             return plantController.addFlowerRating(req.body());
         });
 
-        get("api/exports/plantComments", (req, res) -> {
+        get("api/export", (req, res) -> {
             res.type("application/vnd.ms-excel");
             res.header("Content-Disposition", "attachment; filename=\"plant-comments.xlsx\"");
             // Note that after flush() or close() is called on
@@ -89,6 +90,11 @@ public class Server {
             // when it is done, it needs to be the last line of this function.
             plantController.writeComments(res.raw().getOutputStream());
             return res;
+        });
+
+        get("api/liveUploadId", (req, res) -> {
+            res.type("application/json");
+            return JSON.serialize(plantController.getLiveUploadId());
         });
 
         // Posting a comment
