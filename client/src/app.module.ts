@@ -13,6 +13,8 @@ import { FormsModule } from '@angular/forms';
 import { PipeModule } from './pipe.module';
 import {AdminComponent} from "./app/admin/admin.component";
 import {ExportComponent} from "./app/admin/export.component";
+import {AdminService} from "./app/admin/admin.service";
+
 
 
 
@@ -33,7 +35,7 @@ import {ExportComponent} from "./app/admin/export.component";
         AdminComponent,
         ExportComponent
     ],
-    providers: [ PlantListService ],
+    providers: [ PlantListService, AdminService ],
     bootstrap: [ AppComponent ]
 })
 

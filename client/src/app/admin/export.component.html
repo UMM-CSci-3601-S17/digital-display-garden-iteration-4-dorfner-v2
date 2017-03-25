@@ -1,1 +1,7 @@
 Exported Data
+<ul>
+    <li *ngFor="let uploadId of uploadIds">
+        {{ uploadId }}
+        <a [attr.href]="this.url + uploadId">Download Feedback</a>
+    </li>
+</ul>
