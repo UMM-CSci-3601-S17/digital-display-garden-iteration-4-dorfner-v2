@@ -23,14 +23,14 @@ public class ExcelParser {
     private String fileName;
 
 //    public static void main(String[] args) {
-//        parseExel();
+//        parseExcel();
 //    }
 
     public ExcelParser(String fileName){
         this.fileName = fileName;
     }
 
-    public void parseExel() {
+    public void parseExcel() {
 
         String[][] arrayRepresentation = extractFromXLSX();
 
