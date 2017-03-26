@@ -224,7 +224,6 @@ public class PlantController {
                         Aggregates.group("$gardenLocation"),
                         Aggregates.sort(Sorts.ascending("_id"))
                 ));
-        System.err.println(JSON.serialize(documents));
         return JSON.serialize(documents);
     }
 
