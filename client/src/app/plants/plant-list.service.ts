@@ -28,6 +28,9 @@ export class PlantListService {
     getFlowersByFilter(filterUrl: string): Observable<Plant[]> {
         return this.http.request(this.plantUrl + filterUrl).map(res => res.json());
     }
+    getFlowersByBed(bed: string): Observable<Plant[]> {
+        return this.http.request(this.plantUrl + "?gardenLocation=" + bed).map(res => res.json());
+    }
 
 
     commentPlant(id: string, comment: string): Observable<Boolean> {
