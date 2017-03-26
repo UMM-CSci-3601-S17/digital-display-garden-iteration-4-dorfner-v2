@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { PlantListService } from "./plant-list.service";
 import { Plant } from "./plant";
-import { FilterBy } from "./filter.pipe";
 import {Params, ActivatedRoute} from "@angular/router";
 
 @Component({
     selector: 'bed-component',
     templateUrl: 'bed.component.html',
-    providers: [ FilterBy ]
 })
 
 export class BedComponent implements OnInit {
