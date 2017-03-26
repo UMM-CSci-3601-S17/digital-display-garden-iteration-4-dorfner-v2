@@ -5,7 +5,7 @@ import { Http } from '@angular/http';
 
 @Component({
     selector: 'file-upload',
-    template: '<input type="file" [multiple]="multiple" #fileInput class="center-block">'
+    template: '<input type="file" [multiple]="multiple" #fileInput>'
 })
 export class FileUploadComponent {
     @Input() multiple: boolean = false;
@@ -21,7 +21,7 @@ export class FileUploadComponent {
             for (let i = 0; i < fileCount; i++) {
                 formData.append('file[]', inputEl.files.item(i));
             }
-            this.http.post(API_URL + "import", formData).subscribe(x => console.log(x), err => console.log(err));
+            return this.http.post(API_URL + "import", formData);
         }
     }
 }

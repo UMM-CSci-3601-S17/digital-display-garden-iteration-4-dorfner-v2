@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import { AdminService } from './admin.service';
 
 
@@ -9,7 +9,23 @@ import { AdminService } from './admin.service';
 
 export class ImportComponent implements OnInit {
 
+    @ViewChild('fu') fu;
 
+    filename:string;
+    uploadAttempted:boolean = false;
+
+    handleUpload(){
+        this.fu.upload().subscribe(
+            response => {
+                this.filename = response.json();
+                this.uploadAttempted = true;
+            },
+            err => {
+                this.uploadAttempted = true;
+            }
+
+        );
+    }
 
     ngOnInit(): void {
 

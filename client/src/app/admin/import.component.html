@@ -1,1 +1,7 @@
-<file-upload #fu (change)="fu.upload()" [multiple]="false" class="center-block"></file-upload>
+<file-upload #fu [multiple]="false"></file-upload>
+
+
+<button (click)="this.handleUpload()" style="margin-top: 10px">Import</button>
+
+<div *ngIf="filename!==undefined">Your file was successfully uploaded as data set {{this.filename}}.</div>
+<div *ngIf="filename === undefined && uploadAttempted === true">File upload failed.</div>

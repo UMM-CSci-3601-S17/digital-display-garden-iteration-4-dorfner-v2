@@ -130,14 +130,13 @@ public class Server {
                 parser.parseExel(id);
                 plantController.setLiveUploadId(id);
 
-
+                return JSON.serialize(id);
 
             } catch (Exception e) {
                 e.printStackTrace();
                 throw e;
             }
 
-            return true;
         });
 
         // Handle "404" file not found requests:
