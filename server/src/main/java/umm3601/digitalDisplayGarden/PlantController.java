@@ -22,6 +22,7 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 
 import org.bson.conversions.Bson;
+import org.joda.time.DateTime;
 
 import java.io.OutputStream;
 import java.util.Iterator;
@@ -366,4 +367,28 @@ public class PlantController {
         return JSON.serialize(lst);
 //        return JSON.serialize(plantCollection.distinct("uploadId","".getClass()));
     }
+
+
+    public String getAvailableUploadId(){
+
+        StringBuilder sb = new StringBuilder();
+        // Send all output to the Appendable object sb
+        Formatter formatter = new Formatter(sb);
+
+        java.util.Date juDate = new Date();
+        DateTime dt = new DateTime(juDate);
+
+        int day = dt.getDayOfMonth();
+        int month = dt.getMonthOfYear();
+        int year = dt.getYear();
+        int hour = dt.getHourOfDay();
+        int minute = dt.getMinuteOfHour();
+        int seconds = dt.getSecondOfMinute();
+
+        formatter.format("%d-%02d-%02d %02d:%02d:%02d",year,month,day,hour,minute,seconds);
+        return sb.toString();
+
+
+    }
+
 }

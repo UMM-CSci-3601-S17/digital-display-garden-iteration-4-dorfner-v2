@@ -1,10 +1,12 @@
 package umm3601;
 
 import com.mongodb.util.JSON;
+import org.joda.time.DateTime;
 import umm3601.digitalDisplayGarden.PlantController;
 import umm3601.digitalDisplayGarden.CommentWriter;
 
 import java.io.IOException;
+import java.util.Date;
 
 import static spark.Spark.*;
 
@@ -122,7 +124,11 @@ public class Server {
                 Part part = req.raw().getPart("file[]");
 
                 ExcelParser parser = new ExcelParser(part.getInputStream());
-                parser.parseExel("Today's Database");
+
+
+                parser.parseExel(plantController.getAvailableUploadId());
+
+
 
             } catch (Exception e) {
                 e.printStackTrace();
