@@ -21,7 +21,6 @@ export class FileUploadComponent {
             for (let i = 0; i < fileCount; i++) {
                 formData.append('file[]', inputEl.files.item(i));
             }
-            console.log("I see you!");
             this.http.post(API_URL + "import", formData).subscribe(x => console.log(x), err => console.log(err));
         }
     }

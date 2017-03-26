@@ -10,8 +10,14 @@ import static spark.Spark.*;
 
 import umm3601.digitalDisplayGarden.ExcelParser;
 
+import javax.servlet.MultipartConfigElement;
+import javax.servlet.http.Part;
+
 
 public class Server {
+
+    private static String excelTempDir = "/tmp/digital-display-garden";
+
     public static void main(String[] args) throws IOException {
 
         port(2538);
@@ -101,6 +107,27 @@ public class Server {
         post("api/plants/leaveComment", (req, res) -> {
             res.type("application/json");
             return plantController.storePlantComment(req.body());
+        });
+
+        // Accept an xls file
+        post("api/import", (req, res) -> {
+
+            res.type("application/json");
+            try {
+
+                MultipartConfigElement multipartConfigElement = new MultipartConfigElement(excelTempDir);
+                req.raw().setAttribute("org.eclipse.jetty.multipartConfig", multipartConfigElement);
+
+                String fileName = Long.valueOf(System.currentTimeMillis()).toString();
+                Part part = req.raw().getPart("file[]");
+                part.write(fileName);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
+
+            return true;
         });
 
         // Handle "404" file not found requests:
