@@ -14,6 +14,7 @@ import { PipeModule } from './pipe.module';
 import {AdminComponent} from "./app/admin/admin.component";
 import {ExportComponent} from "./app/admin/export.component";
 import {AdminService} from "./app/admin/admin.service";
+import {ImportComponent} from "./app/admin/import.component";
 
 
 
@@ -33,7 +34,8 @@ import {AdminService} from "./app/admin/admin.service";
         PlantListComponent,
         PlantComponent,
         AdminComponent,
-        ExportComponent
+        ExportComponent,
+        ImportComponent
     ],
     providers: [ PlantListService, AdminService ],
     bootstrap: [ AppComponent ]
