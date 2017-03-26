@@ -22,10 +22,7 @@ export class BedComponent implements OnInit {
 
 
     ngOnInit(): void {
-        //Form the URL for the plant list request for this bed
-        let filterUrl = "?gardenLocation=" + this.bed;
-
-        this.plantListService.getFlowersByFilter(filterUrl).subscribe (
+        this.plantListService.getFlowersByBed(this.bed).subscribe (
             plants => this.plants = plants,
             err => {
                 console.log(err);
