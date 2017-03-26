@@ -125,8 +125,10 @@ public class Server {
 
                 ExcelParser parser = new ExcelParser(part.getInputStream());
 
+                String id = plantController.getAvailableUploadId();
 
-                parser.parseExel(plantController.getAvailableUploadId());
+                parser.parseExel(id);
+                plantController.setLiveUploadId(id);
 
 
 

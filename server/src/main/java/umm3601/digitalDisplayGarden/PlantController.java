@@ -391,4 +391,10 @@ public class PlantController {
 
     }
 
+    public void setLiveUploadId(String uploadid){
+         configCollection.findOneAndUpdate(exists("liveUploadId"),
+                set("liveUploadId", uploadid));
+    }
+
+
 }
