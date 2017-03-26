@@ -20,19 +20,19 @@ import org.bson.Document;
 
 public class ExcelParser {
 
-    private String fileName;
+    private InputStream stream;
 
 //    public static void main(String[] args) {
 //        parseExel();
 //    }
 
-    public ExcelParser(String fileName){
-        this.fileName = fileName;
+    public ExcelParser(InputStream stream){
+     this.stream = stream;
     }
 
-    public void parseExel(String uploadId) {
+    public void parseExel(String uploadId) throws FileNotFoundException{
 
-        String[][] arrayRepresentation = extractFromXLSX();
+        String[][] arrayRepresentation = extractFromXLSX(stream);
 
         String[][] horizontallyCollapsed = collapseHorizontally(arrayRepresentation);
         String[][] verticallyCollapsed = collapseVertically(horizontallyCollapsed);
@@ -48,10 +48,8 @@ public class ExcelParser {
     This file originally just printed data, that is why there are several commented out lines in the code.
     We have repurposed this method to put all data into a 2D String array and return it.
      */
-    public String[][] extractFromXLSX() {
+    public String[][] extractFromXLSX(InputStream excelFile) {
         try {
-            InputStream excelFile = this.getClass().getResourceAsStream(fileName);
-
             Workbook workbook = new XSSFWorkbook(excelFile);
             Sheet datatypeSheet = workbook.getSheetAt(0);
 
