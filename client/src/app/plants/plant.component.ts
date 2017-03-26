@@ -27,7 +27,6 @@ export class PlantComponent implements OnInit {
 
     constructor(private plantListService: PlantListService, private route: ActivatedRoute) {
         this.srcBed = this.route.snapshot.params["srcBed"];
-        console.log(this.srcBed);
     }
 
     private comment(comment: string): void {
