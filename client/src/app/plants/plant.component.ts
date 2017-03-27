@@ -34,12 +34,10 @@ export class PlantComponent implements OnInit {
         if(!this.commented){
             if(comment != null) {
                 this.plantListService.commentPlant(this.plant["_id"]["$oid"], comment)
-                    .subscribe(succeeded => this.commented = succeeded);
-
-                //Update comment numbers
-                this.route.params
-                    .switchMap((params: Params) => this.plantListService.getFeedbackForPlantByPlantID(params['plantID']))
-                    .subscribe((plantFeedback: PlantFeedback) => this.plantFeedback = plantFeedback);
+                    .subscribe(succeeded => {
+                        this.commented = succeeded;
+                        this.refreshFeedback();
+                    });
             }
         }
     }
@@ -47,10 +45,15 @@ export class PlantComponent implements OnInit {
     private ratePlant(like: boolean): void {
         if(this.rating === null && like !== null) {
             this.plantListService.ratePlant(this.plant["_id"]["$oid"], like)
-                .subscribe(succeeded => this.rating = like);
+                .subscribe(succeeded => {
+                    this.rating = like;
+                    this.refreshFeedback();
+                });
         }
+    }
 
-        //Update flower rating numbers
+    private refreshFeedback(): void {
+        //Update flower feedback numbers
         this.route.params
             .switchMap((params: Params) => this.plantListService.getFeedbackForPlantByPlantID(params['plantID']))
             .subscribe((plantFeedback: PlantFeedback) => this.plantFeedback = plantFeedback);
