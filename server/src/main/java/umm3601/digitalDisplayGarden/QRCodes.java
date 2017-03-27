@@ -25,12 +25,6 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import com.mongodb.client.AggregateIterable;
-import com.mongodb.client.model.Aggregates;
-import com.mongodb.client.model.Sorts;
-import org.bson.Document;
-import sun.misc.IOUtils;
-import sun.nio.ch.IOUtil;
 
 /**
  * Created by carav008 on 3/25/17.
