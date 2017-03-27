@@ -29,17 +29,20 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 /**
  * Created by carav008 on 3/25/17.
  */
+
+// todo make this use uploadID
 public class QRCodes {
     //http://javapapers.com/core-java/java-qr-code/
 
     private PlantController plantController;
 
+    // todo make this use uploadID
     public QRCodes(PlantController plantController)
     {
         this.plantController = plantController;
     }
 
-
+    // todo make this use uploadID
     public static BufferedImage createQRFromBedURL(String url) throws IOException,WriterException{
 
         Map hintMap = new HashMap();
@@ -56,6 +59,7 @@ public class QRCodes {
      *
      * @return the path to the new .zip file or null if there was a disk IO issue
      */
+    // todo make this use uploadID
     public String CreateQRCodesFromAllBeds(){
         //Get all unique beds from Database
         //Create URLs for all unique beds
@@ -160,6 +164,7 @@ public class QRCodes {
         return zipPath;
     }
 
+    // todo make this use uploadID
     public static BufferedImage createQRCode(String qrCodeData, String charset, Map hintMap, int qrCodeheight, int qrCodewidth)
             throws WriterException, IOException {
         //Create the BitMatrix representing the QR code

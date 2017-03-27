@@ -68,6 +68,7 @@ public class PlantController {
     }
 
     // List plants
+    // todo make this use uploadID
     public String listPlants(Map<String, String[]> queryParams) {
         Document filterDoc = new Document();
 
@@ -110,6 +111,7 @@ public class PlantController {
      * @param id a hexadecimal ID number of a plant in the DB
      * @return a string representation of a JSON value
      */
+    // todo make this use uploadID
     public String getPlant(String id) {
 
         FindIterable<Document> jsonPlant;
@@ -159,6 +161,7 @@ public class PlantController {
      * @param plantID an ID number of a plant in the DB
      * @return a string representation of a JSON value
      */
+    // todo make this use uploadID
     public String getPlantByPlantID(String plantID) {
 
         FindIterable<Document> jsonPlant;
@@ -196,6 +199,7 @@ public class PlantController {
      *     dislikeCount: number
      * }
      */
+    // todo make this use uploadID
     public String getFeedbackForPlantByPlantID(String plantID) {
         Document out = new Document();
 
@@ -234,7 +238,7 @@ public class PlantController {
     }
 
 
-
+    // todo make this use uploadID
     public String getPlantsByGardenLocations(){
         AggregateIterable<Document> documents
                 = plantCollection.aggregate(
@@ -245,7 +249,7 @@ public class PlantController {
         System.err.println(JSON.serialize(documents));
         return JSON.serialize(documents);
     }
-
+    // todo make this use uploadID
     public String[] getGardenLocations(){
         Document filter = new Document();
         DistinctIterable<String>  bedIterator = plantCollection.distinct("gardenLocation", filter, String.class);
@@ -271,6 +275,7 @@ public class PlantController {
      * @param json string representation of JSON object
      * @return true iff the comment was successfully submitted
      */
+    // todo make this use uploadID
     public boolean storePlantComment(String json) {
 
 
@@ -343,6 +348,7 @@ public class PlantController {
      * @param like true if this is a like, false if this is a dislike
      * @return true iff the operation succeeded.
      */
+    // todo make this use uploadID
     public boolean addFlowerRating(String id, boolean like) {
 
         Document filterDoc = new Document();
@@ -377,6 +383,7 @@ public class PlantController {
      * @param json string representation of a JSON object
      * @return true iff the operation succeeded.
      */
+    // todo make this use uploadID
     public boolean addFlowerRating(String json){
         boolean like;
         String id;
