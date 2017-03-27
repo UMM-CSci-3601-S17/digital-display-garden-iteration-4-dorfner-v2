@@ -50,8 +50,9 @@
             <button type="button" (click)="this.comment(commentText)" style="float: right">Submit feedback</button>
         </span>
     </div>
-
-
+    <span *ngIf="srcBed !== null">
+        <button  [routerLink] ="['/bed', srcBed]" class="btn" style="float: right">Back</button>
+    </span>
    <div>
        {{plantFeedback.commentCount}} people have left feedback
    </div>
