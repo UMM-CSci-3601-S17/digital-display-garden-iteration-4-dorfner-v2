@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { PlantListService } from "./plant-list.service";
 import { Plant } from "./plant";
-import { FilterBy } from "./filter.pipe";
 import {Params, ActivatedRoute} from "@angular/router";
 
 @Component({
     selector: 'bed-component',
     templateUrl: 'bed.component.html',
-    providers: [ FilterBy ]
 })
 
 export class BedComponent implements OnInit {
@@ -24,10 +22,7 @@ export class BedComponent implements OnInit {
 
 
     ngOnInit(): void {
-        //Form the URL for the plant list request for this bed
-        let filterUrl = "?gardenLocation=" + this.bed;
-
-        this.plantListService.getFlowersByFilter(filterUrl).subscribe (
+        this.plantListService.getFlowersByBed(this.bed).subscribe (
             plants => this.plants = plants,
             err => {
                 console.log(err);
