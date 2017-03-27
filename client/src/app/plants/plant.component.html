@@ -1,6 +1,6 @@
 <div class="plant">
     <h2>{{plant.cultivar}}</h2>
-    <h3 style="color:#606000">{{plant.commonName}}</h3>
+    <h3>{{plant.commonName}}</h3>
 
     <br/>
 
@@ -22,7 +22,7 @@
     <div style="padding-top: 0.3em">
         <span *ngIf="rating === null">
             <button type="button" (click)="this.ratePlant(true)" style="border: none; background: inherit; outline: none;font-size:20px">
-                <span  class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
                 {{plantFeedback.likeCount}}
             </button>
             <button type="button" (click)="this.ratePlant(false)" style="border: none; background: inherit; outline: none;font-size:20px">
@@ -50,16 +50,16 @@
             <button type="button" (click)="this.comment(commentText)" style="float: right">Submit feedback</button>
         </span>
     </div>
-    <span *ngIf="srcBed !== null">
-        <button  [routerLink] ="['/bed', srcBed]" class="btn" style="float: right">Back</button>
-    </span>
+
    <div>
        {{plantFeedback.commentCount}} people have left feedback
    </div>
     <br/>
     <br/>
     <br/>
-    <button type="button" style="float: right">Back</button>
+    <span *ngIf="srcBed !== undefined">
+        <button  [routerLink]="['/bed', srcBed]" class="btn" style="float: right">Back</button>
+    </span>
 
     <footer style="position:absolute; bottom:0; width:100%; height:60px">
         <p>Contact Information</p>
