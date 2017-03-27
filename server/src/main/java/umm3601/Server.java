@@ -91,7 +91,7 @@ public class Server {
         //List all Beds
         get("api/gardenLocations", (req, res) -> {
             res.type("application/json");
-            return plantController.getGardenLocations();
+            return plantController.getPlantsByGardenLocations();
         });
 
         // List all uploadIds
@@ -160,7 +160,7 @@ public class Server {
 
                 String id = plantController.getAvailableUploadId();
 
-                parser.parseExel(id);
+                parser.parseExcel(id);
                 plantController.setLiveUploadId(id);
 
                 return JSON.serialize(id);
