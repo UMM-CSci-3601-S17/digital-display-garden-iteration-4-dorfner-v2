@@ -12,9 +12,6 @@
         <span >Plants</span>
     </li>
 
-    <footer style="position:absolute; bottom:0; width:100%; height:60px">
-        <p>Contact Information</p>
-    </footer>
 
     <li *ngFor="let plant of plants" class="list-group-item">
     <!--Button is a hyperlink to a plant page "/plants/:plantID"-->
@@ -22,9 +19,6 @@
         <button [routerLink]="['/plants', plant.id]" class="btn btn-link btn-block" >
             <strong style="font-size:18px">{{plant.cultivar}}</strong><br>
             {{plant.commonName}}</button>
-
     </li>
 
 </ul>
-
-
