@@ -1,14 +1,14 @@
 package umm3601.digitalDisplayGarden;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.Buffer;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
-import java.util.zip.Adler32;
-import java.util.zip.CheckedOutputStream;
-import java.util.zip.GZIPOutputStream;
-import java.util.zip.ZipOutputStream;
+import java.util.List;
+import java.util.zip.*;
 
 import javax.imageio.ImageIO;
 
@@ -29,6 +29,8 @@ import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Sorts;
 import org.bson.Document;
+import sun.misc.IOUtils;
+import sun.nio.ch.IOUtil;
 
 /**
  * Created by carav008 on 3/25/17.
@@ -43,29 +45,24 @@ public class QRCodes {
         this.plantController = plantController;
     }
 
-    public static void main(String[] args)
-            throws WriterException, IOException, NotFoundException {
-        String qrCodeData = "Hello World!";
-        String filePath = "QRCode.png";
-        String charset = "UTF-8"; // or "ISO-8859-1"
-        Map hintMap = new HashMap();
-        hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
-
-        BufferedImage img = createQRCode(qrCodeData, charset, hintMap, 200, 200);
-        //Files.write(filePath, img.getData());
-        System.out.println("QR Code image created successfully!");
-
-    }
 
     public static BufferedImage createQRFromBedURL(String url) throws IOException,WriterException{
 
         Map hintMap = new HashMap();
         hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
         return createQRCode(url, "UTF-8", hintMap, 300,300);
+
     }
 
-
-    public void CreateQRCodesFromAllBeds(){
+    /**
+     * Gets all beds from the Database,
+     * Forms URLS for all unique beds
+     * Write QRCode images to files
+     * Zip together the QRCodes
+     *
+     * @return the path to the new .zip file or null if there was a disk IO issue
+     */
+    public String CreateQRCodesFromAllBeds(){
         //Get all unique beds from Database
         //Create URLs for all unique beds
         //Create QRCode BufferedImages for all URLs
@@ -97,43 +94,76 @@ public class QRCodes {
             }
         }
 
-        //Archive and Compress into Zip
+        //WRITE IMAGES TO FILE
 
-        final int BUFFER_SIZE = 1024;
-
-        //FileOutputStream dest = new FileOutputStream("somefile"); //TODO: should not go to file
-        CheckedOutputStream checksum = new CheckedOutputStream(null, new Adler32()); //null should be replaced with an OutputStream
-        ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(checksum));
-
-        //out.setMethod(ZipOutputStream.DEFLATED);
-
-        byte dataBuffer[] = new byte[BUFFER_SIZE];
-
-        //Get bytes from images and write them into the zipOutputStream
-        byte imageData[];
-        for(int i = 0; i < qrCodeImages.size(); i++)
-        {
-            ByteArrayOutputStream toByteStream = new ByteArrayOutputStream();
-            try {
-                ImageIO.write(qrCodeImages.get(i), "png", toByteStream); //formatName was jpg -- does changing it to png just _rename_ it a png or actually make it png?
-                toByteStream.flush();
-                imageData = toByteStream.toByteArray();
-                //imageData contains the bytes for the qr images, now we just need to put it in the ZipOutputStream
-                //and then send the zip stream to the client in a way it will recognize
-
-
-
-            }
-            catch(IOException ioe)
-            {
-                //TODO: handle better
-                ioe.printStackTrace();
-            }
-
-
+        if(numBeds != qrCodeImages.size()) {
+            System.err.println("a QR code could not be made for each Bed.");
+            return null;
         }
 
+        try {
+            for (int i = 0; i < qrCodeImages.size(); i++) {
+                File outputFile = new File(bedNames[i] + ".png"); //TODO might not want to append .png if automatic
+                ImageIO.write(qrCodeImages.get(i), "png", outputFile);
+            }
+        }
+        catch(IOException ioe)
+        {
+            ioe.printStackTrace();
+            System.err.println("Could not write some Images to disk, exiting.");
+            return null;
+        }
 
+        //We have the images, now Zip them up!
+        //ARCHIVE AND COMPRESS TO ZIP
+
+        final int BUFFER_SIZE = 2048;
+
+        String zipPath = "QR Code Export " + new Date().toString() + ".zip";
+
+        try {
+            BufferedInputStream origin = null;
+            FileOutputStream dest = new FileOutputStream(zipPath);
+            ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(dest));
+
+            //out.setMethod(ZipOutputStream.DEFLATED);
+            byte data[] = new byte[BUFFER_SIZE];
+
+            // get a list of files from current directory
+            File f = new File(".");
+            String files[] = f.list();
+
+            //Add all .png files to Zip archive
+            //Delete the image
+            for (int i=0; i<files.length; i++) {
+                if(files[i].endsWith(".png")) {
+
+                    FileInputStream fi = new FileInputStream(files[i]);
+                    origin = new BufferedInputStream(fi, BUFFER_SIZE);
+                    ZipEntry entry = new ZipEntry(files[i]);
+                    out.putNextEntry(entry);
+                    int count;
+                    while ((count = origin.read(data, 0, BUFFER_SIZE)) != -1) {
+                        out.write(data, 0, count);
+                    }
+                    origin.close();
+                    try {
+                        Files.delete(Paths.get(files[i]));
+                    }
+                    catch(IOException ioe)
+                    {
+                        ioe.printStackTrace();
+                        System.err.println("Failed to delete QRCode image file (permissions or doesn't exist)");
+                    }
+                }
+            }
+            out.close();
+        } catch(Exception e) {
+            e.printStackTrace();
+            zipPath = null; //Don't return a path if it never wrote the file
+        }
+
+        return zipPath;
     }
 
     public static BufferedImage createQRCode(String qrCodeData, String charset, Map hintMap, int qrCodeheight, int qrCodewidth)

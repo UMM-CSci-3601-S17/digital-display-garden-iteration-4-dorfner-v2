@@ -1,15 +1,24 @@
 package umm3601;
 
+import sun.misc.IOUtils;
 import umm3601.digitalDisplayGarden.PlantController;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import static spark.Spark.*;
 
 import umm3601.digitalDisplayGarden.ExcelParser;
+import umm3601.digitalDisplayGarden.QRCodes;
 
 
 public class Server {
+
+    public static final String API_URL = "http://localhost:9000";
+
     public static void main(String[] args) throws IOException {
 
         port(2538);
@@ -24,6 +33,7 @@ public class Server {
         staticFiles.location("/public");
 
         PlantController plantController = new PlantController();
+        QRCodes qrCodeGenerator = new QRCodes(plantController);
 
         options("/*", (request, response) -> {
 
@@ -47,7 +57,7 @@ public class Server {
 
         // Redirects for the "home" page
         redirect.get("", "/");
-        redirect.get("/", "http://localhost:9000");
+        redirect.get("/", API_URL);
 
         // List plants
         get("api/plants", (req, res) -> {
@@ -80,6 +90,22 @@ public class Server {
             return plantController.addFlowerRating(req.body());
         });
 
+        get("api/admin/QRCodes.zip", (req, res) -> {
+            res.type("application/zip");
+
+            String zipPath = qrCodeGenerator.CreateQRCodesFromAllBeds();
+            if(zipPath == null)
+                return null;
+
+            //Get bytes from the file
+            File zipFile = new File(zipPath);
+            byte[] bytes = spark.utils.IOUtils.toByteArray(new FileInputStream(zipFile));
+
+            //Delete local .zip file
+            Files.delete(Paths.get(zipPath));
+
+            return bytes;
+        });
 
         // Posting a comment
         post("api/plants/leaveComment", (req, res) -> {
