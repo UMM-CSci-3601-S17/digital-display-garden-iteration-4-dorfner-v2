@@ -23,14 +23,14 @@ public class ExcelParser {
     private InputStream stream;
 
 //    public static void main(String[] args) {
-//        parseExel();
+//        parseExcel();
 //    }
 
     public ExcelParser(InputStream stream){
      this.stream = stream;
     }
 
-    public void parseExel(String uploadId) throws FileNotFoundException{
+    public void parseExcel(String uploadId) throws FileNotFoundException{
 
         String[][] arrayRepresentation = extractFromXLSX(stream);
 

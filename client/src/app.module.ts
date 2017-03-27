@@ -4,6 +4,7 @@ import { HttpModule, JsonpModule } from '@angular/http';
 
 import { AppComponent }         from './app/app.component';
 import { NavbarComponent } from './app/navbar/navbar.component';
+import { BedComponent } from './app/plants/bed.component';
 import { PlantListComponent } from './app/plants/plant-list.component';
 import { PlantComponent } from './app/plants/plant.component';
 import { PlantListService } from './app/plants/plant-list.service';
@@ -27,7 +28,7 @@ import {FileUploadComponent} from "./app/admin/file-upload.component";
         JsonpModule,
         routing,
         FormsModule,
-        PipeModule,
+        PipeModule
     ],
     declarations: [
         AppComponent,
@@ -37,7 +38,9 @@ import {FileUploadComponent} from "./app/admin/file-upload.component";
         AdminComponent,
         ExportComponent,
         ImportComponent,
-        FileUploadComponent
+        FileUploadComponent,
+        BedComponent
+
     ],
     providers: [ PlantListService, AdminService ],
     bootstrap: [ AppComponent ]

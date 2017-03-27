@@ -24,7 +24,7 @@ public class FilterByUniqueGardenLocations {
         GardenLocation[] filteredPlants;
         Gson gson = new Gson();
         //System.out.println();
-        String rawPlants = plantController.getGardenLocations();
+        String rawPlants = plantController.getPlantsByGardenLocations();
         filteredPlants = gson.fromJson(rawPlants, GardenLocation[].class);
         assertEquals("Incorrect number of unique garden locations", 2, filteredPlants.length);
         assertEquals("Incorrect zero index", "10.0", filteredPlants[0]._id);

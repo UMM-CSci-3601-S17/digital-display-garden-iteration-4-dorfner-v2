@@ -20,6 +20,8 @@ dependencies {
     compile 'joda-time:joda-time:2.9.9'
 
     //compile 'sun.text.normalizer.UTF16: '
+    compile 'com.google.zxing:core:2.2'
+    compile 'com.google.zxing:javase:2.2'
 
     testCompile 'junit:junit:4.12'
 }

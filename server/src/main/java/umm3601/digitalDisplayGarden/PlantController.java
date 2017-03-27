@@ -2,10 +2,7 @@ package umm3601.digitalDisplayGarden;
 
 import com.google.gson.Gson;
 import com.mongodb.MongoClient;
-import com.mongodb.client.AggregateIterable;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.*;
 import com.mongodb.client.model.Accumulators;
 import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Sorts;
@@ -188,7 +185,57 @@ public class PlantController {
 
     }
 
-    public String getGardenLocations(){
+    /**
+     *
+     * @param plantID The plant to get feedback of
+     * @return JSON for the number of comments, likes, and dislikes
+     * Of the form:
+     * {
+     *     commentCount: number
+     *     likeCount: number
+     *     dislikeCount: number
+     * }
+     */
+    public String getFeedbackForPlantByPlantID(String plantID) {
+        Document out = new Document();
+
+        Document filter = new Document();
+        filter.put("commentOnPlant", plantID);
+        long comments = commentCollection.count(filter);
+        long likes = 0;
+        long dislikes = 0;
+
+
+        //Get a plant by plantID
+        FindIterable doc = plantCollection.find(new Document().append("id", plantID));
+
+        Iterator iterator = doc.iterator();
+        if(iterator.hasNext()) {
+            Document result = (Document) iterator.next();
+
+            //Get metadata.rating array
+            List<Document> ratings = (List<Document>) ((Document) result.get("metadata")).get("ratings");
+
+            //Loop through all of the entries within the array, counting like=true(like) and like=false(dislike)
+            for(Document rating : ratings)
+            {
+                if(rating.get("like").equals(true))
+                    likes++;
+                else if(rating.get("like").equals(false))
+                    dislikes++;
+            }
+        }
+
+
+        out.put("commentCount", comments);
+        out.put("likeCount", likes);
+        out.put("dislikeCount", dislikes);
+        return JSON.serialize(out);
+    }
+
+
+
+    public String getPlantsByGardenLocations(){
         AggregateIterable<Document> documents
                 = plantCollection.aggregate(
                 Arrays.asList(
@@ -197,6 +244,17 @@ public class PlantController {
                 ));
         System.err.println(JSON.serialize(documents));
         return JSON.serialize(documents);
+    }
+
+    public String[] getGardenLocations(){
+        Document filter = new Document();
+        DistinctIterable<String>  bedIterator = plantCollection.distinct("gardenLocation", filter, String.class);
+        List<String> beds = new ArrayList<String>();
+        for(String s : bedIterator)
+        {
+            beds.add(s);
+        }
+        return beds.toArray(new String[beds.size()]);
     }
 
     /**

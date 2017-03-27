@@ -1,0 +1,19 @@
+<h2>Digital Display Garden </h2>
+<h3>Bed {{bed}} </h3>
+
+<ul class="list-group">
+
+    <li class="list-group-item list-group-item-info">
+        <span >Flowers</span>
+    </li>
+
+    <li *ngFor="let plant of plants" class="list-group-item">
+        <!--Button is a hyperlink to a plant page "/plants/:plantID"-->
+        <!--See app.routes.ts-->
+        <button [routerLink]="['/plants', plant.id, {srcBed:bed}]" class="btn btn-link btn-block" >
+            {{"Cultivar: " +  plant.cultivar}}<br>
+            {{"Common Name: " + plant.commonName}}</button>
+
+    </li>
+
+</ul>
