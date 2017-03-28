@@ -198,9 +198,10 @@ public class PlantController {
                 ));
         return JSON.serialize(documents);
     }
-    // todo make this use uploadID
+
     public String[] getGardenLocations(String uploadID){
         Document filter = new Document();
+        filter.append("uploadId", uploadID);
         DistinctIterable<String>  bedIterator = plantCollection.distinct("gardenLocation", filter, String.class);
         List<String> beds = new ArrayList<String>();
         for(String s : bedIterator)
