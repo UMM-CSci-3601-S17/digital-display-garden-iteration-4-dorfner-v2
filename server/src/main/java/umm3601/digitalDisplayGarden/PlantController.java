@@ -109,6 +109,7 @@ public class PlantController {
      * </code>
      *
      * @param plantID an ID number of a plant in the DB
+     * @param uploadID Dataset to find the plant
      * @return a string representation of a JSON value
      */
     public String getPlantByPlantID(String plantID, String uploadID) {
@@ -141,6 +142,8 @@ public class PlantController {
     /**
      *
      * @param plantID The plant to get feedback of
+     * @param uploadID Dataset to find the plant
+     *
      * @return JSON for the number of comments, likes, and dislikes
      * Of the form:
      * {
@@ -333,9 +336,10 @@ public class PlantController {
      * </code>
      *
      * @param json string representation of a JSON object
+     * @param uploadID Dataset to find the plant
      * @return true iff the operation succeeded.
      */
-    // todo make this use uploadID
+
     public boolean addFlowerRating(String json, String uploadID){
         boolean like;
         String id;
