@@ -120,7 +120,9 @@ public class Server {
             return JSON.serialize(plantController.getLiveUploadId());
         });
 
-        get("api/admin/QRCodes.zip", (req, res) -> {
+
+
+        get("api/admin/qrcodes", (req, res) -> {
             res.type("application/zip");
 
             String liveUploadID = plantController.getLiveUploadId();
@@ -130,6 +132,8 @@ public class Server {
                     API_URL + "/bed/");
             if(zipPath == null)
                 return null;
+
+            res.header("Content-Disposition","attachment; filename=\"" + zipPath + "\"");
 
             //Get bytes from the file
             File zipFile = new File(zipPath);
