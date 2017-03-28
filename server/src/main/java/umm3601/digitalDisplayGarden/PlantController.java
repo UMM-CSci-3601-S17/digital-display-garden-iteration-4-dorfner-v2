@@ -155,13 +155,14 @@ public class PlantController {
 
         Document filter = new Document();
         filter.put("commentOnPlant", plantID);
+        filter.put("uploadId", uploadID);
         long comments = commentCollection.count(filter);
         long likes = 0;
         long dislikes = 0;
 
 
         //Get a plant by plantID
-        FindIterable doc = plantCollection.find(new Document().append("id", plantID));
+        FindIterable doc = plantCollection.find(new Document().append("id", plantID).append("uploadId", uploadID));
 
         Iterator iterator = doc.iterator();
         if(iterator.hasNext()) {
