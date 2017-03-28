@@ -104,7 +104,7 @@ public class PlantController {
             Iterator<Document> iterator = jsonPlant.iterator();
 
             if (iterator.hasNext()) {
-                //incrementMetadata(id, "pageViews");
+                incrementMetadata(id, "pageViews");
                 returnVal = iterator.next().toJson();
             } else {
                 returnVal = "null";
@@ -153,7 +153,7 @@ public class PlantController {
             Iterator<Document> iterator = jsonPlant.iterator();
 
             if (iterator.hasNext()) {
-                //incrementMetadata(id, "pageViews");
+                incrementMetadata(plantID, "pageViews");
                 returnVal = iterator.next().toJson();
             } else {
                 returnVal = "null";
@@ -354,4 +354,26 @@ public class PlantController {
 
         return addFlowerRating(id, like);
     }
+
+    /**
+     * Finds a plant and atomically increments the specified field
+     * in its metadata object. This method returns true if the plant was
+     * found successfully (false otherwise), but there is no indication of
+     * whether the field was found.
+     *
+     * @param id a hexadecimal ID number of a plant in the DB
+     * @param field a field to be incremented in the metadata object of the plant
+     * @return true if a plant was found
+     * @throws com.mongodb.MongoCommandException when the id is valid and the field is empty
+     */
+    public boolean incrementMetadata(String plantID, String field) {
+
+        Document searchDocument = new Document();
+        searchDocument.append("id", plantID);
+
+        Bson updateDocument = inc("metadata." + field, 1);
+
+        return null != plantCollection.findOneAndUpdate(searchDocument, updateDocument);
+    }
+
 }
