@@ -1,5 +1,6 @@
 package umm3601;
 
+import spark.Route;
 import spark.utils.IOUtils;
 import sun.nio.ch.IOUtil;
 import umm3601.digitalDisplayGarden.PlantController;
@@ -50,10 +51,12 @@ public class Server {
         // Redirects for the "home" page
         redirect.get("", "/");
 
-        get("/", (req, res) -> {
+        Route clientRoute = (req, res) -> {
             InputStream stream = plantController.getClass().getResourceAsStream("/public/index.html");
             return IOUtils.toString(stream);
-        });
+        };
+
+        get("/", clientRoute);
 
         // List plants
         get("api/plants", (req, res) -> {
@@ -93,10 +96,7 @@ public class Server {
             return plantController.storePlantComment(req.body());
         });
 
-        get("/*", (req, res) -> {
-            InputStream stream = plantController.getClass().getResourceAsStream("/public/index.html");
-            return IOUtils.toString(stream);
-        });
+        get("/*", clientRoute);
 
         // Handle "404" file not found requests:
         notFound((req, res) -> {
