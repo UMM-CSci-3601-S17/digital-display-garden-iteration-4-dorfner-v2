@@ -149,7 +149,7 @@ public class PlantController {
      *     dislikeCount: number
      * }
      */
-    // todo make this use uploadID
+
     public String getFeedbackForPlantByPlantID(String plantID, String uploadID) {
         Document out = new Document();
 
@@ -188,14 +188,13 @@ public class PlantController {
         return JSON.serialize(out);
     }
 
-
-    // todo make this use uploadID
     public String getPlantsByGardenLocations(String uploadID){
         AggregateIterable<Document> documents
                 = plantCollection.aggregate(
                 Arrays.asList(
                         Aggregates.group("$gardenLocation"),
-                        Aggregates.sort(Sorts.ascending("_id"))
+                        Aggregates.sort(Sorts.ascending("_id")),
+                        Aggregates.match(eq("uploadId", uploadID))
                 ));
         return JSON.serialize(documents);
     }
