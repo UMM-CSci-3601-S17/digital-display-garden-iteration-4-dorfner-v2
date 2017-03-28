@@ -111,14 +111,14 @@ public class PlantController {
      * @param plantID an ID number of a plant in the DB
      * @return a string representation of a JSON value
      */
-    // todo make this use uploadID
-    public String getPlantByPlantID(String plantID) {
+    public String getPlantByPlantID(String plantID, String uploadID) {
 
         FindIterable<Document> jsonPlant;
         String returnVal;
         try {
 
-            jsonPlant = plantCollection.find(eq("id", plantID))
+            jsonPlant = plantCollection.find(and(eq("id", plantID),
+                    eq("uploadId", uploadID)))
                     .projection(fields(include("commonName", "cultivar")));
 
             Iterator<Document> iterator = jsonPlant.iterator();

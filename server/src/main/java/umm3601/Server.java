@@ -78,7 +78,7 @@ public class Server {
         get("api/plants/:plantID", (req, res) -> {
             res.type("application/json");
             String id = req.params("plantID");
-            return plantController.getPlantByPlantID(id);
+            return plantController.getPlantByPlantID(id, plantController.getLiveUploadId());
         });
 
         //Get feedback counts for a plant
