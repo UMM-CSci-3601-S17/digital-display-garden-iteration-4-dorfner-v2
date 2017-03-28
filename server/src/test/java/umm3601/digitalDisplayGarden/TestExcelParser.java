@@ -27,7 +27,7 @@ public class TestExcelParser {
     public void clearAndPopulateDatabase(){
         mongoClient.dropDatabase("test");
         testDB = mongoClient.getDatabase("test");
-        fromFile = this.getClass().getResourceAsStream("/IDPH_STD_Illinois_By_County_By_Sex.xlsx");
+        fromFile = this.getClass().getResourceAsStream("/AccessionList2016.xlsx");
         parser = new ExcelParser(fromFile);
     }
 
@@ -38,9 +38,10 @@ public class TestExcelParser {
         String[][] plantArray = parser.extractFromXLSX(fromFile);
         //printDoubleArray(plantArray);
 
-        assertEquals(1668, plantArray.length);
-        assertEquals(plantArray[40].length, plantArray[1234].length);
-        assertEquals("ALEXANDER", plantArray[5][2]);
+        assertEquals(1000, plantArray.length);
+        assertEquals(plantArray[40].length, plantArray[963].length);
+        assertEquals("2016 Accession List: Steve's Design", plantArray[0][1]);
+        assertEquals("Begonia", plantArray[6][1]);
 
     }
 
@@ -55,10 +56,10 @@ public class TestExcelParser {
 
         //printDoubleArray(plantArray);
 
-        assertEquals(1668, plantArray.length);
-        assertEquals(10, plantArray[30].length);
-        assertEquals(10, plantArray[0].length);
-        assertEquals(10, plantArray[3].length);
+        assertEquals(362, plantArray.length);
+        assertEquals(8, plantArray[30].length);
+        assertEquals(8, plantArray[0].length);
+        assertEquals(8, plantArray[3].length);
     }
 
     @Test
@@ -86,8 +87,8 @@ public class TestExcelParser {
         MongoCollection plants = testDB.getCollection("plants");
 
 
-        assertEquals(1664, plants.count());
-        assertEquals(16, plants.count(eq("Sort", "104")));
+        assertEquals(286, plants.count());
+        assertEquals(11, plants.count(eq("commonName", "Geranium")));
     }
 
 
