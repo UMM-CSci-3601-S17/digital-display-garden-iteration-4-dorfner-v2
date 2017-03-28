@@ -27,7 +27,7 @@ public class FilterByGardenLocation {
 
         Map<String, String[]> queryParams = new HashMap<>();
         queryParams.put("gardenLocation", new String[]{"10.0"});
-        String rawPlants = plantController.listPlants(queryParams);
+        String rawPlants = plantController.listPlants(queryParams, "first uploadId");
         filteredPlants = gson.fromJson(rawPlants, Plant[].class);
 
         assertEquals("Incorrect number of flowers for gardenLocation 10.0", 2, filteredPlants.length);
@@ -43,7 +43,7 @@ public class FilterByGardenLocation {
 
         Map<String, String[]> queryParams = new HashMap<>();
         queryParams.put("gardenLocation", new String[]{"100.0"});
-        String rawPlants = plantController.listPlants(queryParams);
+        String rawPlants = plantController.listPlants(queryParams, "second uploadId");
         filteredPlants = gson.fromJson(rawPlants, Plant[].class);
 
         assertEquals("Incorrect number of plants for gardenLocation 100", 0, filteredPlants.length);

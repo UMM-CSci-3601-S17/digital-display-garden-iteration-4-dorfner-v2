@@ -7,6 +7,8 @@ import com.mongodb.client.MongoDatabase;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.InputStream;
+
 import static com.mongodb.client.model.Filters.eq;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -19,19 +21,21 @@ public class TestExcelParser {
     public MongoClient mongoClient = new MongoClient();
     public MongoDatabase testDB;
     public ExcelParser parser;
+    public InputStream fromFile;
 
     @Before
     public void clearAndPopulateDatabase(){
         mongoClient.dropDatabase("test");
         testDB = mongoClient.getDatabase("test");
-        parser = new ExcelParser("/IDPH_STD_Illinois_By_County_By_Sex.xlsx");
+        fromFile = this.getClass().getResourceAsStream("/IDPH_STD_Illinois_By_County_By_Sex.xlsx");
+        parser = new ExcelParser(fromFile);
     }
 
 
 
     @Test
     public void testSpeadsheetToDoubleArray(){
-        String[][] plantArray = parser.extractFromXLSX();
+        String[][] plantArray = parser.extractFromXLSX(fromFile);
         //printDoubleArray(plantArray);
 
         assertEquals(1668, plantArray.length);
@@ -42,7 +46,7 @@ public class TestExcelParser {
 
     @Test
     public void testCollapse(){
-        String[][] plantArray = parser.extractFromXLSX();
+        String[][] plantArray = parser.extractFromXLSX(fromFile);
         //System.out.println(plantArray.length);
         //printDoubleArray(plantArray);
 
@@ -59,7 +63,7 @@ public class TestExcelParser {
 
     @Test
     public void testReplaceNulls(){
-        String[][] plantArray = parser.extractFromXLSX();
+        String[][] plantArray = parser.extractFromXLSX(fromFile);
         plantArray = parser.collapseHorizontally(plantArray);
         plantArray = parser.collapseVertically(plantArray);
         parser.replaceNulls(plantArray);
@@ -73,12 +77,12 @@ public class TestExcelParser {
 
     @Test
     public void testPopulateDatabase(){
-        String[][] plantArray = parser.extractFromXLSX();
+        String[][] plantArray = parser.extractFromXLSX(fromFile);
         plantArray = parser.collapseHorizontally(plantArray);
         plantArray = parser.collapseVertically(plantArray);
         parser.replaceNulls(plantArray);
 
-        parser.populateDatabase(plantArray);
+        parser.populateDatabase(plantArray, "an arbitrary ID");
         MongoCollection plants = testDB.getCollection("plants");
 
 

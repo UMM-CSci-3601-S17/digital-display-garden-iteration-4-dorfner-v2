@@ -26,59 +26,6 @@ public class PopulateMockDatabase {
     public String hexAlternantheraID;
 
     public void clearAndPopulateDB() throws IOException {
-//        MongoClient mongoClient = new MongoClient();
-//        MongoDatabase db = mongoClient.getDatabase("test");
-//        MongoCollection<Document> plantDocuments = db.getCollection("plants");
-//        plantDocuments.drop();
-//        List<Document> testPlants = new ArrayList<>();
-//        testPlants.add(Document.parse("{\n" +
-//                "                    commonName: \"Angelonia\",\n" +
-//                "                    cultivar: \"Angelface® Perfectly Pink,\n" +
-//                "                    gardenLocation: \"1S\",\n" +
-//                "                    Comments: \"20x12\", \n" +
-//                "                    S=SeedV=Veg: \"V\", \n" +
-//                "                    id: \"16280.0\", \n" +
-//                "                    source: \"PW\", \n" +
-//                "                    HB=Hang BasketC=ContainerW=Wall: \"\", \n" +
-//                "                }"));
-//        testPlants.add(Document.parse("{\n" +
-//                "                    commonName: \"Angelonia\",\n" +
-//                "                    cultivar: \"Angelface® Super Blue,\n" +
-//                "                    gardenLocation: \"1S\",\n" +
-//                "                    Comments: \"\", \n" +
-//                "                    S=SeedV=Veg: \"V\", \n" +
-//                "                    id: \"16281.0\", \n" +
-//                "                    source: \"PW\", \n" +
-//                "                    HB=Hang BasketC=ContainerW=Wall: \"\", \n"+
-//                "                }"));
-//        testPlants.add(Document.parse("{\n" +
-//                "                    commonName: \"Angelonia\",\n" +
-//                "                    cultivar: \"Angelface® Super Pink,\n" +
-//                "                    gardenLocation: \"1S\",\n" +
-//                "                    Comments: \"\", \n" +
-//                "                    S=SeedV=Veg: \"V\", \n" +
-//                "                    id: \"16282.0\", \n" +
-//                "                    source: \"PW\", \n" +
-//                "                    HB=Hang BasketC=ContainerW=Wall: \"\", \n"+
-//                "                }"));
-//        ObjectId begoniaId = new ObjectId("58bc8252a84aab6cbed02cea");
-//        BasicDBObject begonia = new BasicDBObject("_id", begoniaId);
-//        begonia = begonia.append("commonName", "Begonia")
-//                .append("cultivar", "Bossa Nova Ivory")
-//                .append("gardenLocation", "")
-//                .append("Comments", "Container only")
-//                .append("S=SeedV=Veg", "V")
-//                .append("id", "16235.0")
-//                .append("source", "FL")
-//                .append("HB=Hang BasketC=ContainerW=Wall", "");
-//        begoniaIdString = begoniaId.toHexString();
-//        plantDocuments.insertMany(testPlants);
-//        plantDocuments.insertOne(Document.parse(begonia.toJson()));
-//
-//        // It might be important to construct this _after_ the DB is set up
-//        // in case there are bits in the constructor that care about the state
-//        // of the database.
-//        plantController = new PlantController();
     }
 
     public void clearAndPopulateDBAgain() throws IOException {
@@ -90,6 +37,7 @@ public class PopulateMockDatabase {
         //First Plant Alternanthera
         Document alternanthera = new Document();
         alternanthera.append("_id", new ObjectId("58d1c36efb0cac4e15afd202"));
+        alternanthera.append("uploadId", "first uploadId");
 
         alternanthera.append("commonName", "Alternanthera");
         alternanthera.append("cultivar", "Experimental");
@@ -111,6 +59,7 @@ public class PopulateMockDatabase {
         //Second Plant Begonia
         Document begonia = new Document();
         begonia.append("_id", new ObjectId("58d1c36efb0cac4e15afd203"));
+        begonia.append("uploadId", "first uploadId");
 
         begonia.append("commonName", "Begonia");
         begonia.append("cultivar", "Megawatt Rose Green Leaf");
@@ -131,6 +80,7 @@ public class PopulateMockDatabase {
         //Third Plant Dianthus
         Document dianthus = new Document();
         dianthus.append("_id", new ObjectId("58d1c36efb0cac4e15afd204"));
+        dianthus.append("uploadId", "second uploadId");
 
         dianthus.append("commonName", "Dianthus");
         dianthus.append("cultivar", "Jolt™ Pink F1");
