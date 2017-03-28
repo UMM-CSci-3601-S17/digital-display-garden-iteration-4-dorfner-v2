@@ -57,6 +57,14 @@ public class FlowerRating {
     }
 
     @Test
+    public void AddFlowerRatingReturnsFalseWithInvalidUploadID() throws IOException {
+        PlantController plantController = new PlantController();
+
+        assertFalse(plantController.addFlowerRating("58d1c36efb0cac4e15afd202", true, "anything"));
+    }
+
+
+    @Test
     public void AddFlowerRatingReturnsTrueWithValidJsonInput() throws IOException{
         PlantController plantController = new PlantController();
 
