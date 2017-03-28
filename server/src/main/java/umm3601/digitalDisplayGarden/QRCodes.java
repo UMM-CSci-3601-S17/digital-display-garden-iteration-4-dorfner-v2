@@ -95,7 +95,7 @@ public class QRCodes {
 
         try {
             for (int i = 0; i < qrCodeImages.size(); i++) {
-                File outputFile = new File(qrTempPath + '/' + bedNames[i] + ".png"); //TODO might not want to append .png if automatic
+                File outputFile = new File(qrTempPath + '/' + bedNames[i] + ".png");
                 ImageIO.write(qrCodeImages.get(i), "png", outputFile);
             }
         }
@@ -112,7 +112,7 @@ public class QRCodes {
 
         final int BUFFER_SIZE = 2048;
 
-        String zipPath = "QR Code Export " + new Date().toString() + ".zip";
+        String zipPath = "QR Code Export " + uploadId + ".zip";
 
         System.err.println("ExportPath=" + zipPath);
 

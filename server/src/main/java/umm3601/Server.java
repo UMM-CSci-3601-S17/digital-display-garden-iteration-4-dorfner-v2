@@ -142,7 +142,7 @@ public class Server {
             byte[] bytes = spark.utils.IOUtils.toByteArray(new FileInputStream(zipFile));
 
             //Delete local .zip file
-            //Files.delete(Paths.get(zipPath));
+            Files.delete(Paths.get(zipPath));
 
             return bytes;
         });
