@@ -1,8 +1,11 @@
 package umm3601;
 
+import spark.Route;
+import spark.utils.IOUtils;
 import umm3601.digitalDisplayGarden.PlantController;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import static spark.Spark.*;
 
@@ -42,12 +45,15 @@ public class Server {
 
         before((request, response) -> response.header("Access-Control-Allow-Origin", "*"));
 
-        // Simple example route
-        get("/hello", (req, res) -> "Hello World");
-
         // Redirects for the "home" page
         redirect.get("", "/");
-        redirect.get("/", "http://localhost:9000");
+
+        Route clientRoute = (req, res) -> {
+            InputStream stream = plantController.getClass().getResourceAsStream("/public/index.html");
+            return IOUtils.toString(stream);
+        };
+
+        get("/", clientRoute);
 
         // List plants
         get("api/plants", (req, res) -> {
@@ -87,13 +93,13 @@ public class Server {
             return plantController.storePlantComment(req.body());
         });
 
+        get("/*", clientRoute);
+
         // Handle "404" file not found requests:
         notFound((req, res) -> {
             res.type("text");
             res.status(404);
             return "Sorry, we couldn't find that!";
         });
-
     }
-
 }
