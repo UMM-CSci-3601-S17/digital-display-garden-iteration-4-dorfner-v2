@@ -83,4 +83,16 @@ public class ListPlants {
         assertEquals("Incorrect number of plants for gardenLocation 100", 0, filteredPlants.length);
     }
 
+    @Test
+    public void listPlantsFiltersByUploadID() throws IOException{
+        Plant[] filteredPlants;
+        Gson gson = new Gson();
+
+        Map<String, String[]> queryParams = new HashMap<>();
+        String rawPlants = plantController.listPlants(queryParams, "second uploadId");
+        filteredPlants = gson.fromJson(rawPlants, Plant[].class);
+
+        assertEquals(1, filteredPlants.length);
+    }
+
 }
