@@ -229,7 +229,6 @@ public class PlantController {
 
     public boolean storePlantComment(String json, String uploadID) {
 
-
         try {
 
             Document toInsert = new Document();
@@ -297,9 +296,10 @@ public class PlantController {
      *
      * @param id a hexstring specifiying the oid
      * @param like true if this is a like, false if this is a dislike
+     * @param uploadID Dataset to find the plant
      * @return true iff the operation succeeded.
      */
-    // todo make this use uploadID
+
     public boolean addFlowerRating(String id, boolean like, String uploadID) {
 
         Document filterDoc = new Document();
@@ -313,6 +313,7 @@ public class PlantController {
         }
 
         filterDoc.append("_id", new ObjectId(id));
+        filterDoc.append("uploadId", uploadID);
 
         Document rating = new Document();
         rating.append("like", like);
