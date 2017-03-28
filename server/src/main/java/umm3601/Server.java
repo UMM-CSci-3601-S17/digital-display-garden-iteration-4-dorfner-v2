@@ -2,13 +2,10 @@ package umm3601;
 
 import spark.Route;
 import spark.utils.IOUtils;
-import sun.nio.ch.IOUtil;
 import umm3601.digitalDisplayGarden.PlantController;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
-import java.net.URLClassLoader;
 
 import static spark.Spark.*;
 
