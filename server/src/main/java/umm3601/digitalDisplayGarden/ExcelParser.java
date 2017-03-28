@@ -10,12 +10,18 @@ import java.io.InputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import java.util.Date;
+import java.util.Formatter;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.mongodb.client.model.Filters.exists;
+import static com.mongodb.client.model.Updates.set;
 import static java.lang.Math.max;
 
 import org.bson.BsonArray;
 import org.bson.Document;
+import org.joda.time.DateTime;
 //import sun.text.normalizer.UTF16;
 
 public class ExcelParser {
@@ -38,6 +44,7 @@ public class ExcelParser {
         String[][] verticallyCollapsed = collapseVertically(horizontallyCollapsed);
         replaceNulls(verticallyCollapsed);
         populateDatabase(verticallyCollapsed, uploadId);
+
     }
 
     /*
@@ -206,6 +213,11 @@ public class ExcelParser {
 
             plants.insertOne(doc);
         }
+
+
+
+
+        setLiveUploadId(uploadId);
     }
 
     /*
@@ -238,5 +250,41 @@ public class ExcelParser {
             }
         }
     }
+
+    /*
+    --------------------------- SERVER UTILITIES -------------------------------
+     */
+
+    public static void setLiveUploadId(String uploadID){
+
+        MongoClient mongoClient = new MongoClient();
+        MongoDatabase test = mongoClient.getDatabase("test");
+        MongoCollection configCollection = test.getCollection("config");
+
+        configCollection.deleteMany(exists("liveUploadId"));
+        configCollection.insertOne(new Document().append("liveUploadId", uploadID));
+    }
+
+    public static String getAvailableUploadId(){
+
+        StringBuilder sb = new StringBuilder();
+        // Send all output to the Appendable object sb
+        Formatter formatter = new Formatter(sb);
+
+        java.util.Date juDate = new Date();
+        DateTime dt = new DateTime(juDate);
+
+        int day = dt.getDayOfMonth();
+        int month = dt.getMonthOfYear();
+        int year = dt.getYear();
+        int hour = dt.getHourOfDay();
+        int minute = dt.getMinuteOfHour();
+        int seconds = dt.getSecondOfMinute();
+
+        formatter.format("%d-%02d-%02d %02d:%02d:%02d", year, month, day, hour, minute, seconds);
+        return sb.toString();
+
+    }
+
 
 }

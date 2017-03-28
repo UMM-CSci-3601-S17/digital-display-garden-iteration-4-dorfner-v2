@@ -88,7 +88,7 @@ public class Server {
         });
 
         //List all Beds
-        get("api/gardenLocations", (req, res) -> {
+        get("api/gardenLocations", (req, res) -> { //TODO: change endpoint to something more accurate
             res.type("application/json");
             return plantController.getPlantsByGardenLocations(plantController.getLiveUploadId());
         });
@@ -122,14 +122,16 @@ public class Server {
 
 
 
-        get("api/admin/qrcodes", (req, res) -> {
+        get("api/qrcodes", (req, res) -> {
             res.type("application/zip");
 
             String liveUploadID = plantController.getLiveUploadId();
+            System.err.println("liveUploadID=" + liveUploadID);
             String zipPath = QRCodes.CreateQRCodesFromAllBeds(
                     liveUploadID,
                     plantController.getGardenLocations(liveUploadID),
                     API_URL + "/bed/");
+            System.err.println(zipPath);
             if(zipPath == null)
                 return null;
 
@@ -140,7 +142,7 @@ public class Server {
             byte[] bytes = spark.utils.IOUtils.toByteArray(new FileInputStream(zipFile));
 
             //Delete local .zip file
-            Files.delete(Paths.get(zipPath));
+            //Files.delete(Paths.get(zipPath));
 
             return bytes;
         });
@@ -165,10 +167,8 @@ public class Server {
 
                 ExcelParser parser = new ExcelParser(part.getInputStream());
 
-                String id = plantController.getAvailableUploadId();
-
+                String id = ExcelParser.getAvailableUploadId();
                 parser.parseExcel(id);
-                plantController.setLiveUploadId(id);
 
                 return JSON.serialize(id);
 

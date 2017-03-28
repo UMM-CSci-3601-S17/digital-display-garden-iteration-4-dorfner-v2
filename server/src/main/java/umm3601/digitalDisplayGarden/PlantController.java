@@ -61,10 +61,20 @@ public class PlantController {
     }
 
     public String getLiveUploadId() {
-        FindIterable<Document> findIterable = configCollection.find(exists("liveUploadId"));
-        Iterator<Document> iterator = findIterable.iterator();
-        Document doc = iterator.next();
-        return doc.getString("liveUploadId");
+        try
+        {
+            FindIterable<Document> findIterable = configCollection.find(exists("liveUploadId"));
+            Iterator<Document> iterator = findIterable.iterator();
+            Document doc = iterator.next();
+
+            return doc.getString("liveUploadId");
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            System.err.println(" [hint] Database might be empty? Couldn't getLiveUploadId");
+            throw e;
+        }
     }
 
     // List plants
@@ -195,9 +205,9 @@ public class PlantController {
         AggregateIterable<Document> documents
                 = plantCollection.aggregate(
                 Arrays.asList(
+                        Aggregates.match(eq("uploadId", uploadID)), //!! Order is important here
                         Aggregates.group("$gardenLocation"),
-                        Aggregates.sort(Sorts.ascending("_id")),
-                        Aggregates.match(eq("uploadId", uploadID))
+                        Aggregates.sort(Sorts.ascending("_id"))
                 ));
         return JSON.serialize(documents);
     }
@@ -390,32 +400,7 @@ public class PlantController {
     }
 
 
-    public String getAvailableUploadId(){
 
-        StringBuilder sb = new StringBuilder();
-        // Send all output to the Appendable object sb
-        Formatter formatter = new Formatter(sb);
-
-        java.util.Date juDate = new Date();
-        DateTime dt = new DateTime(juDate);
-
-        int day = dt.getDayOfMonth();
-        int month = dt.getMonthOfYear();
-        int year = dt.getYear();
-        int hour = dt.getHourOfDay();
-        int minute = dt.getMinuteOfHour();
-        int seconds = dt.getSecondOfMinute();
-
-        formatter.format("%d-%02d-%02d %02d:%02d:%02d",year,month,day,hour,minute,seconds);
-        return sb.toString();
-
-
-    }
-
-    public void setLiveUploadId(String uploadid){
-         configCollection.findOneAndUpdate(exists("liveUploadId"),
-                set("liveUploadId", uploadid));
-    }
 
 
 }

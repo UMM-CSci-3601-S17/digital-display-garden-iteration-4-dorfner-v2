@@ -24,6 +24,8 @@ public class QRCodes {
     //http://javapapers.com/core-java/java-qr-code/
 
 
+    private static String qrTempPath = ".qrcode";
+
     public static BufferedImage createQRFromBedURL(String url) throws IOException,WriterException{
 
         Map hintMap = new HashMap();
@@ -49,6 +51,18 @@ public class QRCodes {
             //http://www.mkyong.com/java/how-to-convert-bufferedimage-to-byte-in-java/
             //http://www.oracle.com/technetwork/articles/java/compress-1565076.html
         //create Post request to client to download zip.
+
+        try {
+            if (Files.notExists(Paths.get(qrTempPath))) {
+                Files.createDirectory(Paths.get(qrTempPath));
+            }
+        }
+        catch(IOException ioe)
+        {
+            ioe.printStackTrace();
+            System.err.println("Failed to create directory for qrcode packaging.");
+            return null;
+        }
 
         final int numBeds = bedNames.length;
 
@@ -81,7 +95,7 @@ public class QRCodes {
 
         try {
             for (int i = 0; i < qrCodeImages.size(); i++) {
-                File outputFile = new File(bedNames[i] + ".png"); //TODO might not want to append .png if automatic
+                File outputFile = new File(qrTempPath + '/' + bedNames[i] + ".png"); //TODO might not want to append .png if automatic
                 ImageIO.write(qrCodeImages.get(i), "png", outputFile);
             }
         }
@@ -92,12 +106,15 @@ public class QRCodes {
             return null;
         }
 
+
         //We have the images, now Zip them up!
         //ARCHIVE AND COMPRESS TO ZIP
 
         final int BUFFER_SIZE = 2048;
 
         String zipPath = "QR Code Export " + new Date().toString() + ".zip";
+
+        System.err.println("ExportPath=" + zipPath);
 
         try {
             BufferedInputStream origin = null;
@@ -108,7 +125,7 @@ public class QRCodes {
             byte data[] = new byte[BUFFER_SIZE];
 
             // get a list of files from current directory
-            File f = new File(".");
+            File f = new File("./" + qrTempPath + '/');
             String files[] = f.list();
 
             //Add all .png files to Zip archive
@@ -116,7 +133,7 @@ public class QRCodes {
             for (int i=0; i<files.length; i++) {
                 if(files[i].endsWith(".png")) {
 
-                    FileInputStream fi = new FileInputStream(files[i]);
+                    FileInputStream fi = new FileInputStream(qrTempPath + '/' + files[i]);
                     origin = new BufferedInputStream(fi, BUFFER_SIZE);
                     ZipEntry entry = new ZipEntry(files[i]);
                     out.putNextEntry(entry);
@@ -126,7 +143,7 @@ public class QRCodes {
                     }
                     origin.close();
                     try {
-                        Files.delete(Paths.get(files[i]));
+                        Files.delete(Paths.get(qrTempPath + '/' + files[i]));
                     }
                     catch(IOException ioe)
                     {
@@ -137,6 +154,7 @@ public class QRCodes {
             }
             out.close();
         } catch(Exception e) {
+
             e.printStackTrace();
             zipPath = null; //Don't return a path if it never wrote the file
         }
