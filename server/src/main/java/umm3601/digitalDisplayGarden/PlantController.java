@@ -223,9 +223,10 @@ public class PlantController {
      * If either of the keys are missing or the types of the values are
      * wrong, false is returned.
      * @param json string representation of JSON object
+     * @param uploadID Dataset to find the plant
      * @return true iff the comment was successfully submitted
      */
-    // todo make this use uploadID
+
     public boolean storePlantComment(String json, String uploadID) {
 
 
@@ -257,7 +258,7 @@ public class PlantController {
                 return false;
             }
 
-            toInsert.append("uploadId", getLiveUploadId());
+            toInsert.append("uploadId", uploadID);
 
             commentCollection.insertOne(toInsert);
 
