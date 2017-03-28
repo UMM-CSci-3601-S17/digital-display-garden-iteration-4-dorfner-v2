@@ -195,13 +195,13 @@ public class ExcelParser {
         String[] keys = getKeys(cellValues);
 
         for (int i = 4; i < cellValues.length; i++){
-            Map<String, String> map = new HashMap<String, String>();
+            Document doc = new Document();
             for(int j = 0; j < cellValues[i].length; j++){
-                map.put(keys[j], cellValues[i][j]);
+                doc.append(keys[j], cellValues[i][j]);
             }
 
-            Document doc = new Document();
-            doc.putAll(map);
+            if(doc.get("gardenLocation").equals(""))
+                continue;
 
             // Initialize the empty metadata
             Document metadataDoc = new Document();
