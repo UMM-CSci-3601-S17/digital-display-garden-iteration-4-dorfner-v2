@@ -80,7 +80,6 @@ public class Server {
             return plantController.addFlowerRating(req.body());
         });
 
-
         // Posting a comment
         post("api/plants/leaveComment", (req, res) -> {
             res.type("application/json");

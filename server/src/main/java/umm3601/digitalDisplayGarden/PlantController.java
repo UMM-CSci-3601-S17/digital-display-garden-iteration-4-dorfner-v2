@@ -154,6 +154,7 @@ public class PlantController {
 
             if (iterator.hasNext()) {
                 incrementMetadata(plantID, "pageViews");
+                addVisit(plantID);
                 returnVal = iterator.next().toJson();
             } else {
                 returnVal = "null";
@@ -374,6 +375,16 @@ public class PlantController {
         Bson updateDocument = inc("metadata." + field, 1);
 
         return null != plantCollection.findOneAndUpdate(searchDocument, updateDocument);
+    }
+    public boolean addVisit(String plantID) {
+
+        Document filterDoc = new Document();
+        filterDoc.append("id", plantID);
+
+        Document visit = new Document();
+        visit.append("visit", new ObjectId());
+
+        return null != plantCollection.findOneAndUpdate(filterDoc, push("metadata.visits", visit));
     }
 
 }

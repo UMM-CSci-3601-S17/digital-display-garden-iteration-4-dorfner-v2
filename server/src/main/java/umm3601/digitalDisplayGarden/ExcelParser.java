@@ -202,6 +202,7 @@ public class ExcelParser {
             // Initialize the empty metadata
             Document metadataDoc = new Document();
             metadataDoc.append("pageViews", 0);
+            metadataDoc.append("visits", new BsonArray());
             metadataDoc.append("ratings", new BsonArray());
 
             doc.append("metadata", metadataDoc);
