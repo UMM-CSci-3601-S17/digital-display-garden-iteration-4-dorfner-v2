@@ -1,7 +1,10 @@
-<file-upload #fu [multiple]="false"></file-upload>
+<file-upload #fu (change)="filename = undefined; uploadAttempted = false" [multiple]="false">-</file-upload>
 
 
-<button (click)="this.handleUpload()" style="margin-top: 10px">Import</button>
+<button *ngIf="filename === undefined" (click)="this.handleUpload()" style="margin-top: 10px">
+    <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
+    Import
+</button>
 <!-- todo clear the  status message when they go to upload again. -->
-<div *ngIf="filename!==undefined">Your file was successfully uploaded as data set {{this.filename}}.</div>
+<div *ngIf="filename!==undefined"> Your file was successfully uploaded as data set {{this.filename}}.</div>
 <div *ngIf="filename === undefined && uploadAttempted === true">File upload failed.</div>
