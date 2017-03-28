@@ -3,39 +3,43 @@
     <h3>{{plant.commonName}}</h3>
 
     <br/>
-    <br/>
 
     <h3>Leave Feedback for Flower</h3>
     <span *ngIf="!commented">
-        <textarea [(ngModel)]="commentText" rows="5" wrap="on" style="width: 100%;"></textarea>
+        <textarea [(ngModel)]="commentText" rows="5" wrap="on" style="resize:vertical;width: 100%;color:#4e3e0a; font-size:18px"></textarea>
 
     </span>
-    <span *ngIf="commented">
-        Your comment has been submitted.
+    <span *ngIf="commented" >
+        <br/>
+        &ensp; <!--Makes the following text indented, &ensp; is whitespace-->
+        <span style="font-size:18px;color:#008119">
+            <strong>Your feedback has been submitted.</strong>
+        </span>
+        <br/>
         <br/>
     </span>
 
     <div style="padding-top: 0.3em">
         <span *ngIf="rating === null">
-            <button type="button" (click)="this.ratePlant(true)" style="border: none; background: inherit; outline: none;">
+            <button type="button" (click)="this.ratePlant(true)" style="border: none; background: inherit; outline: none;font-size:20px">
                 <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
                 {{plantFeedback.likeCount}}
             </button>
-            <button type="button" (click)="this.ratePlant(false)" style="border: none; background: inherit; outline: none;">
+            <button type="button" (click)="this.ratePlant(false)" style="border: none; background: inherit; outline: none;font-size:20px">
                 <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
                 {{plantFeedback.dislikeCount}}
             </button>
         </span>
 
         <span *ngIf="rating === true">
-            <button type="button" style="border: none; background: inherit; outline: none;" class="text-success">
+            <button type="button" style="border: none; background: inherit; outline: none;font-size:20px" class="text-success" >
                 <span class="glyphicon glyphicon-thumbs-up " aria-hidden="true"></span>
                 Liked! <span class="label label-default">{{plantFeedback.likeCount}}</span>
             </button>
         </span>
 
         <span *ngIf="rating === false">
-            <button type="button" style="border: none; background: inherit; outline: none;" class="text-success">
+            <button type="button" style="border: none; background: inherit; outline: none;font-size:20px" class="text-success">
                 <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
                 Disliked <span class="label label-default">{{plantFeedback.dislikeCount}}</span>
 
@@ -43,13 +47,22 @@
         </span>
 
         <span *ngIf="!commented">
-            <button type="button" (click)="this.comment(commentText)" style="float: right">Submit comment</button>
+            <button type="button" (click)="this.comment(commentText)" style="float: right">Submit feedback</button>
         </span>
     </div>
-    <span *ngIf="srcBed !== null">
-        <button  [routerLink] ="['/bed', srcBed]" class="btn" style="float: right">Back</button>
-    </span>
+
    <div>
-       {{plantFeedback.commentCount}} people have left feedback on this plant
+       {{plantFeedback.commentCount}} people have left feedback
    </div>
+    <br/>
+    <br/>
+    <br/>
+    <span *ngIf="srcBed !== null">
+        <button  [routerLink]="['/bed', srcBed]" class="btn" style="float: right">Back</button>
+    </span>
+
 </div>
+
+<footer style="position:absolute; bottom:0; height:60px; text-align:center;">
+    <p>West Central Research and Outreach Center | 46352 State Hwy 329 Morris MN 56267 | Phone: (320) 589-1711 | Fax: (320) 589-4870</p>
+</footer>

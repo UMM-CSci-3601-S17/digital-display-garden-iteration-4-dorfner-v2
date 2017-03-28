@@ -15,9 +15,8 @@
     <!--Button is a hyperlink to a plant page "/plants/:plantID"-->
     <!--See app.routes.ts-->
         <button [routerLink]="['/plants', plant.id]" class="btn btn-link btn-block" >
-            {{"Cultivar: " +  plant.cultivar}}<br>
-            {{"Common Name: " + plant.commonName}}</button>
-
+            <strong style="font-size:18px">{{plant.cultivar}}</strong><br>
+            {{plant.commonName}}</button>
     </li>
 
 </ul>
