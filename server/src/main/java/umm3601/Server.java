@@ -41,7 +41,7 @@ public class Server {
         // a problem which is resolved in `server/build.gradle`.
         staticFiles.location("/public");
 
-        PlantController plantController = new PlantController();
+        PlantController plantController = new PlantController("test");
 
         options("/*", (request, response) -> {
 

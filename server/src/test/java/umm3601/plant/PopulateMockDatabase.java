@@ -17,6 +17,8 @@ import static org.junit.Assert.assertEquals;
 
 public class PopulateMockDatabase {
 
+    private final static String databaseName = "data-for-testing-only";
+
     public PopulateMockDatabase(){
 
     }
@@ -30,7 +32,7 @@ public class PopulateMockDatabase {
 
     public void clearAndPopulateDBAgain() throws IOException {
         MongoClient mongoClient = new MongoClient();
-        MongoDatabase db = mongoClient.getDatabase("test");
+        MongoDatabase db = mongoClient.getDatabase(databaseName);
         MongoCollection plants = db.getCollection("plants");
         db.drop();
 

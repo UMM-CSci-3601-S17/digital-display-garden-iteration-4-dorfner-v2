@@ -12,15 +12,19 @@ import java.io.IOException;
 import static junit.framework.TestCase.assertEquals;
 
 public class FilterByUniqueGardenLocations {
+
+    private final static String databaseName = "data-for-testing-only";
+    private PlantController plantController;
+
     @Before
-    public void setUpDB() throws IOException{
-        PopulateMockDatabase mockDatabase = new PopulateMockDatabase();
-        mockDatabase.clearAndPopulateDBAgain();
+    public void populateDB() throws IOException {
+        PopulateMockDatabase db = new PopulateMockDatabase();
+        db.clearAndPopulateDBAgain();
+        plantController = new PlantController(databaseName);
     }
 
     @Test
     public void findByGardenLocation() throws IOException {
-        PlantController plantController = new PlantController();
         GardenLocation[] filteredPlants;
         Gson gson = new Gson();
         //System.out.println();

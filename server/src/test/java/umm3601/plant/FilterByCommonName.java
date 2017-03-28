@@ -14,15 +14,20 @@ import java.util.Map;
 import static junit.framework.TestCase.assertEquals;
 
 public class FilterByCommonName {
+
+
+    private final static String databaseName = "data-for-testing-only";
+    private PlantController plantController;
+
     @Before
     public void populateDB() throws IOException {
         PopulateMockDatabase db = new PopulateMockDatabase();
         db.clearAndPopulateDBAgain();
+        plantController = new PlantController(databaseName);
     }
 
     @Test
     public void filterPlantsByCommonName() throws IOException {
-        PlantController plantController = new PlantController();
         Plant[] filteredPlants;
         Gson gson = new Gson();
 
@@ -40,7 +45,6 @@ public class FilterByCommonName {
 
     @Test
     public void filterPlantsByPlantThatDoesntExist() throws IOException {
-        PlantController plantController = new PlantController();
         Plant[] filteredPlants;
         Gson gson = new Gson();
 

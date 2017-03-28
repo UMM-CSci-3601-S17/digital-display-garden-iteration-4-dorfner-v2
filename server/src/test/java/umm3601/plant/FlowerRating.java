@@ -20,20 +20,23 @@ import java.util.List;
 
 public class FlowerRating {
 
+    private final static String databaseName = "data-for-testing-only";
+    private PlantController plantController;
+
     @Before
     public void populateDB() throws IOException {
         PopulateMockDatabase db = new PopulateMockDatabase();
         db.clearAndPopulateDBAgain();
+        plantController = new PlantController(databaseName);
     }
 
     @Test
     public void AddFlowerRatingReturnsTrueWithValidInput() throws IOException{
-        PlantController plantController = new PlantController();
 
         assertTrue(plantController.addFlowerRating("58d1c36efb0cac4e15afd202", true, "first uploadId"));
 
         MongoClient mongoClient = new MongoClient();
-        MongoDatabase db = mongoClient.getDatabase("test");
+        MongoDatabase db = mongoClient.getDatabase(databaseName);
         MongoCollection plants = db.getCollection("plants");
 
         FindIterable doc = plants.find(new Document().append("_id", new ObjectId("58d1c36efb0cac4e15afd202")));
@@ -50,7 +53,6 @@ public class FlowerRating {
 
     @Test
     public void AddFlowerRatingReturnsFalseWithInvalidInput() throws IOException {
-        PlantController plantController = new PlantController();
 
         assertFalse(plantController.addFlowerRating("jfd;laj;asjfoisaf", true, "anything"));
         assertFalse(plantController.addFlowerRating("58d1c36efb0cac4e15afd201", true, "anything"));
@@ -58,7 +60,6 @@ public class FlowerRating {
 
     @Test
     public void AddFlowerRatingReturnsFalseWithInvalidUploadID() throws IOException {
-        PlantController plantController = new PlantController();
 
         assertFalse(plantController.addFlowerRating("58d1c36efb0cac4e15afd202", true, "anything"));
     }
@@ -66,14 +67,13 @@ public class FlowerRating {
 
     @Test
     public void AddFlowerRatingReturnsTrueWithValidJsonInput() throws IOException{
-        PlantController plantController = new PlantController();
 
         String json = "{like: true, id: \"58d1c36efb0cac4e15afd202\"}";
 
         assertTrue(plantController.addFlowerRating(json, "first uploadId"));
 
         MongoClient mongoClient = new MongoClient();
-        MongoDatabase db = mongoClient.getDatabase("test");
+        MongoDatabase db = mongoClient.getDatabase(databaseName);
         MongoCollection plants = db.getCollection("plants");
 
         FindIterable doc = plants.find(new Document().append("_id", new ObjectId("58d1c36efb0cac4e15afd202")));
@@ -90,7 +90,6 @@ public class FlowerRating {
 
     @Test
     public void AddFlowerRatingReturnsFalseWithInvalidJsonInput() throws IOException {
-        PlantController plantController = new PlantController();
 
         String json1 = "{like: true, id: \"dkjahfjafhlkasjdf\"}";
         String json2 = "{like: true id: \"58d1c36efb0cac4e15afd201\"}";

@@ -43,7 +43,7 @@ public class PlantController {
     private final MongoCollection<Document> commentCollection;
     private final MongoCollection<Document> configCollection;
 
-    public PlantController() throws IOException {
+    public PlantController(String databaseName) throws IOException {
         // Set up our server address
         // (Default host: 'localhost', default port: 27017)
         // ServerAddress testAddress = new ServerAddress();
@@ -53,7 +53,7 @@ public class PlantController {
         MongoClient mongoClient = new MongoClient(); // Defaults!
 
         // Try connecting to a database
-        MongoDatabase db = mongoClient.getDatabase("test");
+        MongoDatabase db = mongoClient.getDatabase(databaseName);
 
         plantCollection = db.getCollection("plants");
         commentCollection = db.getCollection("comments");
