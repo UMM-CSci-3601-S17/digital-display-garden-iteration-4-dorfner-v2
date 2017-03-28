@@ -52,7 +52,8 @@ public class Server {
         redirect.get("", "/");
 
         get("/", (req, res) -> {
-            InputStream stream = plantController.getClass().getResourceAsStream("/index.html");
+            System.out.println("the top path works");
+            InputStream stream = plantController.getClass().getResourceAsStream("/public/index.html");
             return IOUtils.toString(stream);
         });
 
@@ -95,7 +96,8 @@ public class Server {
         });
 
         get("/*", (req, res) -> {
-            InputStream stream = plantController.getClass().getResourceAsStream("/index.html");
+            System.out.println("this works!");
+            InputStream stream = plantController.getClass().getResourceAsStream("/public/index.html");
             return IOUtils.toString(stream);
         });
 
