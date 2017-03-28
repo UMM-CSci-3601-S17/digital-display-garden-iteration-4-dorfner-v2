@@ -71,7 +71,7 @@ public class Server {
         // List plants
         get("api/plants", (req, res) -> {
             res.type("application/json");
-            return plantController.listPlants(req.queryMap().toMap());
+            return plantController.listPlants(req.queryMap().toMap(), plantController.getLiveUploadId());
         });
 
         //Get a plant

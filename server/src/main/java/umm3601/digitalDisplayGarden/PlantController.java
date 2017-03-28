@@ -68,9 +68,9 @@ public class PlantController {
     }
 
     // List plants
-    // todo make this use uploadID
-    public String listPlants(Map<String, String[]> queryParams) {
+    public String listPlants(Map<String, String[]> queryParams, String uploadId) {
         Document filterDoc = new Document();
+        filterDoc.append("uploadId", uploadId);
 
         if (queryParams.containsKey("gardenLocation")) {
             String location =(queryParams.get("gardenLocation")[0]);
