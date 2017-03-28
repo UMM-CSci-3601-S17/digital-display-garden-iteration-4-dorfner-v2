@@ -89,56 +89,6 @@ public class PlantController {
     }
 
     /**
-     * Takes a String representing a hexadecimal ID number of a plant
-     * and when the ID is found in the database returns a JSON document
-     * as a String of the following form
-     *
-     * <code>
-     * {
-     *  "_id"        : { "$oid": String },
-     *  "commonName" : String,
-     *  "cultivar"   : String
-     * }
-     * </code>
-     *
-     * If the ID is invalid or not found, the following JSON value is
-     * returned
-     *
-     * <code>
-     *  null
-     * </code>
-     *
-     * @param id a hexadecimal ID number of a plant in the DB
-     * @return a string representation of a JSON value
-     */
-    // todo make this use uploadID
-    public String getPlant(String id) {
-
-        FindIterable<Document> jsonPlant;
-        String returnVal;
-        try {
-
-            jsonPlant = plantCollection.find(eq("_id", new ObjectId(id)))
-                    .projection(fields(include("commonName", "cultivar")));
-
-            Iterator<Document> iterator = jsonPlant.iterator();
-
-            if (iterator.hasNext()) {
-                //incrementMetadata(id, "pageViews");
-                returnVal = iterator.next().toJson();
-            } else {
-                returnVal = "null";
-            }
-
-        } catch (IllegalArgumentException e) {
-            returnVal = "null";
-        }
-
-        return returnVal;
-
-    }
-
-    /**
      * Takes a String representing an ID number of a plant
      * and when the ID is found in the database returns a JSON document
      * as a String of the following form
