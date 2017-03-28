@@ -85,13 +85,13 @@ public class Server {
         get("api/plants/:plantID/counts", (req, res) -> {
             res.type("application/json");
             String id = req.params("plantID");
-            return plantController.getFeedbackForPlantByPlantID(id);
+            return plantController.getFeedbackForPlantByPlantID(id, plantController.getLiveUploadId());
         });
 
         //List all Beds
         get("api/gardenLocations", (req, res) -> {
             res.type("application/json");
-            return plantController.getPlantsByGardenLocations();
+            return plantController.getPlantsByGardenLocations(plantController.getLiveUploadId());
         });
 
         // List all uploadIds
@@ -102,7 +102,7 @@ public class Server {
 
         post("api/plants/rate", (req, res) -> {
             res.type("application/json");
-            return plantController.addFlowerRating(req.body());
+            return plantController.addFlowerRating(req.body(), plantController.getLiveUploadId());
         });
 
         get("api/export", (req, res) -> {
@@ -124,7 +124,7 @@ public class Server {
         get("api/admin/QRCodes.zip", (req, res) -> {
             res.type("application/zip");
 
-            String zipPath = qrCodeGenerator.CreateQRCodesFromAllBeds();
+            String zipPath = qrCodeGenerator.CreateQRCodesFromAllBeds(plantController.getLiveUploadId());
             if(zipPath == null)
                 return null;
 
@@ -141,7 +141,7 @@ public class Server {
         // Posting a comment
         post("api/plants/leaveComment", (req, res) -> {
             res.type("application/json");
-            return plantController.storePlantComment(req.body());
+            return plantController.storePlantComment(req.body(), plantController.getLiveUploadId());
         });
 
         // Accept an xls file

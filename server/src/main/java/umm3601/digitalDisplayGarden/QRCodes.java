@@ -26,9 +26,6 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
-/**
- * Created by carav008 on 3/25/17.
- */
 
 // todo make this use uploadID
 public class QRCodes {
@@ -59,8 +56,8 @@ public class QRCodes {
      *
      * @return the path to the new .zip file or null if there was a disk IO issue
      */
-    // todo make this use uploadID
-    public String CreateQRCodesFromAllBeds(){
+    // todo make this use uploadId
+    public String CreateQRCodesFromAllBeds(String uploadId){
         //Get all unique beds from Database
         //Create URLs for all unique beds
         //Create QRCode BufferedImages for all URLs
@@ -69,7 +66,7 @@ public class QRCodes {
             //http://www.oracle.com/technetwork/articles/java/compress-1565076.html
         //create Post request to client to download zip.
 
-        String bedNames[] = plantController.getGardenLocations();
+        String bedNames[] = plantController.getGardenLocations(uploadId);
         final int numBeds = bedNames.length;
 
         String bedURLs[] = new String [numBeds];

@@ -150,7 +150,7 @@ public class PlantController {
      * }
      */
     // todo make this use uploadID
-    public String getFeedbackForPlantByPlantID(String plantID) {
+    public String getFeedbackForPlantByPlantID(String plantID, String uploadID) {
         Document out = new Document();
 
         Document filter = new Document();
@@ -189,7 +189,7 @@ public class PlantController {
 
 
     // todo make this use uploadID
-    public String getPlantsByGardenLocations(){
+    public String getPlantsByGardenLocations(String uploadID){
         AggregateIterable<Document> documents
                 = plantCollection.aggregate(
                 Arrays.asList(
@@ -199,7 +199,7 @@ public class PlantController {
         return JSON.serialize(documents);
     }
     // todo make this use uploadID
-    public String[] getGardenLocations(){
+    public String[] getGardenLocations(String uploadID){
         Document filter = new Document();
         DistinctIterable<String>  bedIterator = plantCollection.distinct("gardenLocation", filter, String.class);
         List<String> beds = new ArrayList<String>();
@@ -225,7 +225,7 @@ public class PlantController {
      * @return true iff the comment was successfully submitted
      */
     // todo make this use uploadID
-    public boolean storePlantComment(String json) {
+    public boolean storePlantComment(String json, String uploadID) {
 
 
         try {
@@ -298,7 +298,7 @@ public class PlantController {
      * @return true iff the operation succeeded.
      */
     // todo make this use uploadID
-    public boolean addFlowerRating(String id, boolean like) {
+    public boolean addFlowerRating(String id, boolean like, String uploadID) {
 
         Document filterDoc = new Document();
 
@@ -333,7 +333,7 @@ public class PlantController {
      * @return true iff the operation succeeded.
      */
     // todo make this use uploadID
-    public boolean addFlowerRating(String json){
+    public boolean addFlowerRating(String json, String uploadID){
         boolean like;
         String id;
 
@@ -360,7 +360,7 @@ public class PlantController {
             return false;
         }
 
-        return addFlowerRating(id, like);
+        return addFlowerRating(id, like, uploadID);
     }
 
     /**
