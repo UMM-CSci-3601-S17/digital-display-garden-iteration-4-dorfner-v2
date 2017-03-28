@@ -42,7 +42,6 @@ public class Server {
         staticFiles.location("/public");
 
         PlantController plantController = new PlantController();
-        QRCodes qrCodeGenerator = new QRCodes(plantController);
 
         options("/*", (request, response) -> {
 
@@ -124,7 +123,11 @@ public class Server {
         get("api/admin/QRCodes.zip", (req, res) -> {
             res.type("application/zip");
 
-            String zipPath = qrCodeGenerator.CreateQRCodesFromAllBeds(plantController.getLiveUploadId());
+            String liveUploadID = plantController.getLiveUploadId();
+            String zipPath = QRCodes.CreateQRCodesFromAllBeds(
+                    liveUploadID,
+                    plantController.getGardenLocations(liveUploadID),
+                    API_URL + "/bed/");
             if(zipPath == null)
                 return null;
 

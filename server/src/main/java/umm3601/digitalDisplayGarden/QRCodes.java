@@ -19,19 +19,11 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 
-// todo make this use uploadID
+
 public class QRCodes {
     //http://javapapers.com/core-java/java-qr-code/
 
-    private PlantController plantController;
 
-    // todo make this use uploadID
-    public QRCodes(PlantController plantController)
-    {
-        this.plantController = plantController;
-    }
-
-    // todo make this use uploadID
     public static BufferedImage createQRFromBedURL(String url) throws IOException,WriterException{
 
         Map hintMap = new HashMap();
@@ -48,8 +40,8 @@ public class QRCodes {
      *
      * @return the path to the new .zip file or null if there was a disk IO issue
      */
-    // todo make this use uploadId
-    public String CreateQRCodesFromAllBeds(String uploadId){
+
+    public static String CreateQRCodesFromAllBeds(String uploadId, String bedNames[], String urlPrefix){
         //Get all unique beds from Database
         //Create URLs for all unique beds
         //Create QRCode BufferedImages for all URLs
@@ -58,14 +50,13 @@ public class QRCodes {
             //http://www.oracle.com/technetwork/articles/java/compress-1565076.html
         //create Post request to client to download zip.
 
-        String bedNames[] = plantController.getGardenLocations(uploadId);
         final int numBeds = bedNames.length;
 
         String bedURLs[] = new String [numBeds];
         List<BufferedImage> qrCodeImages = new ArrayList<BufferedImage>();
 
         for(int i = 0; i < numBeds; i++) {
-            bedURLs[i] = "http://localhost:9000/bed/" + bedNames[i];
+            bedURLs[i] = urlPrefix + bedNames[i];
             try {
                 qrCodeImages.add(createQRFromBedURL(bedURLs[i]));
             }
@@ -153,7 +144,6 @@ public class QRCodes {
         return zipPath;
     }
 
-    // todo make this use uploadID
     public static BufferedImage createQRCode(String qrCodeData, String charset, Map hintMap, int qrCodeheight, int qrCodewidth)
             throws WriterException, IOException {
         //Create the BitMatrix representing the QR code
