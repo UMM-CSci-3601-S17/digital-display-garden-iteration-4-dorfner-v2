@@ -12,6 +12,12 @@ import { routing } from './app/app.routes';
 import { FormsModule } from '@angular/forms';
 
 import { PipeModule } from './pipe.module';
+import {AdminComponent} from "./app/admin/admin.component";
+import {ExportComponent} from "./app/admin/export.component";
+import {AdminService} from "./app/admin/admin.service";
+import {ImportComponent} from "./app/admin/import.component";
+import {FileUploadComponent} from "./app/admin/file-upload.component";
+
 
 
 
@@ -29,10 +35,14 @@ import { PipeModule } from './pipe.module';
         NavbarComponent,
         PlantListComponent,
         PlantComponent,
+        AdminComponent,
+        ExportComponent,
+        ImportComponent,
+        FileUploadComponent,
         BedComponent
 
     ],
-    providers: [ PlantListService ],
+    providers: [ PlantListService, AdminService ],
     bootstrap: [ AppComponent ]
 })
 
