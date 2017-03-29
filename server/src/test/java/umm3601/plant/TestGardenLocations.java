@@ -9,7 +9,7 @@ import java.io.IOException;
 
 import static junit.framework.TestCase.assertEquals;
 
-public class FilterByUniqueGardenLocations {
+public class TestGardenLocations {
 
     private final static String databaseName = "data-for-testing-only";
     private PlantController plantController;
@@ -22,7 +22,7 @@ public class FilterByUniqueGardenLocations {
     }
 
     @Test
-    public void findByGardenLocation() throws IOException {
+    public void GetGardenLocationAsJsonRemovesDuplicates() throws IOException {
         GardenLocation[] gardenLocations;
         Gson gson = new Gson();
 
