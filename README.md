@@ -33,6 +33,9 @@ When you load the project on a new machine, tell Gradle to Refresh linked Gradle
 * Track the number of times a flower page is visited
 * Track the number of times a bed page is visited 
 
+Finished by Claude Arabo
+* Import Excel Spreadsheet to Database
+
 ## Documentation
 * [Excel File Requirements](https://github.com/UMM-CSci-3601-S17/digital-display-garden-iteration-1-claudearabo/blob/MakeMarkdownDocumentation/Documentation/ExcelFileRequirements.md)  
 * [Excel Parser Documentation](https://github.com/UMM-CSci-3601-S17/digital-display-garden-iteration-1-claudearabo/blob/MakeMarkdownDocumentation/Documentation/ExcelParser.md) 
