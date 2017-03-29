@@ -201,7 +201,7 @@ public class PlantController {
         return JSON.serialize(out);
     }
 
-    public String getPlantsByGardenLocations(String uploadID){
+    public String getGardenLocationsAsJson(String uploadID){
         AggregateIterable<Document> documents
                 = plantCollection.aggregate(
                 Arrays.asList(

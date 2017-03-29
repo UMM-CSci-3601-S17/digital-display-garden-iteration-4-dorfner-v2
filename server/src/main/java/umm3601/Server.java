@@ -1,14 +1,11 @@
 package umm3601;
 
 import com.mongodb.util.JSON;
-import org.joda.time.DateTime;
 import umm3601.digitalDisplayGarden.PlantController;
-import umm3601.digitalDisplayGarden.CommentWriter;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Date;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -88,9 +85,9 @@ public class Server {
         });
 
         //List all Beds
-        get("api/gardenLocations", (req, res) -> { //TODO: change endpoint to something more accurate
+        get("api/gardenLocations", (req, res) -> {
             res.type("application/json");
-            return plantController.getPlantsByGardenLocations(plantController.getLiveUploadId());
+            return plantController.getGardenLocationsAsJson(plantController.getLiveUploadId());
         });
 
         // List all uploadIds

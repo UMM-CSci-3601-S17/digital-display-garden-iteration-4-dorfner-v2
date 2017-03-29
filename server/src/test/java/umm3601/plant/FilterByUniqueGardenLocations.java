@@ -3,9 +3,7 @@ package umm3601.plant;
 import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;
-import umm3601.digitalDisplayGarden.Plant;
 import umm3601.digitalDisplayGarden.PlantController;
-import umm3601.plant.PopulateMockDatabase;
 
 import java.io.IOException;
 
@@ -25,13 +23,14 @@ public class FilterByUniqueGardenLocations {
 
     @Test
     public void findByGardenLocation() throws IOException {
-        GardenLocation[] filteredPlants;
+        GardenLocation[] gardenLocations;
         Gson gson = new Gson();
-        //System.out.println();
-        String rawPlants = plantController.getPlantsByGardenLocations("first uploadId");
-        filteredPlants = gson.fromJson(rawPlants, GardenLocation[].class);
-        assertEquals("Incorrect number of unique garden locations", 1, filteredPlants.length);
-        assertEquals("Incorrect zero index", "10.0", filteredPlants[0]._id);
-        assertEquals("Incorrect value for index 0", "10.0", filteredPlants[0]._id);
+
+        String json = plantController.getGardenLocationsAsJson("first uploadId");
+        gardenLocations = gson.fromJson(json, GardenLocation[].class);
+        assertEquals("Incorrect number of unique garden locations", 1, gardenLocations.length);
+        assertEquals("Incorrect zero index", "10.0", gardenLocations[0]._id);
+        assertEquals("Incorrect value for index 0", "10.0", gardenLocations[0]._id);
     }
+
 }
