@@ -1,4 +1,5 @@
 export class PlantFeedback{
+    id:string;
     commentCount:number;
     likeCount:number;
     dislikeCount:number;

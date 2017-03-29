@@ -1,4 +1,5 @@
 export class Plant {
+    _id: {};
     id: string;
     plantID: string;
     plantType: string;

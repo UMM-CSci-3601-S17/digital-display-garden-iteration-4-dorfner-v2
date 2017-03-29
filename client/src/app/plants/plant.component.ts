@@ -29,7 +29,7 @@ export class PlantComponent implements OnInit {
         this.srcBed = this.route.snapshot.params["srcBed"];
     }
 
-    private comment(comment: string): void {
+    public comment(comment: string): void {
         if(!this.commented){
             if(comment != null) {
                 this.plantListService.commentPlant(this.plant["_id"]["$oid"], comment)
@@ -43,7 +43,7 @@ export class PlantComponent implements OnInit {
         }
     }
 
-    private ratePlant(like: boolean): void {
+    public ratePlant(like: boolean): void {
         if(this.rating === null && like !== null) {
             this.plantListService.ratePlant(this.plant["_id"]["$oid"], like)
                 .subscribe(succeeded => this.rating = like);
