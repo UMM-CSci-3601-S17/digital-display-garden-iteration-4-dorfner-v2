@@ -100,7 +100,22 @@ public class PopulateMockDatabase {
         dianthus.append("metadata", metadataDoc2);
         plants.insertOne(dianthus);
 
+        //Fourth Plant PlantFour
+        Document plantFour = new Document();
+        plantFour.append("_id", new ObjectId("58d1c36efb0cac4e15afd278"));
+        plantFour.append("uploadId", "second uploadId");
 
+        plantFour.append("commonName", "PlantFour");
+        plantFour.append("cultivar", "Some Plant");
+        plantFour.append("gardenLocation", "12");
+        plantFour.append("id", "16040.0");
+
+        Document metadataDoc3 = new Document();
+        metadataDoc3.append("pageViews", 0);
+        metadataDoc3.append("ratings", new BsonArray());
+
+        plantFour.append("metadata", metadataDoc3);
+        plants.insertOne(plantFour);
     }
 }
 

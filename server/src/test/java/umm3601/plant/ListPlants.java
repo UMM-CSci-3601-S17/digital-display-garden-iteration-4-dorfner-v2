@@ -92,7 +92,7 @@ public class ListPlants {
         String rawPlants = plantController.listPlants(queryParams, "second uploadId");
         filteredPlants = gson.fromJson(rawPlants, Plant[].class);
 
-        assertEquals(1, filteredPlants.length);
+        assertEquals(2, filteredPlants.length);
     }
 
 }
