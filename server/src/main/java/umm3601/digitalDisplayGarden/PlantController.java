@@ -279,6 +279,8 @@ public class PlantController {
             return false;
         } catch (org.bson.json.JsonParseException e){
             return false;
+        } catch (IllegalArgumentException e){
+            return false;
         }
 
         return true;
