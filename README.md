@@ -1,6 +1,6 @@
-## Digital Display Garden
+# Digital Display Garden
 [![Build Status](https://travis-ci.org/UMM-CSci-3601-S17/digital-display-garden-iteration-2-grimaldi.svg?branch=master)](https://travis-ci.org/UMM-CSci-3601-S17/digital-display-garden-iteration-2-grimaldi)
-Software Design S2017, Iteration 2, Team Grimaldi 
+Software Design S2017, Iteration 2, Team _Grimaldi_ 
 
 ## Setup
 
@@ -17,6 +17,25 @@ side of your project during build. No permanent damage will be done, but it's
 pretty annoying to deal with.
 
 When you load the project on a new machine, tell Gradle to Refresh linked Gradle projects.
+
+##Stories
+* Leave Comments About a Flower
+* Allow a visitor to rate a flower
+* Display counts of likes and dislikes on visitor website
+* Display counts of comments on visitor website
+* Extra: Add Bed Pages (required for QR Codes)
+* Generate QR Codes
+* Export Feedback to a File
+* Track the number of times a flower page is visited
+* Track the number of times a bed page is visited 
+
+##Documentation
+* [Excel File Requirements](https://github.com/UMM-CSci-3601-S17/digital-display-garden-iteration-1-claudearabo/blob/MakeMarkdownDocumentation/Documentation/ExcelFileRequirements.md)  
+* [Excel Parser Documentation](https://github.com/UMM-CSci-3601-S17/digital-display-garden-iteration-1-claudearabo/blob/MakeMarkdownDocumentation/Documentation/ExcelParser.md) 
+
+## Running your project
+> Run the server  
+> Run the client  
 
 ## Libraries used
 ###Client-Side
