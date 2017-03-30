@@ -18,6 +18,8 @@ import static org.junit.Assert.assertNotNull;
  */
 public class TestExcelParser {
 
+    private final static String databaseName = "data-for-testing-only";
+
     public MongoClient mongoClient = new MongoClient();
     public MongoDatabase testDB;
     public ExcelParser parser;
@@ -25,8 +27,8 @@ public class TestExcelParser {
 
     @Before
     public void clearAndPopulateDatabase(){
-        mongoClient.dropDatabase("test");
-        testDB = mongoClient.getDatabase("test");
+        mongoClient.dropDatabase(databaseName);
+        testDB = mongoClient.getDatabase(databaseName);
         fromFile = this.getClass().getResourceAsStream("/AccessionList2016.xlsx");
         parser = new ExcelParser(fromFile);
     }
