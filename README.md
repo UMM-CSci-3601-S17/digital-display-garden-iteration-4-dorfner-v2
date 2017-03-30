@@ -22,7 +22,7 @@ When you load the project on a new machine, tell Gradle to Refresh linked Gradle
 > Run the server  
 > Run the client  
 
-## Stories
+## Attempted or Completed Stories
 * Leave Comments About a Flower
 * Allow a visitor to rate a flower
 * Display counts of likes and dislikes on visitor website
@@ -53,7 +53,7 @@ Finished by Claude Arabo
 * **JUnit** is used for testing
 * **Apache** is used for importing and exporting data in .xlsx format
 * **zxing** is used for generating (supports reading it we want) QR codes
-* **joda** TODO:why?
+* **joda** is used for making an unique LiveUploadID
 
 ### Source of branches at end of Iteration 2 
 
