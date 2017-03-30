@@ -54,17 +54,17 @@ Finished by Claude Arabo
 * **Spark** is used for the server operations
 * **JUnit** is used for testing
 * **Apache** is used for importing and exporting data in .xlsx format
-* **zxing** is used for generating (supports reading it we want) QR codes
+* **zxing** is used for generating QR codes (supports reading them if we want) 
 * **joda** is used for making an unique LiveUploadID
 
 ### Source of branches at end of Iteration 2 
 
 Most of these branches can be deleted in the next Iterations' forks of this repo.
 
-* **fix-tests** very behind, fixed tests at beginning of iteration
+* **fix-tests** Very behind, fixed tests at beginning of iteration
 * **comments** Implements capability for comments
 * **rating-flowers** Implements capability for flower likes and dislikes
-* **improving-deployment** changes API_URL
+* **improving-deployment** Changes API_URL
 * **chg-dialog** Changes plant information to be displayed from DialogComponent to PlantComponent
 * **rm-unnecessary** Removes unnecessary files, imports, config from files
 * **count** Implement the ability to count and display count for feedback on a plant
