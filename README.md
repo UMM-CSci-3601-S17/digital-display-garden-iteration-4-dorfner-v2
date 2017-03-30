@@ -11,14 +11,18 @@ Cloning the project inside IntelliJ:
   - Make sure **Use default Gradle wrapper** is selected.
 - Click **Finish.**
 
-:bangbang: :fire: If IntelliJ ever prompts you to compile typescript files into
+:fire: If IntelliJ ever prompts you to compile typescript files into
 javascript **say no!**. Doing this will confuse webpack and break the client
 side of your project during build. No permanent damage will be done, but it's
 pretty annoying to deal with.
 
 When you load the project on a new machine, tell Gradle to Refresh linked Gradle projects.
 
-##Stories
+## Running your project
+> Run the server  
+> Run the client  
+
+## Attempted or Completed Stories
 * Leave Comments About a Flower
 * Allow a visitor to rate a flower
 * Display counts of likes and dislikes on visitor website
@@ -29,46 +33,47 @@ When you load the project on a new machine, tell Gradle to Refresh linked Gradle
 * Track the number of times a flower page is visited
 * Track the number of times a bed page is visited 
 
-##Documentation
+Finished by Claude Arabo
+* Import Excel Spreadsheet to Database
+
+## Documentation
 * [Excel File Requirements](https://github.com/UMM-CSci-3601-S17/digital-display-garden-iteration-1-claudearabo/blob/MakeMarkdownDocumentation/Documentation/ExcelFileRequirements.md)  
 * [Excel Parser Documentation](https://github.com/UMM-CSci-3601-S17/digital-display-garden-iteration-1-claudearabo/blob/MakeMarkdownDocumentation/Documentation/ExcelParser.md) 
 
-## Running your project
-> Run the server  
-> Run the client  
+
 
 ## Libraries used
-###Client-Side
+### Client-Side
 * **Angular 2**
-* **Jasmine**and**Karma** 
+* **Jasmine** and **Karma** 
 
-###Server-Side
-* **Java**
-* **Spark**is used for the server operations
-* **JUnit**is used for testing
-* **Apache**is used for importing and exporting data in .xlsx format
-* **zxing**is used for generating (supports reading it we want) QR codes
-* **joda**TODO:why?
+### Server-Side
+* **Java** 
+* **Spark** is used for the server operations
+* **JUnit** is used for testing
+* **Apache** is used for importing and exporting data in .xlsx format
+* **zxing** is used for generating (supports reading it we want) QR codes
+* **joda** is used for making an unique LiveUploadID
 
-###Source of branches at end of Iteration 2 
+### Source of branches at end of Iteration 2 
 
 Most of these branches can be deleted in the next Iterations' forks of this repo.
 
-* **fix-tests**very behind, fixed tests at beginning of iteration
-* **comments**Implements capability for comments
-* **rating-flowers**Implements capability for flower likes and dislikes
-* **improving-deployment**changes API_URL
-* **chg-dialog**Changes plant information to be displayed from DialogComponent to PlantComponent
-* **rm-unnecessary**Removes unnecessary files, imports, config from files
-* **count**Implement the ability to count and display count for feedback on a plant
-* **bed-pages**Creates pages for beds (BedComponent)
-* **feedback-export**Implements ability to export comments to spreadsheet (xlsx)
-* **QR-Generation**Implements ability to generate QRCodes and request a .zip from the server.
-* **qr+text-export**A merge of QR-Generation and feedback-export with bug fixes  
+* **fix-tests** very behind, fixed tests at beginning of iteration
+* **comments** Implements capability for comments
+* **rating-flowers** Implements capability for flower likes and dislikes
+* **improving-deployment** changes API_URL
+* **chg-dialog** Changes plant information to be displayed from DialogComponent to PlantComponent
+* **rm-unnecessary** Removes unnecessary files, imports, config from files
+* **count** Implement the ability to count and display count for feedback on a plant
+* **bed-pages** Creates pages for beds (BedComponent)
+* **feedback-export** Implements ability to export comments to spreadsheet (xlsx)
+* **QR-Generation** Implements ability to generate QRCodes and request a .zip from the server.
+* **qr+text-export** A merge of QR-Generation and feedback-export with bug fixes  
 * **fixing-deployment**
-* **prettify**Makes things look nicer
-* **testing-client**Tests
-* **testing-PlantController**Tests
+* **prettify** Makes things look nicer
+* **testing-client** Tests
+* **testing-PlantController** Tests
 * **update-plantController-for-uploadIds**
 * **improving-navigation**
 * **master**
