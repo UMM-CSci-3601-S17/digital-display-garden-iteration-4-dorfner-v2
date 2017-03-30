@@ -39,8 +39,8 @@ Finished by Claude Arabo
 * Import Excel Spreadsheet to Database
 
 ## Documentation
-* [Excel File Requirements](https://github.com/UMM-CSci-3601-S17/digital-display-garden-iteration-1-claudearabo/blob/MakeMarkdownDocumentation/Documentation/ExcelFileRequirements.md)  
-* [Excel Parser Documentation](https://github.com/UMM-CSci-3601-S17/digital-display-garden-iteration-1-claudearabo/blob/MakeMarkdownDocumentation/Documentation/ExcelParser.md) 
+* [Excel File Requirements](Documentation/ExcelFileRequirements.md)  
+* [Excel Parser Documentation](Documentation/ExcelParser.md) 
 
 
 
