@@ -26,14 +26,17 @@ import org.joda.time.DateTime;
 
 public class ExcelParser {
 
+    private String databaseName;
+
     private InputStream stream;
 
 //    public static void main(String[] args) {
 //        parseExcel();
 //    }
 
-    public ExcelParser(InputStream stream){
-     this.stream = stream;
+    public ExcelParser(InputStream stream, String databaseName){
+        this.databaseName = databaseName;
+        this.stream = stream;
     }
 
     public void parseExcel(String uploadId) throws FileNotFoundException{
@@ -187,9 +190,9 @@ public class ExcelParser {
 
     // Moves row by row through the 2D array and adds content for every flower paired with keys into a document
     // Uses the document to one at a time, add flower information into the database.
-    public static void populateDatabase(String[][] cellValues, String uploadId){
+    public void populateDatabase(String[][] cellValues, String uploadId){
         MongoClient mongoClient = new MongoClient();
-        MongoDatabase test = mongoClient.getDatabase("test");
+        MongoDatabase test = mongoClient.getDatabase(databaseName);
         MongoCollection plants = test.getCollection("plants");
 
         String[] keys = getKeys(cellValues);

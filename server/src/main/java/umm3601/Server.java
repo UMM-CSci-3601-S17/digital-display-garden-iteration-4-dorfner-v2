@@ -25,6 +25,7 @@ public class Server {
 
     public static final String API_URL = "http://grimaldi.ddg.congrue.xyz:2538";
 
+    public static String databaseName = "test";
 
     private static String excelTempDir = "/tmp/digital-display-garden";
 
@@ -41,7 +42,7 @@ public class Server {
         // a problem which is resolved in `server/build.gradle`.
         staticFiles.location("/public");
 
-        PlantController plantController = new PlantController("test");
+        PlantController plantController = new PlantController(databaseName);
 
         options("/*", (request, response) -> {
 
@@ -168,7 +169,7 @@ public class Server {
                 String fileName = Long.valueOf(System.currentTimeMillis()).toString();
                 Part part = req.raw().getPart("file[]");
 
-                ExcelParser parser = new ExcelParser(part.getInputStream());
+                ExcelParser parser = new ExcelParser(part.getInputStream(), databaseName);
 
                 String id = ExcelParser.getAvailableUploadId();
                 parser.parseExcel(id);

@@ -30,7 +30,7 @@ public class TestExcelParser {
         mongoClient.dropDatabase(databaseName);
         testDB = mongoClient.getDatabase(databaseName);
         fromFile = this.getClass().getResourceAsStream("/AccessionList2016.xlsx");
-        parser = new ExcelParser(fromFile);
+        parser = new ExcelParser(fromFile, databaseName);
     }
 
 
