@@ -23,7 +23,7 @@ import javax.servlet.http.Part;
 
 public class Server {
 
-    public static final String API_URL = "http://localhost:9000";
+    public static final String API_URL = "http://grimaldi.ddg.congrue.xyz:2538";
 
 
     private static String excelTempDir = "/tmp/digital-display-garden";
