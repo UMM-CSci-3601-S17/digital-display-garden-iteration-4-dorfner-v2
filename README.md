@@ -75,7 +75,7 @@ Most of these branches can be deleted in the next Iterations' forks of this repo
 
 **Branches Inherited from Claude Arabo**
 
-* **MakeMarkdownDocumentation** contains documentation that pertains to xlsx parsing, consider moving to master 
+* **MakeMarkdownDocumentation**
 * **PlantController**
 * **MergeFromMotherShip**
 * **testXlsxToDatabase**
