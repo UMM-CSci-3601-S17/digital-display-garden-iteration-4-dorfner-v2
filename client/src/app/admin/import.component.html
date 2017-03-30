@@ -11,6 +11,9 @@
 </button>
 
 <div *ngIf="filename!==undefined"> Your file was successfully uploaded as data set {{this.filename}}.
-<button  [routerLink]="['/admin']" style="float: right">Back to Admin Page</button>
 </div>
 <div *ngIf="filename === undefined && uploadAttempted === true">File upload failed.</div>
+
+<div>
+<button  [routerLink]="['/admin']" style="float: right">Back to Admin Page</button>
+</div>
