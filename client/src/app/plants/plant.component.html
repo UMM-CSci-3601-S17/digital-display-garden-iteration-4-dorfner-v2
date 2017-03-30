@@ -47,7 +47,7 @@
         </span>
 
         <span *ngIf="!commented">
-            <button type="button" (click)="this.comment(commentText)" style="float: right">Submit feedback</button>
+            <button (click)="this.comment(commentText)" class="btn btn-primary btn-lg" style="float: right">Submit feedback</button>
         </span>
     </div>
 
@@ -58,7 +58,7 @@
     <br/>
     <br/>
     <span *ngIf="srcBed !== null">
-        <button  [routerLink]="['/bed', srcBed]" class="btn" style="float: right">Back</button>
+        <button  type="button" [routerLink]="['/bed', srcBed]" class="btn btn-primary btn-lg" style="float: right">Back</button>
     </span>
 
 </div>
