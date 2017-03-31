@@ -4,11 +4,8 @@ import { PlantComponent } from "./plant.component";
 import { PlantListService } from "./plant-list.service";
 import { Observable } from "rxjs";
 import {PlantFeedback} from "./plant.feedback";
-import {Router, ActivatedRoute} from "@angular/router";
-import { Location } from '@angular/common';
-import {RouterTestingModule} from "@angular/router/testing";
+import { ActivatedRoute} from "@angular/router";
 import {FormsModule} from "@angular/forms";
-import {Component} from "@angular/core";
 
 
 describe("Plant component", () => {
@@ -94,7 +91,7 @@ describe("Plant component", () => {
 
 
         TestBed.configureTestingModule({
-            imports: [FormsModule, RouterTestingModule],
+            imports: [FormsModule],
             declarations: [ PlantComponent ],
             providers:    [
                 {provide: PlantListService, useValue: plantListServiceStub} ,
