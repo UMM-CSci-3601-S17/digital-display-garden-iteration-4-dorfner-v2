@@ -2,6 +2,8 @@
 [![Build Status](https://travis-ci.org/UMM-CSci-3601-S17/digital-display-garden-iteration-2-grimaldi.svg?branch=master)](https://travis-ci.org/UMM-CSci-3601-S17/digital-display-garden-iteration-2-grimaldi)
 Software Design S2017, Iteration 2, Team _Grimaldi_ 
 
+This repository is a fork from [Iteration 1 , Team _Claude Arabo_](https://github.com/UMM-CSci-3601-S17/digital-display-garden-iteration-1-claudearabo).
+
 ## Setup
 
 Cloning the project inside IntelliJ:
@@ -46,8 +48,8 @@ Finished by Claude Arabo
 * Import Excel Spreadsheet to Database
 
 ## Documentation
-* [Excel File Requirements](https://github.com/UMM-CSci-3601-S17/digital-display-garden-iteration-1-claudearabo/blob/MakeMarkdownDocumentation/Documentation/ExcelFileRequirements.md)  
-* [Excel Parser Documentation](https://github.com/UMM-CSci-3601-S17/digital-display-garden-iteration-1-claudearabo/blob/MakeMarkdownDocumentation/Documentation/ExcelParser.md) 
+* [Excel File Requirements](Documentation/ExcelFileRequirements.md)  
+* [Excel Parser Documentation](Documentation/ExcelParser.md) 
 
 
 
