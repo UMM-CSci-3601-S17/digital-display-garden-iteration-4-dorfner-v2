@@ -36,9 +36,36 @@ describe("Plant component", () => {
         }
     };
 
+    let originalMockFeedBackData = [
+        {
+            id:"16001",
+            commentCount: 1,
+            likeCount: 2,
+            dislikeCount: 0
+        },
+        {
+            id:"16002",
+            commentCount: 62,
+            likeCount: 8,
+            dislikeCount: 6
+        },
+        {
+            id:"16008",
+            commentCount: 2,
+            likeCount: 22,
+            dislikeCount: 5
+        }
+    ];
+
+    let mockFeedBackData;
+
 
 
     beforeEach(() => {
+
+        // (re)set the fake database before every test
+        mockFeedBackData = originalMockFeedBackData;
+
         // stub plantService for test purposes
         plantListServiceStub = {
             getPlantById: (id: string) => Observable.of([
@@ -57,27 +84,10 @@ describe("Plant component", () => {
                     recognitions: [""]
                 }
             ].find(plant => plant.id === id)),
-            getFeedbackForPlantByPlantID: (id: string) => Observable.of([
-                {
-                    id:"16001",
-                    commentCount: 1,
-                    likeCount: 2,
-                    dislikeCount: 0
-                },
-                {
-                    id:"16002",
-                    commentCount: 62,
-                    likeCount: 8,
-                    dislikeCount: 6
-                },
-                {
-                    id:"16008",
-                    commentCount: 2,
-                    likeCount: 22,
-                    dislikeCount: 5
-                }
-            ].find(plantFeedback => plantFeedback.id === id)),
+            getFeedbackForPlantByPlantID: (id: string) =>
+                Observable.of(mockFeedBackData.find(plantFeedback => plantFeedback.id === id)),
             ratePlant: (id: string, like: boolean) => {
+                mockFeedBackData.find(el => el.id === id).likeCount += 1;
                 return Observable.of(true);
             }
         };
@@ -114,13 +124,25 @@ describe("Plant component", () => {
                 plantComponent = fixture.componentInstance;
 
                 expect(plantComponent).toBeDefined();
-
-                // plantComponent.ratePlant(true);
-
-                expect(plantComponent.plantFeedback).toBeDefined();
                 expect(plantComponent.plantFeedback.likeCount).toBe(2);
         })});
     });
+
+    it("updates plant feedback", () => {
+        async(() => {
+            TestBed.compileComponents().then(() => {
+                fixture = TestBed.createComponent(PlantComponent);
+                fixture.detectChanges();
+                plantComponent = fixture.componentInstance;
+
+                expect(plantComponent.plantFeedback.likeCount).toBe(2);
+                expect(plantComponent.ratePlant(true)).toBe(true);
+                expect(plantComponent.plantFeedback.likeCount).toBe(3);
+            });
+        });
+    });
+
+
 
     // it("returns undefined for Santa", () => {
     //     plantComponent.setId("Santa");
