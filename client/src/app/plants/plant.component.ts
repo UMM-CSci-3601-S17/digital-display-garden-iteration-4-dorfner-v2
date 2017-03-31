@@ -59,7 +59,6 @@ export class PlantComponent implements OnInit {
 
 
     ngOnInit(): void {
-        console.log("\n\n initializing A pLant component \n\n")
 
         //This gets the ID from the URL params and sets and asks the server for the Plant with that ID
         this.route.params
