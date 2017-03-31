@@ -39,7 +39,6 @@ describe("Plant component", () => {
 
 
     beforeEach(() => {
-        console.log("before the test");
         // stub plantService for test purposes
         plantListServiceStub = {
             getPlantById: (id: string) => Observable.of([
