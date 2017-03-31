@@ -79,14 +79,9 @@ describe("Plant component", () => {
                 }
             ].find(plantFeedback => plantFeedback.id === id)),
             ratePlant: (id: string, like: boolean) => {
-                console.log(id);
-                console.log(like);
-                console.log("Done in rate plant");
                 return Observable.of(true);
             }
         };
-
-
 
 
         TestBed.configureTestingModule({
@@ -97,22 +92,11 @@ describe("Plant component", () => {
                 {provide: ActivatedRoute, useValue: mockRouter }]
         });
 
-        async(() => {
 
-        });
-        // router = TestBed.get(Router);
     });
 
-    // beforeEach();
-
-    // beforeEach(inject([Router, Location], (_router: Router, _location: Location) => {
-    //     location = _location;
-    //     router = _router;
-    // }));
 
     it("can retrieve Pat by ID", () => {
-        console.log("in the test");
-        console.log("after the test");
 
         async(() => {TestBed.compileComponents().then(() => {
             fixture = TestBed.createComponent(PlantComponent);
