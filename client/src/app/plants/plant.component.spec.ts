@@ -4,7 +4,7 @@ import { PlantComponent } from "./plant.component";
 import { PlantListService } from "./plant-list.service";
 import { Observable } from "rxjs";
 import {PlantFeedback} from "./plant.feedback";
-import {Router} from "@angular/router";
+import {Router, ActivatedRoute} from "@angular/router";
 import { Location } from '@angular/common';
 import {RouterTestingModule} from "@angular/router/testing";
 import {FormsModule} from "@angular/forms";
@@ -18,6 +18,22 @@ describe("Plant component", () => {
     let plantListServiceStub: {
         getPlantById: (id: string) => Observable<Plant>
         getFeedbackForPlantByPlantID: (id: string) => Observable<PlantFeedback>
+        ratePlant: (id: string, like: boolean) => Observable<boolean>
+    };
+
+    let mockRouter = {
+        route: {
+            snapshot: {
+                params: {
+                    "srcBed": "bedFoo"
+                }
+            },
+            params: {
+                switchMap: (predicate) => {
+                    predicate( {plantID: "fakePlantID"})
+                }
+            }
+        }
     };
 
 
@@ -61,7 +77,13 @@ describe("Plant component", () => {
                     likeCount: 22,
                     dislikeCount: 5
                 }
-            ].find(plantFeedback => plantFeedback.id === id))
+            ].find(plantFeedback => plantFeedback.id === id)),
+            ratePlant: (id: string, like: boolean) => {
+                console.log(id);
+                console.log(like);
+                console.log("Done in rate plant");
+                return Observable.of(true);
+            }
         };
 
 
@@ -70,21 +92,18 @@ describe("Plant component", () => {
         TestBed.configureTestingModule({
             imports: [FormsModule, RouterTestingModule],
             declarations: [ PlantComponent ],
-            providers:    [ { provide: PlantListService, useValue: plantListServiceStub} ]
+            providers:    [
+                {provide: PlantListService, useValue: plantListServiceStub} ,
+                {provide: ActivatedRoute, useValue: mockRouter }]
         });
 
         async(() => {
-            TestBed.compileComponents().then(() => {
-                fixture = TestBed.createComponent(PlantComponent);
-                fixture.detectChanges();
-                // plantComponent = fixture.componentInstance;
-            });
+
         });
         // router = TestBed.get(Router);
     });
 
-    // beforeEach(
-    // }));
+    // beforeEach();
 
     // beforeEach(inject([Router, Location], (_router: Router, _location: Location) => {
     //     location = _location;
@@ -95,6 +114,12 @@ describe("Plant component", () => {
         console.log("in the test");
         console.log("after the test");
 
+        async(() => {TestBed.compileComponents().then(() => {
+            fixture = TestBed.createComponent(PlantComponent);
+            fixture.detectChanges();
+            plantComponent = fixture.componentInstance;
+            expect(plantComponent).toBeDefined();
+        })});
         // plantComponent.ratePlant(true);
         // expect(plantComponent.plantFeedback).toBeDefined();
 
