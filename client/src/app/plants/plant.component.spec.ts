@@ -30,7 +30,7 @@ describe("Plant component", () => {
             },
             params: {
                 switchMap: (predicate) => {
-                    predicate( {plantID: "fakePlantID"})
+                    predicate( {plantID: "16001"})
                 }
             }
         }
@@ -96,21 +96,31 @@ describe("Plant component", () => {
     });
 
 
-    it("can retrieve Pat by ID", () => {
+    it("can be initialized", () => {
 
         async(() => {TestBed.compileComponents().then(() => {
             fixture = TestBed.createComponent(PlantComponent);
             fixture.detectChanges();
             plantComponent = fixture.componentInstance;
+
             expect(plantComponent).toBeDefined();
-
-            plantComponent.ratePlant(true);
-
-            expect(plantComponent.plantFeedback).toBeDefined();
         })});
+    });
 
-        expect("foo").toEqual("foo");
-        //expect(plantComponent.plantFeedback.likeCount).toBe(2);
+    it("fetches plant feedback", () => {
+        async(() => {
+            TestBed.compileComponents().then(() => {
+                fixture = TestBed.createComponent(PlantComponent);
+                fixture.detectChanges();
+                plantComponent = fixture.componentInstance;
+
+                expect(plantComponent).toBeDefined();
+
+                // plantComponent.ratePlant(true);
+
+                expect(plantComponent.plantFeedback).toBeDefined();
+                expect(plantComponent.plantFeedback.likeCount).toBe(2);
+        })});
     });
 
     // it("returns undefined for Santa", () => {
