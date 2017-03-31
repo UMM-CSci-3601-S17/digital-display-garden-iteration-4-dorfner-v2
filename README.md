@@ -22,6 +22,15 @@ When you load the project on a new machine, tell Gradle to Refresh linked Gradle
 > Run the server  
 > Run the client  
 
+If you have data in the database from a previous version it would be
+best to drop() the test database.
+In order to populate the database
+* Run the Server and Client
+* go to localhost:9000/admin (or whatever ip/port the client is running on)
+* Import the data set from the Excel spreadsheet (.xlsx)
+* the liveUploadId will be set to the latest data set imported
+* liveUploadId determines which set of data to refer to within the database.
+
 ## Attempted or Completed Stories
 * Leave Comments About a Flower
 * Allow a visitor to rate a flower
@@ -29,9 +38,9 @@ When you load the project on a new machine, tell Gradle to Refresh linked Gradle
 * Display counts of comments on visitor website
 * Extra: Add Bed Pages (required for QR Codes)
 * Generate QR Codes
-* Export Feedback to a File
-* Track the number of times a flower page is visited
-* Track the number of times a bed page is visited 
+* Export Feedback to a File (Only plant comments are done)
+* Track the number of times a flower page is visited (Client-side not done)
+* Track the number of times a bed page is visited (Not attempted)
 
 Finished by Claude Arabo
 * Import Excel Spreadsheet to Database
@@ -77,16 +86,6 @@ Most of these branches can be deleted in the next Iterations' forks of this repo
 * **update-plantController-for-uploadIds**
 * **improving-navigation**
 * **master**
-
-**Branches Inherited from Claude Arabo**
-
-* **MakeMarkdownDocumentation**
-* **PlantController**
-* **MergeFromMotherShip**
-* **testXlsxToDatabase**
-* **playingWithMongo**
-* **xlsxIntoDatabase**
-
 
 ## Resources
 
