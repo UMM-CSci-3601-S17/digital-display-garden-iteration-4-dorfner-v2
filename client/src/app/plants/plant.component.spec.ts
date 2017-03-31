@@ -103,9 +103,11 @@ describe("Plant component", () => {
             fixture.detectChanges();
             plantComponent = fixture.componentInstance;
             expect(plantComponent).toBeDefined();
+
+            plantComponent.ratePlant(true);
+
+            expect(plantComponent.plantFeedback).toBeDefined();
         })});
-        // plantComponent.ratePlant(true);
-        // expect(plantComponent.plantFeedback).toBeDefined();
 
         expect("foo").toEqual("foo");
         //expect(plantComponent.plantFeedback.likeCount).toBe(2);
