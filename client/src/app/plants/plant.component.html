@@ -22,26 +22,25 @@
     <div style="padding-top: 0.3em">
         <span *ngIf="rating === null">
             <button type="button" (click)="this.ratePlant(true)" style="border: none; background: inherit; outline: none;font-size:20px">
-                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
-                {{plantFeedback.likeCount}}
+                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"> Like </span>
             </button>
+            <br/>
             <button type="button" (click)="this.ratePlant(false)" style="border: none; background: inherit; outline: none;font-size:20px">
-                <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
-                {{plantFeedback.dislikeCount}}
+                <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"> Dislike</span>
             </button>
         </span>
 
         <span *ngIf="rating === true">
             <button type="button" style="border: none; background: inherit; outline: none;font-size:20px" class="text-success" >
                 <span class="glyphicon glyphicon-thumbs-up " aria-hidden="true"></span>
-                Liked! <span class="label label-default">{{plantFeedback.likeCount}}</span>
+                Liked! <span class="label label-default"></span>
             </button>
         </span>
 
         <span *ngIf="rating === false">
             <button type="button" style="border: none; background: inherit; outline: none;font-size:20px" class="text-success">
                 <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
-                Disliked <span class="label label-default">{{plantFeedback.dislikeCount}}</span>
+                Disliked <span class="label label-default"></span>
 
             </button>
         </span>
@@ -50,9 +49,9 @@
             <button (click)="this.comment(commentText)" class="btn btn-primary btn-lg" style="float: right">Submit feedback</button>
         </span>
     </div>
-
    <div>
-       {{plantFeedback.commentCount}} people have left feedback
+       {{plantFeedback.rateCount}} have rated this plant.
+       {{plantFeedback.commentCount}} people have left feedback.
    </div>
     <br/>
     <br/>
