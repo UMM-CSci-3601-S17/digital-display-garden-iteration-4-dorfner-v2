@@ -36,8 +36,8 @@ In order to populate the database
 ## Attempted or Completed Stories
 ### Iteration 3
 * Updating comment data to include following columns:
->CommonName
->Clutivar
+>CommonName,
+>Clutivar,
 >Bed Location
 * Add an URL beneath QR-Code
 * Export Ratings
