@@ -7,6 +7,8 @@ import com.mongodb.client.MongoDatabase;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.InputStream;
+
 import static com.mongodb.client.model.Filters.eq;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -16,33 +18,38 @@ import static org.junit.Assert.assertNotNull;
  */
 public class TestExcelParser {
 
+    private final static String databaseName = "data-for-testing-only";
+
     public MongoClient mongoClient = new MongoClient();
     public MongoDatabase testDB;
     public ExcelParser parser;
+    public InputStream fromFile;
 
     @Before
     public void clearAndPopulateDatabase(){
-        mongoClient.dropDatabase("test");
-        testDB = mongoClient.getDatabase("test");
-        parser = new ExcelParser("/IDPH_STD_Illinois_By_County_By_Sex.xlsx");
+        mongoClient.dropDatabase(databaseName);
+        testDB = mongoClient.getDatabase(databaseName);
+        fromFile = this.getClass().getResourceAsStream("/AccessionList2016.xlsx");
+        parser = new ExcelParser(fromFile, databaseName);
     }
 
 
 
     @Test
     public void testSpeadsheetToDoubleArray(){
-        String[][] plantArray = parser.extractFromXLSX();
+        String[][] plantArray = parser.extractFromXLSX(fromFile);
         //printDoubleArray(plantArray);
 
-        assertEquals(1668, plantArray.length);
-        assertEquals(plantArray[40].length, plantArray[1234].length);
-        assertEquals("ALEXANDER", plantArray[5][2]);
+        assertEquals(1000, plantArray.length);
+        assertEquals(plantArray[40].length, plantArray[963].length);
+        assertEquals("2016 Accession List: Steve's Design", plantArray[0][1]);
+        assertEquals("Begonia", plantArray[6][1]);
 
     }
 
     @Test
     public void testCollapse(){
-        String[][] plantArray = parser.extractFromXLSX();
+        String[][] plantArray = parser.extractFromXLSX(fromFile);
         //System.out.println(plantArray.length);
         //printDoubleArray(plantArray);
 
@@ -51,15 +58,15 @@ public class TestExcelParser {
 
         //printDoubleArray(plantArray);
 
-        assertEquals(1668, plantArray.length);
-        assertEquals(10, plantArray[30].length);
-        assertEquals(10, plantArray[0].length);
-        assertEquals(10, plantArray[3].length);
+        assertEquals(362, plantArray.length);
+        assertEquals(8, plantArray[30].length);
+        assertEquals(8, plantArray[0].length);
+        assertEquals(8, plantArray[3].length);
     }
 
     @Test
     public void testReplaceNulls(){
-        String[][] plantArray = parser.extractFromXLSX();
+        String[][] plantArray = parser.extractFromXLSX(fromFile);
         plantArray = parser.collapseHorizontally(plantArray);
         plantArray = parser.collapseVertically(plantArray);
         parser.replaceNulls(plantArray);
@@ -73,17 +80,17 @@ public class TestExcelParser {
 
     @Test
     public void testPopulateDatabase(){
-        String[][] plantArray = parser.extractFromXLSX();
+        String[][] plantArray = parser.extractFromXLSX(fromFile);
         plantArray = parser.collapseHorizontally(plantArray);
         plantArray = parser.collapseVertically(plantArray);
         parser.replaceNulls(plantArray);
 
-        parser.populateDatabase(plantArray);
+        parser.populateDatabase(plantArray, "an arbitrary ID");
         MongoCollection plants = testDB.getCollection("plants");
 
 
-        assertEquals(1664, plants.count());
-        assertEquals(16, plants.count(eq("Sort", "104")));
+        assertEquals(286, plants.count());
+        assertEquals(11, plants.count(eq("commonName", "Geranium")));
     }
 
 

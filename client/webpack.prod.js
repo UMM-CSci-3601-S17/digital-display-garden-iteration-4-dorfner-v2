@@ -43,6 +43,23 @@ module.exports = {
             inject: 'body',
             template: path.resolve('src', 'index.html')
         }),
+        new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                warnings: false,
+                screw_ie8: true,
+                conditionals: true,
+                unused: true,
+                comparisons: true,
+                sequences: true,
+                dead_code: true,
+                evaluate: true,
+                if_return: true,
+                join_vars: true
+            },
+            output: {
+                comments: false
+            }
+        }),
         new DefinePlugin({
             'ENV': JSON.stringify('development'),
             'API_URL': JSON.stringify('http://174.138.76.93:2538/api/')

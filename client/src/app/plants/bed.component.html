@@ -1,16 +1,24 @@
 <h2>Digital Display Garden </h2>
-<h3>Bed {{bed}} </h3>
+<h3>
+    Bed
+    <select id="locationDropdown" (change)="this.router.navigate(['/bed', this.bed])" [(ngModel)]=bed>
+        <option *ngFor="let location of locations" value="{{location._id}}">{{location._id}}</option>
+    </select>
+</h3>
 
 <ul class="list-group">
 
     <li class="list-group-item list-group-item-info">
         <span >Flowers</span>
+
     </li>
 
-    <li *ngFor="let plant of plants" class="list-group-item">
+
+
+    <li *ngFor="let plant of plants"  class="list-group-item">
         <!--Button is a hyperlink to a plant page "/plants/:plantID"-->
         <!--See app.routes.ts-->
-        <button [routerLink]="['/plants', plant.id, {srcBed:bed}]" class="btn btn-link btn-block" >
+        <button [routerLink]="['/plants', plant.id, {srcBed:bed}]" style="white-space: normal" class="btn btn-link btn-block" >
             <strong style="font-size:18px">{{plant.cultivar}}</strong><br>
             {{plant.commonName}}</button>
 

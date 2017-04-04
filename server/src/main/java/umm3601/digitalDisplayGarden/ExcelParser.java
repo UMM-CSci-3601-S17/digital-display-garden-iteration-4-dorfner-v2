@@ -10,34 +10,44 @@ import java.io.InputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import java.util.Date;
+import java.util.Formatter;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.mongodb.client.model.Filters.exists;
+import static com.mongodb.client.model.Updates.set;
 import static java.lang.Math.max;
 
 import org.bson.BsonArray;
 import org.bson.Document;
+import org.joda.time.DateTime;
 //import sun.text.normalizer.UTF16;
 
 public class ExcelParser {
 
-    private String fileName;
+    private String databaseName;
+
+    private InputStream stream;
 
 //    public static void main(String[] args) {
 //        parseExcel();
 //    }
 
-    public ExcelParser(String fileName){
-        this.fileName = fileName;
+    public ExcelParser(InputStream stream, String databaseName){
+        this.databaseName = databaseName;
+        this.stream = stream;
     }
 
-    public void parseExcel() {
+    public void parseExcel(String uploadId) throws FileNotFoundException{
 
-        String[][] arrayRepresentation = extractFromXLSX();
+        String[][] arrayRepresentation = extractFromXLSX(stream);
 
         String[][] horizontallyCollapsed = collapseHorizontally(arrayRepresentation);
         String[][] verticallyCollapsed = collapseVertically(horizontallyCollapsed);
         replaceNulls(verticallyCollapsed);
-        populateDatabase(verticallyCollapsed);
+        populateDatabase(verticallyCollapsed, uploadId);
+
     }
 
     /*
@@ -48,10 +58,8 @@ public class ExcelParser {
     This file originally just printed data, that is why there are several commented out lines in the code.
     We have repurposed this method to put all data into a 2D String array and return it.
      */
-    public String[][] extractFromXLSX() {
+    public String[][] extractFromXLSX(InputStream excelFile) {
         try {
-            InputStream excelFile = this.getClass().getResourceAsStream(fileName);
-
             Workbook workbook = new XSSFWorkbook(excelFile);
             Sheet datatypeSheet = workbook.getSheetAt(0);
 
@@ -182,22 +190,21 @@ public class ExcelParser {
 
     // Moves row by row through the 2D array and adds content for every flower paired with keys into a document
     // Uses the document to one at a time, add flower information into the database.
-    public static void populateDatabase(String[][] cellValues){
+    public void populateDatabase(String[][] cellValues, String uploadId){
         MongoClient mongoClient = new MongoClient();
-        MongoDatabase test = mongoClient.getDatabase("test");
+        MongoDatabase test = mongoClient.getDatabase(databaseName);
         MongoCollection plants = test.getCollection("plants");
-        plants.drop();
 
         String[] keys = getKeys(cellValues);
 
         for (int i = 4; i < cellValues.length; i++){
-            Map<String, String> map = new HashMap<String, String>();
+            Document doc = new Document();
             for(int j = 0; j < cellValues[i].length; j++){
-                map.put(keys[j], cellValues[i][j]);
+                doc.append(keys[j], cellValues[i][j]);
             }
 
-            Document doc = new Document();
-            doc.putAll(map);
+            if(doc.get("gardenLocation").equals(""))
+                continue;
 
             // Initialize the empty metadata
             Document metadataDoc = new Document();
@@ -206,9 +213,15 @@ public class ExcelParser {
             metadataDoc.append("ratings", new BsonArray());
 
             doc.append("metadata", metadataDoc);
+            doc.append("uploadId", uploadId);
 
             plants.insertOne(doc);
         }
+
+
+
+
+        setLiveUploadId(uploadId);
     }
 
     /*
@@ -241,5 +254,41 @@ public class ExcelParser {
             }
         }
     }
+
+    /*
+    --------------------------- SERVER UTILITIES -------------------------------
+     */
+
+    public static void setLiveUploadId(String uploadID){
+
+        MongoClient mongoClient = new MongoClient();
+        MongoDatabase test = mongoClient.getDatabase("test");
+        MongoCollection configCollection = test.getCollection("config");
+
+        configCollection.deleteMany(exists("liveUploadId"));
+        configCollection.insertOne(new Document().append("liveUploadId", uploadID));
+    }
+
+    public static String getAvailableUploadId(){
+
+        StringBuilder sb = new StringBuilder();
+        // Send all output to the Appendable object sb
+        Formatter formatter = new Formatter(sb);
+
+        java.util.Date juDate = new Date();
+        DateTime dt = new DateTime(juDate);
+
+        int day = dt.getDayOfMonth();
+        int month = dt.getMonthOfYear();
+        int year = dt.getYear();
+        int hour = dt.getHourOfDay();
+        int minute = dt.getMinuteOfHour();
+        int seconds = dt.getSecondOfMinute();
+
+        formatter.format("%d-%02d-%02d %02d:%02d:%02d", year, month, day, hour, minute, seconds);
+        return sb.toString();
+
+    }
+
 
 }

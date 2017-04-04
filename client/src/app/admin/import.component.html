@@ -1,0 +1,19 @@
+<navbar-component></navbar-component>
+
+<h2>Import Spreadsheet</h2>
+
+<file-upload #fu (change)="filename = undefined; uploadAttempted = false" [multiple]="false">-</file-upload>
+
+
+<button *ngIf="filename === undefined" class="btn btn-primary" (click)="this.handleUpload()" style="margin-top: 10px">
+    <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
+    Import
+</button>
+
+<div *ngIf="filename!==undefined"> Your file was successfully uploaded as data set {{this.filename}}.
+</div>
+<div *ngIf="filename === undefined && uploadAttempted === true">File upload failed.</div>
+
+<div>
+<button  [routerLink]="['/admin']" class="btn btn-primary" style="float: right">Back to Admin Page</button>
+</div>

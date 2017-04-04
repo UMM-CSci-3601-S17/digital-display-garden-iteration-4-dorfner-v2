@@ -47,7 +47,7 @@
         </span>
 
         <span *ngIf="!commented">
-            <button type="button" (click)="this.comment(commentText)" style="float: right">Submit feedback</button>
+            <button (click)="this.comment(commentText)" class="btn btn-primary btn-lg" style="float: right">Submit feedback</button>
         </span>
     </div>
 
@@ -58,11 +58,9 @@
     <br/>
     <br/>
     <span *ngIf="srcBed !== null">
-        <button  [routerLink]="['/bed', srcBed]" class="btn" style="float: right">Back</button>
+        <button  type="button" [routerLink]="['/bed', srcBed]" class="btn btn-primary btn-lg" style="float: right">Back</button>
     </span>
 
 </div>
 
-<footer style="position:absolute; bottom:0; height:60px; text-align:center;">
-    <p>West Central Research and Outreach Center | 46352 State Hwy 329 Morris MN 56267 | Phone: (320) 589-1711 | Fax: (320) 589-4870</p>
-</footer>
+
