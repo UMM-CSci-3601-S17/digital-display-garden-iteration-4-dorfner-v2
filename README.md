@@ -34,6 +34,15 @@ In order to populate the database
 * liveUploadId determines which set of data to refer to within the database.
 
 ## Attempted or Completed Stories
+### Iteration 3
+* Updating comment data to include following columns:
+>CommonName
+>Clutivar
+>Bed Location
+* Add an URL beneath QR-Code
+* Export Ratings
+* Change like/dislike counter to a single number
+### Iteration 2
 * Leave Comments About a Flower
 * Allow a visitor to rate a flower
 * Display counts of likes and dislikes on visitor website
