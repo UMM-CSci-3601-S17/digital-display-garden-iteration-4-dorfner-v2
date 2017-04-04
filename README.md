@@ -42,6 +42,12 @@ In order to populate the database
 * Add an URL beneath QR-Code
 * Export Ratings
 * Change like/dislike counter to a single number
+* Ability to Delete old Data
+* Add a footer to pages
+* (Epic) Create a homepage that consists of
+>QR-Code instructions, 
+>Ability to search by common name,
+>Bed Navigation
 ### Iteration 2
 * Leave Comments About a Flower
 * Allow a visitor to rate a flower
