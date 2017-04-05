@@ -4,6 +4,7 @@
     position: relative;
     padding-bottom:90px; /* footer's height */
 }
+
 #footer {
     width: 100%;
     background-color: maroon;
@@ -12,4 +13,11 @@
     left: 0px;
     bottom: 0px;
     text-align: center;
+}
+
+#body {
+    background-color:#f3eddc;
+    min-height: 100%;
+    position: relative;
+    padding-bottom:90px;
 }
