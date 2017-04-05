@@ -12,7 +12,7 @@ import {PlantFeedback} from "./plant.feedback";
 export class PlantComponent implements OnInit {
     plant : Plant = new Plant();
     plantFeedback: PlantFeedback = new PlantFeedback();
-    private commented: Boolean = false;
+    commented: Boolean = false;
 
     // The rating field can have 3 values:
     // null - means that the plant hasn't been rated
