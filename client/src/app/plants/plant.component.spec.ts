@@ -17,6 +17,7 @@ describe("Plant component", () => {
         getPlantById: (id: string) => Observable<Plant>
         getFeedbackForPlantByPlantID: (id: string) => Observable<PlantFeedback>
         ratePlant: (id: string, like: boolean) => Observable<boolean>
+        commentPlant: (id: string, comment: string) => Observable<boolean>
     };
 
     let mockRouter = {
@@ -78,10 +79,14 @@ describe("Plant component", () => {
                 console.log(this.mockFeedBackData.find(el => el.oid === id));
                 this.mockFeedBackData.find(el => el.oid === id).likeCount += 1;
                 return Observable.of(true);
+            },
+            commentPlant: (id: string, comment: string) => {
+                this.mockFeedBackData.find(el => el.oid === id).commentCount += 1;
+                return Observable.of(true);
             }
         };
 
-        
+
         TestBed.configureTestingModule({
             imports: [FormsModule, RouterTestingModule],
             declarations: [ PlantComponent ],
@@ -119,6 +124,13 @@ describe("Plant component", () => {
         expect(plantComponent.plantFeedback.likeCount).toBe(2);
         plantComponent.ratePlant(true);
         expect(plantComponent.plantFeedback.likeCount).toBe(3);
+    });
+
+    it("can accept comments", () => {
+        expect(plantComponent.plantFeedback.commentCount).toBe(1);
+        plantComponent.comment("This flower is quite pretty");
+        expect(plantComponent.commented).toBe(true);
+        expect(plantComponent.plantFeedback.commentCount).toBe(2)
     });
 
 
