@@ -50,7 +50,6 @@ describe("Plant component", () => {
         // stub plantService for test purposes
         plantListServiceStub = {
             getPlantById: (id: string) => {
-                console.log("inside getPlantById");
                 return Observable.of(
                 [{
                     _id: {$oid: "58daf99befbd607288f772a5"},
@@ -68,15 +67,9 @@ describe("Plant component", () => {
                 }].find(plant => plant.id === id));
             },
             getFeedbackForPlantByPlantID: (id: string) => {
-                console.log("starting getFeedbackForPlantByPlanyID");
-                console.log(this.mockFeedBackData);
                 return Observable.of(this.mockFeedBackData.find(plantFeedback => plantFeedback.id === id))
             },
             ratePlant: (id: string, like: boolean) => {
-
-                console.log("starting ratePlant");
-                console.log("the id" + id);
-                console.log(this.mockFeedBackData.find(el => el.oid === id));
                 this.mockFeedBackData.find(el => el.oid === id).likeCount += 1;
                 return Observable.of(true);
             },
@@ -101,11 +94,8 @@ describe("Plant component", () => {
 
     beforeEach(
         async(() => {
-            console.log("about to compile the components\n\n\nBORKBORKBORK\n\n\n");
             TestBed.compileComponents().then(() => {
-                console.log("about to create the PlantComponent \n\n\nBORKBORKBORK\n\n\n");
                 fixture = TestBed.createComponent(PlantComponent);
-                console.log("about to 'detectChanges' \n\n\nBORKBORKBORK\n\n\n");
                 plantComponent = fixture.componentInstance;
                 fixture.detectChanges();
         });
