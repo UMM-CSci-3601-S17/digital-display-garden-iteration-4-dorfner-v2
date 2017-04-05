@@ -147,12 +147,10 @@ public class PlantController {
      * @param plantID The plant to get feedback of
      * @param uploadID Dataset to find the plant
      *
-     * @return JSON for the number of comments, likes, and dislikes
+     * @return JSON for the number of interactions of a plant (likes + dislikes + comments)
      * Of the form:
      * {
-     *     commentCount: number
-     *     likeCount: number
-     *     dislikeCount: number
+     *  interactionCount: number
      * }
      */
 
@@ -165,6 +163,7 @@ public class PlantController {
         long comments = commentCollection.count(filter);
         long likes = 0;
         long dislikes = 0;
+        long interactions = 0;
 
 
         //Get a plant by plantID
@@ -187,10 +186,9 @@ public class PlantController {
             }
         }
 
+        interactions = likes + dislikes + comments;
 
-        out.put("commentCount", comments);
-        out.put("likeCount", likes);
-        out.put("dislikeCount", dislikes);
+        out.put("interactionCount", interactions);
         return JSON.serialize(out);
     }
 
