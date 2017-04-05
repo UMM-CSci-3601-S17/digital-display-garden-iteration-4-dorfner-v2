@@ -165,7 +165,7 @@ public class PlantController {
         long comments = commentCollection.count(filter);
         long likes = 0;
         long dislikes = 0;
-        long rates = 0;
+        long interactions = 0;
 
 
         //Get a plant by plantID
@@ -188,13 +188,9 @@ public class PlantController {
             }
         }
 
-        rates = likes + dislikes;
+        interactions = likes + dislikes + comments;
 
-
-        out.put("commentCount", comments);
-        out.put("likeCount", likes);
-        out.put("dislikeCount", dislikes);
-        out.put("rateCount", rates);
+        out.put("interactionCount", interactions);
         return JSON.serialize(out);
     }
 

@@ -5,10 +5,31 @@
     <br/>
 
     <h3>Leave Feedback for Flower</h3>
-    <span *ngIf="!commented">
-        <textarea [(ngModel)]="commentText" rows="5" wrap="on" style="resize:vertical;width: 100%;color:#4e3e0a; font-size:18px"></textarea>
+    <div *ngIf="rating === null" style="text-align:center; padding-bottom: 0.3em">
+        <button type="button" (click)="this.ratePlant(true)" class="btn btn-success" >
+            <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"> </span> Like
+        </button>
+        <button type="button" (click)="this.ratePlant(false)" class="btn btn-danger">
+            <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"> </span> Dislike
+        </button>
+    </div>
 
-    </span>
+    <div *ngIf="rating === true" style="text-align:center">
+        <button type="button" style="border: none; background: inherit; outline: none;font-size:20px" class="text-success" >
+            <span class="glyphicon glyphicon-thumbs-up " aria-hidden="true"></span>
+             Liked!
+        </button>
+    </div>
+
+    <div *ngIf="rating === false" style="text-align:center">
+        <button type="button" style="border: none; background: inherit; outline: none;font-size:20px" class="text-success">
+            <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
+            Disliked
+        </button>
+    </div>
+    <div *ngIf="!commented">
+        <textarea [(ngModel)]="commentText" rows="5" wrap="on" style="resize:vertical;width: 100%;color:#4e3e0a; font-size:18px"></textarea>
+    </div>
     <span *ngIf="commented" >
         <br/>
         &ensp; <!--Makes the following text indented, &ensp; is whitespace-->
@@ -19,40 +40,15 @@
         <br/>
     </span>
 
-    <div style="padding-top: 0.3em">
-        <span *ngIf="rating === null">
-            <button type="button" (click)="this.ratePlant(true)" style="border: none; background: inherit; outline: none;font-size:20px">
-                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"> Like </span>
-            </button>
-            <br/>
-            <button type="button" (click)="this.ratePlant(false)" style="border: none; background: inherit; outline: none;font-size:20px">
-                <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"> Dislike</span>
-            </button>
+    <div style="padding-top: 0.3em" style="text-align:right;">
+        <span>
+            {{plantFeedback.interactionCount}} interactions with this plant.
         </span>
-
-        <span *ngIf="rating === true">
-            <button type="button" style="border: none; background: inherit; outline: none;font-size:20px" class="text-success" >
-                <span class="glyphicon glyphicon-thumbs-up " aria-hidden="true"></span>
-                Liked! <span class="label label-default"></span>
-            </button>
-        </span>
-
-        <span *ngIf="rating === false">
-            <button type="button" style="border: none; background: inherit; outline: none;font-size:20px" class="text-success">
-                <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
-                Disliked <span class="label label-default"></span>
-
-            </button>
-        </span>
-
         <span *ngIf="!commented">
-            <button (click)="this.comment(commentText)" class="btn btn-primary btn-lg" style="float: right">Submit feedback</button>
+            <button (click)="this.comment(commentText)" class="btn btn-primary btn-lg" >Submit feedback</button>
         </span>
+
     </div>
-   <div>
-       {{plantFeedback.rateCount}} have rated this plant.
-       {{plantFeedback.commentCount}} people have left feedback.
-   </div>
     <br/>
     <br/>
     <br/>
