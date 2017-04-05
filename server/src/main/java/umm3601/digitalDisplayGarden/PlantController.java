@@ -97,7 +97,7 @@ public class PlantController {
      *
      * <code>
      * {
-     *  "plantID"        : String,
+     *  "_id"        : ObjectId,
      *  "commonName" : String,
      *  "cultivar"   : String
      * }
@@ -192,6 +192,12 @@ public class PlantController {
         return JSON.serialize(out);
     }
 
+    // Used in the garden website
+    /**
+     * Takes `uploadID` and returns all bed names as a json format string
+     * @param uploadID - the year that the data was uploaded
+     * @return String representation of json with all bed names
+     */
     public String getGardenLocationsAsJson(String uploadID){
         AggregateIterable<Document> documents
                 = plantCollection.aggregate(
@@ -203,6 +209,12 @@ public class PlantController {
         return JSON.serialize(documents);
     }
 
+    // Used in the QR code generation
+    /**
+     * Takes `uploadID` and returns all bed names as an array of Strings
+     * @param uploadID - - the year that the data was uploaded
+     * @return an array of strings
+     */
     public String[] getGardenLocations(String uploadID){
         Document filter = new Document();
         filter.append("uploadId", uploadID);
