@@ -211,6 +211,7 @@ public class ExcelParser {
             metadataDoc.append("pageViews", 0);
             metadataDoc.append("visits", new BsonArray());
             metadataDoc.append("ratings", new BsonArray());
+            metadataDoc.append("comments", new BsonArray());
 
             doc.append("metadata", metadataDoc);
             doc.append("uploadId", uploadId);

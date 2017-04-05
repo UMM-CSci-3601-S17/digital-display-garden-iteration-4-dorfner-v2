@@ -14,6 +14,7 @@ import org.bson.types.ObjectId;
 import org.bson.conversions.Bson;
 import org.joda.time.DateTime;
 
+import javax.print.Doc;
 import java.io.OutputStream;
 import java.util.Iterator;
 
@@ -32,7 +33,6 @@ import static com.mongodb.client.model.Updates.push;
 public class PlantController {
 
     private final MongoCollection<Document> plantCollection;
-    private final MongoCollection<Document> commentCollection;
     private final MongoCollection<Document> configCollection;
 
     public PlantController(String databaseName) throws IOException {
@@ -48,7 +48,6 @@ public class PlantController {
         MongoDatabase db = mongoClient.getDatabase(databaseName);
 
         plantCollection = db.getCollection("plants");
-        commentCollection = db.getCollection("comments");
         configCollection = db.getCollection("config");
     }
 
@@ -157,30 +156,35 @@ public class PlantController {
      */
 
     public String getFeedbackForPlantByPlantID(String plantID, String uploadID) {
-        Document out = new Document();
-
-        Document filter = new Document();
-        filter.put("commentOnPlant", plantID);
-        filter.put("uploadId", uploadID);
-        long comments = commentCollection.count(filter);
+        long comments = 0;
         long likes = 0;
         long dislikes = 0;
         long interactions = 0;
 
+        Document out = new Document();
+
+        FindIterable document = plantCollection.find(new Document().append("id", plantID).append("uploadId", uploadID));
+
+        Iterator iterator = document.iterator();
+        if(iterator.hasNext()){
+            Document result = (Document) iterator.next();
+            List<Document> plantComments = (List<Document>) ((Document) result.get("metadata")).get("comments");
+
+            comments = plantComments.size();
+        }
 
         //Get a plant by plantID
         FindIterable doc = plantCollection.find(new Document().append("id", plantID).append("uploadId", uploadID));
 
-        Iterator iterator = doc.iterator();
+        Iterator iter = doc.iterator();
         if(iterator.hasNext()) {
-            Document result = (Document) iterator.next();
+            Document result = (Document) iter.next();
 
             //Get metadata.rating array
             List<Document> ratings = (List<Document>) ((Document) result.get("metadata")).get("ratings");
 
             //Loop through all of the entries within the array, counting like=true(like) and like=false(dislike)
-            for(Document rating : ratings)
-            {
+            for(Document rating : ratings) {
                 if(rating.get("like").equals(true))
                     likes++;
                 else if(rating.get("like").equals(false))
@@ -189,6 +193,7 @@ public class PlantController {
         }
 
         interactions = likes + dislikes + comments;
+       System.out.print(interactions);
 
         out.put("interactionCount", interactions);
         return JSON.serialize(out);
@@ -228,44 +233,46 @@ public class PlantController {
      * </code>
      * If either of the keys are missing or the types of the values are
      * wrong, false is returned.
-     * @param json string representation of JSON object
+
      * @param uploadID Dataset to find the plant
      * @return true iff the comment was successfully submitted
      */
-
-    public boolean storePlantComment(String json, String uploadID) {
+    public boolean addComment(String id, String comment, String uploadID) {
+        Document filterDoc = new Document();
+        ObjectId objectId;
 
         try {
+            objectId = new ObjectId(id);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
 
-            Document toInsert = new Document();
+        filterDoc.append("_id", new ObjectId(id));
+
+        filterDoc.append("uploadId", uploadID);
+
+        Document comments = new Document();
+        comments.append("comment", comment);
+
+        return null != plantCollection.findOneAndUpdate(filterDoc, push("metadata.comments", comments));
+    }
+    public boolean addComment(String json, String uploadID) {
+        String comment;
+        String id;
+
+        try {
             Document parsedDocument = Document.parse(json);
 
-            if (parsedDocument.containsKey("plantId") && parsedDocument.get("plantId") instanceof String) {
-
-                FindIterable<Document> jsonPlant = plantCollection.find(eq("_id",
-                        new ObjectId(parsedDocument.getString("plantId"))));
-
-                Iterator<Document> iterator = jsonPlant.iterator();
-
-                if(iterator.hasNext()){
-                    toInsert.put("commentOnPlant", iterator.next().getString("id"));
-                } else {
-                    return false;
-                }
-
-            } else {
-                return false;
-            }
-
             if (parsedDocument.containsKey("comment") && parsedDocument.get("comment") instanceof String) {
-                toInsert.put("comment", parsedDocument.getString("comment"));
+                comment = parsedDocument.getString("comment");
             } else {
                 return false;
             }
-
-            toInsert.append("uploadId", uploadID);
-
-            commentCollection.insertOne(toInsert);
+            if(parsedDocument.containsKey("plantId") && parsedDocument.get("plantId") instanceof String){
+                id = parsedDocument.getString("plantId");
+            } else {
+                return false;
+            }
 
         } catch (BsonInvalidOperationException e){
             e.printStackTrace();
@@ -276,27 +283,40 @@ public class PlantController {
             return false;
         }
 
-        return true;
+    return addComment(id, comment, uploadID);
+
     }
 
-    public void writeComments(OutputStream outputStream, String uploadId) throws IOException{
+    public void writeComments(OutputStream outputStream, String uploadId) throws IOException {
 
-          FindIterable iter = commentCollection.find(
-                   and(
-                           exists("commentOnPlant"),
-                           eq("uploadId", uploadId)
-                   ));
-           Iterator iterator = iter.iterator();
+        AggregateIterable<Document> plantIds = plantCollection.aggregate(
+                Arrays.asList(
+                        Aggregates.match(eq("uploadId", uploadId)),
+                        Aggregates.group("$id")
+                ));
 
-           CommentWriter commentWriter = new CommentWriter(outputStream);
 
-           while (iterator.hasNext()) {
-               Document comment = (Document) iterator.next();
-               commentWriter.writeComment(comment.getString("commentOnPlant"),
-                       comment.getString("comment"),
-                       ((ObjectId) comment.get("_id")).getDate());
-           }
-           commentWriter.complete();
+        for(Document plantId : plantIds ) {
+            FindIterable doc = plantCollection.find(new Document().append("id", plantId).append("uploadId", uploadId));
+
+            Iterator iterator = doc.iterator();
+            if (iterator.hasNext()) {
+                Document result = (Document) iterator.next();
+                List<Document> plantComments = (List<Document>) ((Document) result.get("metadata")).get("comments");
+
+                Iterator iterOverPlant = plantComments.iterator();
+
+                CommentWriter commentWriter = new CommentWriter(outputStream);
+
+                while (iterator.hasNext()) {
+                    Document comment = (Document) iterator.next();
+                    commentWriter.writeComment(comment.getString("commentOnPlant"),
+                            comment.getString("comment"),
+                            ((ObjectId) comment.get("_id")).getDate());
+                }
+                commentWriter.complete();
+            }
+        }
     }
 
     /**
