@@ -32,7 +32,7 @@ public class TestPlantComment {
     public void successfulInputOfComment() throws IOException {
         String json = "{ plantId: \"58d1c36efb0cac4e15afd278\", comment : \"Here is our comment for this test\" }";
 
-        assertTrue(plantController.storePlantComment(json, "second uploadId"));
+        assertTrue(plantController.addComment(json, "second uploadId"));
 
         MongoClient mongoClient = new MongoClient();
         MongoDatabase db = mongoClient.getDatabase(databaseName);
@@ -54,7 +54,7 @@ public class TestPlantComment {
     public void failedInputOfComment() throws IOException {
         String json = "{ plantId: \"58d1c36efb0cac4e15afd27\", comment : \"Here is our comment for this test\" }";
 
-        assertFalse(plantController.storePlantComment(json, "second uploadId"));
+        assertFalse(plantController.addComment(json, "second uploadId"));
 
         MongoClient mongoClient = new MongoClient();
         MongoDatabase db = mongoClient.getDatabase(databaseName);
