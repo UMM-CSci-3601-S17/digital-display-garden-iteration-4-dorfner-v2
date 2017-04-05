@@ -171,14 +171,6 @@ public class PlantController {
             List<Document> plantComments = (List<Document>) ((Document) result.get("metadata")).get("comments");
 
             comments = plantComments.size();
-        }
-
-        //Get a plant by plantID
-        FindIterable doc = plantCollection.find(new Document().append("id", plantID).append("uploadId", uploadID));
-
-        Iterator iter = doc.iterator();
-        if(iterator.hasNext()) {
-            Document result = (Document) iter.next();
 
             //Get metadata.rating array
             List<Document> ratings = (List<Document>) ((Document) result.get("metadata")).get("ratings");
@@ -193,7 +185,6 @@ public class PlantController {
         }
 
         interactions = likes + dislikes + comments;
-       System.out.print(interactions);
 
         out.put("interactionCount", interactions);
         return JSON.serialize(out);
@@ -308,9 +299,9 @@ public class PlantController {
 
                 CommentWriter commentWriter = new CommentWriter(outputStream);
 
-                while (iterator.hasNext()) {
-                    Document comment = (Document) iterator.next();
-                    commentWriter.writeComment(comment.getString("commentOnPlant"),
+                while (iterOverPlant.hasNext()) {
+                    Document comment = (Document) iterOverPlant.next();
+                    commentWriter.writeComment(comment.getString("id"),
                             comment.getString("comment"),
                             ((ObjectId) comment.get("_id")).getDate());
                 }
