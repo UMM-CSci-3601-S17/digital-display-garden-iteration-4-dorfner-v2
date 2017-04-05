@@ -1,5 +1,15 @@
-wrapper {
+
+.wrapper {
     min-height: 100%;
     position: relative;
     padding-bottom:90px; /* footer's height */
+}
+#footer {
+    width: 100%;
+    background-color: maroon;
+    color: gold;
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    text-align: center;
 }
