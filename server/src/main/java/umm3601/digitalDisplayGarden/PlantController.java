@@ -97,7 +97,7 @@ public class PlantController {
      *
      * <code>
      * {
-     *  "plantID"        : String,
+     *  "_id"        : ObjectId,
      *  "commonName" : String,
      *  "cultivar"   : String
      * }
