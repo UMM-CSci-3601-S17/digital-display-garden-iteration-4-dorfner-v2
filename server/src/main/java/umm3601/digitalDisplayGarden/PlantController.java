@@ -147,12 +147,10 @@ public class PlantController {
      * @param plantID The plant to get feedback of
      * @param uploadID Dataset to find the plant
      *
-     * @return JSON for the number of comments, likes, and dislikes
+     * @return JSON for the number of interactions of a plant (likes + dislikes + comments)
      * Of the form:
      * {
-     *     commentCount: number
-     *     likeCount: number
-     *     dislikeCount: number
+     *  interactionCount: number
      * }
      */
 
