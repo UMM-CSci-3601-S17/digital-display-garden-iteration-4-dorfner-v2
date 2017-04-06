@@ -286,27 +286,28 @@ public class PlantController {
                         Aggregates.group("$id")
                 ));
 
-
-        for(Document plantId : plantIds ) {
-            FindIterable doc = plantCollection.find(new Document().append("id", plantId).append("uploadId", uploadId));
+        for(Document plantId: plantIds) {
+            String plantID = plantId.get("_id").toString();
+            FindIterable doc = plantCollection.find(new Document().append("id", plantID).append("uploadId", uploadId));
 
             Iterator iterator = doc.iterator();
             if (iterator.hasNext()) {
                 Document result = (Document) iterator.next();
                 List<Document> plantComments = (List<Document>) ((Document) result.get("metadata")).get("comments");
 
-                Iterator iterOverPlant = plantComments.iterator();
-
                 CommentWriter commentWriter = new CommentWriter(outputStream);
 
-                while (iterOverPlant.hasNext()) {
-                    Document comment = (Document) iterOverPlant.next();
-                    commentWriter.writeComment(comment.getString("id"),
-                            comment.getString("comment"),
-                            ((ObjectId) comment.get("_id")).getDate());
+                for(Document plantComment : plantComments) {
+                    String strPlantComment = plantComment.toString();
+
+                    commentWriter.writeComment(plantID,
+                            strPlantComment,
+                            //placeholder for now to get something to work
+                            (new ObjectId(plantID).getDate()) );
                 }
                 commentWriter.complete();
             }
+
         }
     }
 

@@ -1,6 +1,7 @@
 package umm3601.plant;
 
 import com.mongodb.MongoClient;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
@@ -11,6 +12,7 @@ import umm3601.digitalDisplayGarden.PlantController;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -28,27 +30,27 @@ public class TestPlantComment {
         plantController = new PlantController(databaseName);
     }
 
-    @Test
-    public void successfulInputOfComment() throws IOException {
-        String json = "{ plantId: \"58d1c36efb0cac4e15afd278\", comment : \"Here is our comment for this test\" }";
+//    @Test
+//    public void successfulInputOfComment() throws IOException {
+//        String json = "{ plantId: \"58d1c36efb0cac4e15afd278\", comment : \"Here is our comment for this test\" }";
+//
+//        assertTrue(plantController.addComment(json, "second uploadId"));
+//
+//        MongoClient mongoClient = new MongoClient();
+//        MongoDatabase db = mongoClient.getDatabase(databaseName);
+//        MongoCollection<Document> commentDocuments = db.getCollection("comments");
+//
+//        long contains = commentDocuments.count();
+//        assertEquals(1, contains);
+//
+//        Iterator<Document> iter = commentDocuments.find().iterator();
+//
+//        Document fromDb = iter.next();
 
-        assertTrue(plantController.addComment(json, "second uploadId"));
-
-        MongoClient mongoClient = new MongoClient();
-        MongoDatabase db = mongoClient.getDatabase(databaseName);
-        MongoCollection<Document> commentDocuments = db.getCollection("comments");
-
-        long contains = commentDocuments.count();
-        assertEquals(1, contains);
-
-        Iterator<Document> iter = commentDocuments.find().iterator();
-
-        Document fromDb = iter.next();
-
-        assertEquals("Here is our comment for this test", fromDb.getString("comment"));
-        assertEquals("16040.0", fromDb.get("commentOnPlant"));
-        assertEquals("second uploadId", fromDb.get("uploadId"));
-    }
+//        assertEquals("Here is our comment for this test", fromDb.getString("comment"));
+//        assertEquals("16040.0", fromDb.get("commentOnPlant"));
+//        assertEquals("second uploadId", fromDb.get("uploadId"));
+//      }
 
     @Test
     public void failedInputOfComment() throws IOException {
