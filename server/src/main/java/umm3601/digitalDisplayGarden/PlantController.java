@@ -52,6 +52,11 @@ public class PlantController {
         configCollection = db.getCollection("config");
     }
 
+    /**
+     * Returns a string representation of uploadId in the config collection.
+     * Assumes there is only one liveUploadId in the config collection for any given time.
+     * @return a string representation of uploadId in the config collection
+     */
     public String getLiveUploadId() {
         try
         {
@@ -389,7 +394,7 @@ public class PlantController {
 
     /**
      *
-     * @return a sorted JSON array of all the distinct uploadIds in the DB
+     * @return a sorted JSON array of all the distinct uploadIds in plant collection of the DB
      */
     public String listUploadIds() {
         AggregateIterable<Document> documents
