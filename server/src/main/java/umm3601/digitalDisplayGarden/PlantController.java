@@ -307,7 +307,7 @@ public class PlantController {
      * @param outputStream stream to which the excel file is written
      * @param uploadId Dataset to find a plant
      */
-    public void writeComments(OutputStream outputStream, String uploadId) throws IOException {
+    public void exportCollectedData(OutputStream outputStream, String uploadId) throws IOException {
 
         //finding all the plantIds
         AggregateIterable<Document> plantIds = plantCollection.aggregate(
@@ -315,7 +315,7 @@ public class PlantController {
                         Aggregates.match(eq("uploadId", uploadId)),
                         Aggregates.group("$id")
                 ));
-        CommentWriter commentWriter = new CommentWriter(outputStream);
+        CollectedDataWriter collectedDataWriter = new CollectedDataWriter(outputStream);
 
         //for each plant, get a list of comments and write each comment to the excel
         for(Document plantId: plantIds) {
@@ -329,7 +329,7 @@ public class PlantController {
 
                 for(Document plantComment : plantComments) {
                     String strPlantComment = plantComment.getString("comment");
-                    commentWriter.writeComment(plantID,
+                    collectedDataWriter.writeComment(plantID,
                             plant.getString("commonName"),
                             plant.getString("cultivar"),
                             plant.getString("gardenLocation"),
@@ -340,7 +340,7 @@ public class PlantController {
             }
 
         }
-        commentWriter.complete();
+        collectedDataWriter.complete();
     }
 
     /**
