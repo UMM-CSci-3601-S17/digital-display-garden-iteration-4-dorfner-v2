@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PlantListService } from "../plants/plant-list.service";
 import { Plant } from "../plants/plant";
+import {Params, ActivatedRoute, Router} from "@angular/router";
 
 @Component({
     selector: 'homepage-component',
@@ -12,7 +13,7 @@ export class HomepageComponent implements OnInit {
     public plants: Plant[];
     public locations: Plant[];
 
-    constructor(private plantListService: PlantListService) {
+    constructor(private plantListService: PlantListService, private router: Router) {
         this.refreshInformation();
     }
 
