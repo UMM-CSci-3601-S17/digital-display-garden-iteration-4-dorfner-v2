@@ -27,14 +27,15 @@ public class PopulateMockDatabase {
     private String begoniaIdString;
     public String hexAlternantheraID;
 
-    public void clearAndPopulateDB() throws IOException {
-    }
 
     public void clearAndPopulateDBAgain() throws IOException {
         MongoClient mongoClient = new MongoClient();
         MongoDatabase db = mongoClient.getDatabase(databaseName);
         MongoCollection plants = db.getCollection("plants");
+        MongoCollection config = db.getCollection("config");
         db.drop();
+
+        config.insertOne(new Document().append("liveUploadId", "second uploadId"));
 
         //First Plant Alternanthera
         Document alternanthera = new Document();
@@ -56,7 +57,7 @@ public class PopulateMockDatabase {
         
         alternanthera.append("metadata", metadataDoc);
         //alternanthera.append("garden", "hello!");
-        plants.insertOne(alternanthera );
+        plants.insertOne(alternanthera);
 
         //Second Plant Begonia
         Document begonia = new Document();
