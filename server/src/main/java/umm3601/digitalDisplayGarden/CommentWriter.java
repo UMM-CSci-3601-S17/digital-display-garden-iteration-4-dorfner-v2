@@ -26,9 +26,18 @@ public class CommentWriter {
         cell.setCellValue("#");
 
         cell = row.createCell(1);
-        cell.setCellValue("comment");
+        cell.setCellValue("common name");
 
         cell = row.createCell(2);
+        cell.setCellValue("cultivar");
+
+        cell = row.createCell(3);
+        cell.setCellValue("garden location");
+
+        cell = row.createCell(4);
+        cell.setCellValue("comment");
+
+        cell = row.createCell(5);
         cell.setCellValue("timestamp");
 
         rowCount = 1;
@@ -40,16 +49,25 @@ public class CommentWriter {
      * @param comment: comment left by visitor
      * @param timestamp: time the user left the comment
      */
-    public void writeComment(String id, String comment, Date timestamp){
+    public void writeComment(String id, String commonName, String cultivar, String gardenLocation, String comment, Date timestamp){
         Row row = sheet.createRow(rowCount);
 
         Cell cell = row.createCell(0);
         cell.setCellValue(id);
 
         cell = row.createCell(1);
-        cell.setCellValue(comment);
+        cell.setCellValue(commonName);
 
         cell = row.createCell(2);
+        cell.setCellValue(cultivar);
+
+        cell = row.createCell(3);
+        cell.setCellValue(gardenLocation);
+
+        cell = row.createCell(4);
+        cell.setCellValue(comment);
+
+        cell = row.createCell(5);
         cell.setCellValue(timestamp.toString());
 
         rowCount++;

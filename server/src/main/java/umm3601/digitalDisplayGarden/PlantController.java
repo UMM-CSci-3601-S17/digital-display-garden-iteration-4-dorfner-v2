@@ -239,7 +239,6 @@ public class PlantController {
         }
 
         filterDoc.append("_id", new ObjectId(id));
-
         filterDoc.append("uploadId", uploadID);
 
         Document comments = new Document();
@@ -294,14 +293,16 @@ public class PlantController {
 
             Iterator iterator = doc.iterator();
             if (iterator.hasNext()) {
-                Document result = (Document) iterator.next();
-                List<Document> plantComments = (List<Document>) ((Document) result.get("metadata")).get("comments");
+                Document plant = (Document) iterator.next();
+                List<Document> plantComments = (List<Document>) ((Document) plant.get("metadata")).get("comments");
 
                 for(Document plantComment : plantComments) {
                     String strPlantComment = plantComment.getString("comment");
                     commentWriter.writeComment(plantID,
+                            plant.getString("commonName"),
+                            plant.getString("cultivar"),
+                            plant.getString("gardenLocation"),
                             strPlantComment,
-                            //placeholder for now to get something to work
                             plantComment.getObjectId("_id").getDate());
                 }
 
