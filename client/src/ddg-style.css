@@ -1,0 +1,30 @@
+/*html,body{*/
+    /*height:100%;*/
+/*}*/
+.wrapper {
+    min-height: 100%;
+    padding-bottom:100px; /* footer's height */
+}
+#footer {
+    width: 100%;
+    background-color: maroon;
+    color: gold;
+    position: fixed;
+    left: 0px;
+    bottom: 0px;
+    text-align: center;
+}
+
+#likeButton {
+    border: none;
+    background: inherit;
+    outline: none;
+    font-size:20px;
+}
+
+#dislikeButton {
+    border: none;
+    background: inherit;
+    outline: none;
+    font-size:20px;
+}

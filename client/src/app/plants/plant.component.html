@@ -1,3 +1,6 @@
+
+<link rel="stylesheet" type="text/css" href="../../ddg-style.css">
+
 <div class="plant">
     <h2>{{plant.cultivar}}</h2>
     <h3>{{plant.commonName}}</h3>
@@ -15,14 +18,14 @@
     </div>
 
     <div *ngIf="rating === true" style="text-align:center">
-        <button type="button" style="border: none; background: inherit; outline: none;font-size:20px" class="text-success" >
+        <button type="button" id="likeButton" class="text-success" >
             <span class="glyphicon glyphicon-thumbs-up " aria-hidden="true"></span>
              Liked!
         </button>
     </div>
 
     <div *ngIf="rating === false" style="text-align:center">
-        <button type="button" style="border: none; background: inherit; outline: none;font-size:20px" class="text-success">
+        <button type="button" id="dislikeButton" class="text-success">
             <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
             Disliked
         </button>

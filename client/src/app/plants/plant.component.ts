@@ -6,8 +6,10 @@ import { Params,  ActivatedRoute} from '@angular/router';
 import {PlantFeedback} from "./plant.feedback";
 
 @Component({
+    //moduleId: module.id,
     selector: 'plant-component',
-    templateUrl: 'plant.component.html'
+    templateUrl: 'plant.component.html',
+    //styles: ['ddg-style.css']
 })
 export class PlantComponent implements OnInit {
     plant : Plant = new Plant();
