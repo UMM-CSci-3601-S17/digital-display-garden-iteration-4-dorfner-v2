@@ -154,7 +154,7 @@ public class Server {
         // Posting a comment
         post("api/plants/leaveComment", (req, res) -> {
             res.type("application/json");
-            return plantController.storePlantComment(req.body(), plantController.getLiveUploadId());
+            return plantController.addComment(req.body(), plantController.getLiveUploadId());
         });
 
         // Accept an xls file

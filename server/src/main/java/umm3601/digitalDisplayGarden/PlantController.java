@@ -32,7 +32,6 @@ import static com.mongodb.client.model.Updates.push;
 public class PlantController {
 
     private final MongoCollection<Document> plantCollection;
-    private final MongoCollection<Document> commentCollection;
     private final MongoCollection<Document> configCollection;
 
     public PlantController(String databaseName) throws IOException {
@@ -48,7 +47,6 @@ public class PlantController {
         MongoDatabase db = mongoClient.getDatabase(databaseName);
 
         plantCollection = db.getCollection("plants");
-        commentCollection = db.getCollection("comments");
         configCollection = db.getCollection("config");
     }
 
@@ -150,28 +148,28 @@ public class PlantController {
      * @return JSON for the number of interactions of a plant (likes + dislikes + comments)
      * Of the form:
      * {
-     *  interactionCount: number
+     *     interactionCount: number
      * }
      */
 
     public String getFeedbackForPlantByPlantID(String plantID, String uploadID) {
-        Document out = new Document();
-
-        Document filter = new Document();
-        filter.put("commentOnPlant", plantID);
-        filter.put("uploadId", uploadID);
-        long comments = commentCollection.count(filter);
+        long comments = 0;
         long likes = 0;
         long dislikes = 0;
         long interactions = 0;
 
+        Document out = new Document();
 
-        //Get a plant by plantID
-        FindIterable doc = plantCollection.find(new Document().append("id", plantID).append("uploadId", uploadID));
+        FindIterable document = plantCollection.find(new Document().append("id", plantID).append("uploadId", uploadID));
 
-        Iterator iterator = doc.iterator();
-        if(iterator.hasNext()) {
+        Iterator iterator = document.iterator();
+        if(iterator.hasNext()){
             Document result = (Document) iterator.next();
+
+            //Get metadat.comments array
+            List<Document> plantComments = (List<Document>) ((Document) result.get("metadata")).get("comments");
+
+            comments = plantComments.size();
 
             //Get metadata.rating array
             List<Document> ratings = (List<Document>) ((Document) result.get("metadata")).get("ratings");
@@ -228,6 +226,33 @@ public class PlantController {
     }
 
     /**
+     * Adds a comment to the specified plant.
+     *
+     * @param id a hexstring specifiying the oid
+     * @param comment true if this is a like, false if this is a dislike
+     * @param uploadID Dataset to find the plant
+     * @return true iff the operation succeeded.
+     */
+    public boolean addComment(String id, String comment, String uploadID) {
+        Document filterDoc = new Document();
+        ObjectId objectId;
+
+        try {
+            objectId = new ObjectId(id);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+
+        filterDoc.append("_id", new ObjectId(id));
+        filterDoc.append("uploadId", uploadID);
+
+        Document comments = new Document();
+        comments.append("comment", comment);
+        comments.append("_id", new ObjectId());
+
+        return null != plantCollection.findOneAndUpdate(filterDoc, push("metadata.comments", comments));
+    }
+    /**
      * Accepts string representation of JSON object containing
      * at least the following.
      * <code>
@@ -242,40 +267,23 @@ public class PlantController {
      * @param uploadID Dataset to find the plant
      * @return true iff the comment was successfully submitted
      */
-
-    public boolean storePlantComment(String json, String uploadID) {
+    public boolean addComment(String json, String uploadID) {
+        String comment;
+        String id;
 
         try {
-
-            Document toInsert = new Document();
             Document parsedDocument = Document.parse(json);
 
-            if (parsedDocument.containsKey("plantId") && parsedDocument.get("plantId") instanceof String) {
-
-                FindIterable<Document> jsonPlant = plantCollection.find(eq("_id",
-                        new ObjectId(parsedDocument.getString("plantId"))));
-
-                Iterator<Document> iterator = jsonPlant.iterator();
-
-                if(iterator.hasNext()){
-                    toInsert.put("commentOnPlant", iterator.next().getString("id"));
-                } else {
-                    return false;
-                }
-
-            } else {
-                return false;
-            }
-
             if (parsedDocument.containsKey("comment") && parsedDocument.get("comment") instanceof String) {
-                toInsert.put("comment", parsedDocument.getString("comment"));
+                comment = parsedDocument.getString("comment");
             } else {
                 return false;
             }
-
-            toInsert.append("uploadId", uploadID);
-
-            commentCollection.insertOne(toInsert);
+            if(parsedDocument.containsKey("plantId") && parsedDocument.get("plantId") instanceof String){
+                id = parsedDocument.getString("plantId");
+            } else {
+                return false;
+            }
 
         } catch (BsonInvalidOperationException e){
             e.printStackTrace();
@@ -286,27 +294,53 @@ public class PlantController {
             return false;
         }
 
-        return true;
+    return addComment(id, comment, uploadID);
+
     }
 
-    public void writeComments(OutputStream outputStream, String uploadId) throws IOException{
+    /**
+     * Writes the comments on plants to an excel file with the following columns;
+     * Id, common name, cultivar, garden location, comment, and timestamp
+     *
+     * outputStream is closed when this method exits
+     *
+     * @param outputStream stream to which the excel file is written
+     * @param uploadId Dataset to find a plant
+     */
+    public void writeComments(OutputStream outputStream, String uploadId) throws IOException {
 
-          FindIterable iter = commentCollection.find(
-                   and(
-                           exists("commentOnPlant"),
-                           eq("uploadId", uploadId)
-                   ));
-           Iterator iterator = iter.iterator();
+        //finding all the plantIds
+        AggregateIterable<Document> plantIds = plantCollection.aggregate(
+                Arrays.asList(
+                        Aggregates.match(eq("uploadId", uploadId)),
+                        Aggregates.group("$id")
+                ));
+        CommentWriter commentWriter = new CommentWriter(outputStream);
 
-           CommentWriter commentWriter = new CommentWriter(outputStream);
+        //for each plant, get a list of comments and write each comment to the excel
+        for(Document plantId: plantIds) {
+            String plantID = plantId.getString("_id");
+            FindIterable doc = plantCollection.find(new Document().append("id", plantID).append("uploadId", uploadId));
 
-           while (iterator.hasNext()) {
-               Document comment = (Document) iterator.next();
-               commentWriter.writeComment(comment.getString("commentOnPlant"),
-                       comment.getString("comment"),
-                       ((ObjectId) comment.get("_id")).getDate());
-           }
-           commentWriter.complete();
+            Iterator iterator = doc.iterator();
+            if (iterator.hasNext()) {
+                Document plant = (Document) iterator.next();
+                List<Document> plantComments = (List<Document>) ((Document) plant.get("metadata")).get("comments");
+
+                for(Document plantComment : plantComments) {
+                    String strPlantComment = plantComment.getString("comment");
+                    commentWriter.writeComment(plantID,
+                            plant.getString("commonName"),
+                            plant.getString("cultivar"),
+                            plant.getString("gardenLocation"),
+                            strPlantComment,
+                            plantComment.getObjectId("_id").getDate());
+                }
+
+            }
+
+        }
+        commentWriter.complete();
     }
 
     /**

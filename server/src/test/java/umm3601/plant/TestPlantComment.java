@@ -1,6 +1,7 @@
 package umm3601.plant;
 
 import com.mongodb.MongoClient;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
@@ -11,10 +12,9 @@ import umm3601.digitalDisplayGarden.PlantController;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class TestPlantComment {
 
@@ -32,35 +32,44 @@ public class TestPlantComment {
     public void successfulInputOfComment() throws IOException {
         String json = "{ plantId: \"58d1c36efb0cac4e15afd278\", comment : \"Here is our comment for this test\" }";
 
-        assertTrue(plantController.storePlantComment(json, "second uploadId"));
+        assertTrue(plantController.addComment(json, "second uploadId"));
 
         MongoClient mongoClient = new MongoClient();
         MongoDatabase db = mongoClient.getDatabase(databaseName);
-        MongoCollection<Document> commentDocuments = db.getCollection("comments");
+        MongoCollection<Document> plants = db.getCollection("plants");
 
-        long contains = commentDocuments.count();
-        assertEquals(1, contains);
+        Document filterDoc = new Document();
 
-        Iterator<Document> iter = commentDocuments.find().iterator();
+        filterDoc.append("_id", new ObjectId("58d1c36efb0cac4e15afd278"));
+        filterDoc.append("uploadId", "second uploadId");
 
-        Document fromDb = iter.next();
+        Iterator<Document> iter = plants.find(filterDoc).iterator();
 
-        assertEquals("Here is our comment for this test", fromDb.getString("comment"));
-        assertEquals("16040.0", fromDb.get("commentOnPlant"));
-        assertEquals("second uploadId", fromDb.get("uploadId"));
-    }
+        Document plant = iter.next();
+        List<Document> plantComments = (List<Document>) ((Document) plant.get("metadata")).get("comments");
+        long comments = plantComments.size();
+
+        assertEquals(1, comments);
+        assertEquals("Here is our comment for this test", plantComments.get(0).getString("comment"));
+        assertNotNull(plantComments.get(0).getObjectId("_id"));
+      }
 
     @Test
     public void failedInputOfComment() throws IOException {
         String json = "{ plantId: \"58d1c36efb0cac4e15afd27\", comment : \"Here is our comment for this test\" }";
 
-        assertFalse(plantController.storePlantComment(json, "second uploadId"));
+        assertFalse(plantController.addComment(json, "second uploadId"));
 
         MongoClient mongoClient = new MongoClient();
         MongoDatabase db = mongoClient.getDatabase(databaseName);
-        MongoCollection<Document> commentDocuments = db.getCollection("comments");
+        MongoCollection<Document> plants = db.getCollection("plants");
 
-        long contains = commentDocuments.count();
-        assertEquals(0, contains);
+        FindIterable findIterable = plants.find();
+        Iterator iterator = findIterable.iterator();
+        while(iterator.hasNext()){
+            Document plant = (Document) iterator.next();
+            List<Document> plantComments = (List<Document>) ((Document) plant.get("metadata")).get("comments");
+            assertEquals(0,plantComments.size());
+        }
     }
 }
