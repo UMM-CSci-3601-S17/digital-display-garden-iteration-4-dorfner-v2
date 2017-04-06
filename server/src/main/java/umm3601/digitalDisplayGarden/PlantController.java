@@ -244,6 +244,7 @@ public class PlantController {
 
         Document comments = new Document();
         comments.append("comment", comment);
+        comments.append("_id", new ObjectId());
 
         return null != plantCollection.findOneAndUpdate(filterDoc, push("metadata.comments", comments));
     }
@@ -285,9 +286,10 @@ public class PlantController {
                         Aggregates.match(eq("uploadId", uploadId)),
                         Aggregates.group("$id")
                 ));
+        CommentWriter commentWriter = new CommentWriter(outputStream);
 
         for(Document plantId: plantIds) {
-            String plantID = plantId.get("_id").toString();
+            String plantID = plantId.getString("_id");
             FindIterable doc = plantCollection.find(new Document().append("id", plantID).append("uploadId", uploadId));
 
             Iterator iterator = doc.iterator();
@@ -295,20 +297,18 @@ public class PlantController {
                 Document result = (Document) iterator.next();
                 List<Document> plantComments = (List<Document>) ((Document) result.get("metadata")).get("comments");
 
-                CommentWriter commentWriter = new CommentWriter(outputStream);
-
                 for(Document plantComment : plantComments) {
-                    String strPlantComment = plantComment.toString();
-
+                    String strPlantComment = plantComment.getString("comment");
                     commentWriter.writeComment(plantID,
                             strPlantComment,
                             //placeholder for now to get something to work
-                            (new ObjectId(plantID).getDate()) );
+                            plantComment.getObjectId("_id").getDate());
                 }
-                commentWriter.complete();
+
             }
 
         }
+        commentWriter.complete();
     }
 
     /**
