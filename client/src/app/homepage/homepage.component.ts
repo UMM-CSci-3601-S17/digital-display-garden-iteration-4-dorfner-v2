@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { PlantListService } from "./plant-list.service";
-import { Plant } from "./plant";
+import { PlantListService } from "../plants/plant-list.service";
+import { Plant } from "../plants/plant";
 import {Params, ActivatedRoute, Router} from "@angular/router";
 
 @Component({
     selector: 'homepage-component',
-    templateUrl: 'homepage-component.html',
+    templateUrl: 'homepage.component.html',
 })
 
 export class HomepageComponent implements OnInit {
