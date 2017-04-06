@@ -11,13 +11,12 @@ import {HomepageComponent} from "./homepage/homepage.component";
 
 // Route Configuration
 export const routes: Routes = [
-    { path: '', component: PlantListComponent },
+    { path: '', component: HomepageComponent },
     { path: 'plants/:plantID', component: PlantComponent },
     { path: 'admin', component: AdminComponent},
     { path: 'admin/exportData', component: ExportComponent},
     { path: 'admin/importData', component: ImportComponent},
     { path: 'bed/:gardenLocation', component: BedComponent },
-    { path: 'home', component: HomepageComponent}
 ];
 
 export const routing: ModuleWithProviders = RouterModule.forRoot(routes);
