@@ -31,21 +31,17 @@ describe("Plant component", () => {
         }
     };
 
-    let originalMockFeedBackData = [
-        {
-            id:"16001",
-            oid: "58daf99befbd607288f772a5",
-            commentCount: 1,
-            likeCount: 2,
-            dislikeCount: 0
-        }
-    ];
+    let originalMockFeedBackData = {interactionCount: 0};
 
 
     beforeEach(() => {
 
         // (re)set the fake database before every test
-        this.mockFeedBackData = originalMockFeedBackData;
+        this.mockFeedBackData = {};
+        var key;
+        for (key in originalMockFeedBackData) {
+            this.mockFeedBackData[key] = originalMockFeedBackData[key];
+        }
 
         // stub plantService for test purposes
         plantListServiceStub = {
@@ -67,14 +63,14 @@ describe("Plant component", () => {
                 }].find(plant => plant.id === id));
             },
             getFeedbackForPlantByPlantID: (id: string) => {
-                return Observable.of(this.mockFeedBackData.find(plantFeedback => plantFeedback.id === id))
+                return Observable.of(this.mockFeedBackData)
             },
             ratePlant: (id: string, like: boolean) => {
-                this.mockFeedBackData.find(el => el.oid === id).likeCount += 1;
+                this.mockFeedBackData.interactionCount += 1;
                 return Observable.of(true);
             },
             commentPlant: (id: string, comment: string) => {
-                this.mockFeedBackData.find(el => el.oid === id).commentCount += 1;
+                this.mockFeedBackData.interactionCount += 1;
                 return Observable.of(true);
             }
         };
@@ -107,20 +103,20 @@ describe("Plant component", () => {
     });
 
     it("fetches plant feedback", () => {
-        expect(plantComponent.plantFeedback.likeCount).toBe(2);
+        expect(plantComponent.plantFeedback.interactionCount).toBe(0);
     });
 
     it("updates plant feedback", () => {
-        expect(plantComponent.plantFeedback.likeCount).toBe(2);
+        expect(plantComponent.plantFeedback.interactionCount).toBe(0);
         plantComponent.ratePlant(true);
-        expect(plantComponent.plantFeedback.likeCount).toBe(3);
+        expect(plantComponent.plantFeedback.interactionCount).toBe(1);
     });
 
     it("can accept comments", () => {
-        expect(plantComponent.plantFeedback.commentCount).toBe(1);
+        expect(plantComponent.plantFeedback.interactionCount).toBe(0);
         plantComponent.comment("This flower is quite pretty");
         expect(plantComponent.commented).toBe(true);
-        expect(plantComponent.plantFeedback.commentCount).toBe(2)
+        expect(plantComponent.plantFeedback.interactionCount).toBe(1)
     });
 
 
