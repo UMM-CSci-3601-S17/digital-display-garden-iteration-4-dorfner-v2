@@ -14,7 +14,6 @@ import org.bson.types.ObjectId;
 import org.bson.conversions.Bson;
 import org.joda.time.DateTime;
 
-import javax.print.Doc;
 import java.io.OutputStream;
 import java.util.Iterator;
 
