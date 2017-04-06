@@ -146,12 +146,10 @@ public class PlantController {
      * @param plantID The plant to get feedback of
      * @param uploadID Dataset to find the plant
      *
-     * @return JSON for the number of comments, likes, and dislikes
+     * @return JSON for the number of interactions
      * Of the form:
      * {
-     *     commentCount: number
-     *     likeCount: number
-     *     dislikeCount: number
+     *     interactionCount: number
      * }
      */
 
@@ -168,6 +166,8 @@ public class PlantController {
         Iterator iterator = document.iterator();
         if(iterator.hasNext()){
             Document result = (Document) iterator.next();
+
+            //Get metadat.comments array
             List<Document> plantComments = (List<Document>) ((Document) result.get("metadata")).get("comments");
 
             comments = plantComments.size();
@@ -214,19 +214,12 @@ public class PlantController {
     }
 
     /**
-     * Accepts string representation of JSON object containing
-     * at least the following.
-     * <code>
-     *     {
-     *         plantId: String,
-     *         comment: String
-     *     }
-     * </code>
-     * If either of the keys are missing or the types of the values are
-     * wrong, false is returned.
-
+     * Adds a comment to the specified plant.
+     *
+     * @param id a hexstring specifiying the oid
+     * @param comment true if this is a like, false if this is a dislike
      * @param uploadID Dataset to find the plant
-     * @return true iff the comment was successfully submitted
+     * @return true iff the operation succeeded.
      */
     public boolean addComment(String id, String comment, String uploadID) {
         Document filterDoc = new Document();
@@ -247,6 +240,22 @@ public class PlantController {
 
         return null != plantCollection.findOneAndUpdate(filterDoc, push("metadata.comments", comments));
     }
+    /**
+     * Accepts string representation of JSON object containing
+     * at least the following.
+     * <code>
+     *     {
+     *         plantId: String,
+     *         comment: String
+     *     }
+     * </code>
+     * If either of the keys are missing or the types of the values are
+     * wrong, false is returned.
+
+     * @param uploadID Dataset to find the plant
+     * @param json string representation of a JSON object
+     * @return true iff the comment was successfully submitted
+     */
     public boolean addComment(String json, String uploadID) {
         String comment;
         String id;
@@ -278,8 +287,18 @@ public class PlantController {
 
     }
 
+    /**
+     * Writes the comments on plants to an excel file with the following columns;
+     * Id, common name, cultivar, garden location, comment, and timestamp
+     *
+     * outputStream is closed when this method exits
+     *
+     * @param outputStream stream to which the excel file is written
+     * @param uploadId Dataset to find a plant
+     */
     public void writeComments(OutputStream outputStream, String uploadId) throws IOException {
 
+        //finding all the plantIds
         AggregateIterable<Document> plantIds = plantCollection.aggregate(
                 Arrays.asList(
                         Aggregates.match(eq("uploadId", uploadId)),
@@ -287,6 +306,7 @@ public class PlantController {
                 ));
         CommentWriter commentWriter = new CommentWriter(outputStream);
 
+        //for each plant, get a list of comments and write each comment to the excel
         for(Document plantId: plantIds) {
             String plantID = plantId.getString("_id");
             FindIterable doc = plantCollection.find(new Document().append("id", plantID).append("uploadId", uploadId));
