@@ -78,7 +78,9 @@ public class QRCodes {
 
                 Graphics g = QRImage.getGraphics();
                 g.setColor(Color.black);
-                g.drawString(bedURLs[i], QRImage.getWidth()/20, 290);
+                g.setFont(g.getFont().deriveFont(Font.CENTER_BASELINE, 11));
+                g.drawString(bedURLs[i], QRImage.getWidth()/20, 285);
+
                 g.dispose();
 
                 qrCodeImages.add(QRImage);
