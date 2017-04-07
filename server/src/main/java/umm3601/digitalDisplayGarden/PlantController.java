@@ -331,9 +331,33 @@ public class PlantController {
                         plantComment.getObjectId("_id").getDate());
             }
 
-            // add the ratings stuff
+            long comments = plantComments.size();
+            long likes = 0;
+            long dislikes = 0;
 
+            //Get metadata.rating array
+            List<Document> ratings = (List<Document>) ((Document) plant.get("metadata")).get("ratings");
 
+            //Loop through all of the entries within the array, counting like=true(like) and like=false(dislike)
+            for(Document rating : ratings)
+            {
+                if(rating.get("like").equals(true))
+                    likes++;
+                else if(rating.get("like").equals(false))
+                    dislikes++;
+            }
+
+            List<Document> visits = (List<Document>) ((Document) plant.get("metadata")).get("visits");
+            long numVisits = visits.size();
+
+            collectedDataWriter.writeRating(plantID,
+                    plant.getString("commonName"),
+                    plant.getString("cultivar"),
+                    plant.getString("gardenLocation"),
+                    (int) likes,
+                    (int) dislikes,
+                    (int) numVisits,
+                    (int) comments);
         }
         collectedDataWriter.complete();
     }
