@@ -309,35 +309,30 @@ public class PlantController {
      */
     public void exportCollectedData(OutputStream outputStream, String uploadId) throws IOException {
 
-        //finding all the plantIds
-        AggregateIterable<Document> plantIds = plantCollection.aggregate(
-                Arrays.asList(
-                        Aggregates.match(eq("uploadId", uploadId)),
-                        Aggregates.group("$id")
-                ));
         CollectedDataWriter collectedDataWriter = new CollectedDataWriter(outputStream);
 
+        FindIterable<Document> plantFindIterable = plantCollection.find(new Document().append("uploadId", uploadId));
+        Iterator<Document> plantIterator = plantFindIterable.iterator();
+
         //for each plant, get a list of comments and write each comment to the excel
-        for(Document plantId: plantIds) {
-            String plantID = plantId.getString("_id");
-            FindIterable doc = plantCollection.find(new Document().append("id", plantID).append("uploadId", uploadId));
+        while(plantIterator.hasNext()) {
+            Document plant = plantIterator.next();
 
-            Iterator iterator = doc.iterator();
-            if (iterator.hasNext()) {
-                Document plant = (Document) iterator.next();
-                List<Document> plantComments = (List<Document>) ((Document) plant.get("metadata")).get("comments");
+            String plantID = plant.getString("id");
 
-                for(Document plantComment : plantComments) {
-                    String strPlantComment = plantComment.getString("comment");
-                    collectedDataWriter.writeComment(plantID,
-                            plant.getString("commonName"),
-                            plant.getString("cultivar"),
-                            plant.getString("gardenLocation"),
-                            strPlantComment,
-                            plantComment.getObjectId("_id").getDate());
-                }
-
+            List<Document> plantComments = (List<Document>) ((Document) plant.get("metadata")).get("comments");
+            for(Document plantComment : plantComments) {
+                String strPlantComment = plantComment.getString("comment");
+                collectedDataWriter.writeComment(plantID,
+                        plant.getString("commonName"),
+                        plant.getString("cultivar"),
+                        plant.getString("gardenLocation"),
+                        strPlantComment,
+                        plantComment.getObjectId("_id").getDate());
             }
+
+            // add the ratings stuff
+
 
         }
         collectedDataWriter.complete();
