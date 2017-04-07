@@ -35,13 +35,19 @@ In order to populate the database
 
 ## Attempted or Completed Stories
 ### Iteration 3
-* Updating comment data to include following columns:
+* Updating comment data to include following columns (3 jellybeans):
 >CommonName,
 >Clutivar,
 >Bed Location
-* Add an URL beneath QR-Code
-* Export Ratings
-* Change like/dislike counter to a single number
+* Add an URL beneath QR-Code (3 jellybeans)
+* Export Ratings (2 jellybeans)
+* Change like/dislike counter to a single number (1 jellybean)
+* Ability to Delete old Data (1 jellybean)
+* Add a footer to pages (1 jellybean)
+* (Epic) Create a homepage that consists of (4 jellybeans)
+>QR-Code instructions, 
+>Ability to search by common name,
+>Bed Navigation
 ### Iteration 2
 * Leave Comments About a Flower
 * Allow a visitor to rate a flower

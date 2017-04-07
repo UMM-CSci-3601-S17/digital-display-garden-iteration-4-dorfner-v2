@@ -12,7 +12,7 @@ import {PlantFeedback} from "./plant.feedback";
 export class PlantComponent implements OnInit {
     plant : Plant = new Plant();
     plantFeedback: PlantFeedback = new PlantFeedback();
-    private commented: Boolean = false;
+    commented: Boolean = false;
 
     // The rating field can have 3 values:
     // null - means that the plant hasn't been rated
@@ -29,7 +29,7 @@ export class PlantComponent implements OnInit {
         this.srcBed = this.route.snapshot.params["srcBed"];
     }
 
-    private comment(comment: string): void {
+    public comment(comment: string): void {
         if(!this.commented){
             if(comment != null) {
                 this.plantListService.commentPlant(this.plant["_id"]["$oid"], comment)
@@ -41,7 +41,7 @@ export class PlantComponent implements OnInit {
         }
     }
 
-    private ratePlant(like: boolean): void {
+    public ratePlant(like: boolean): void {
         if(this.rating === null && like !== null) {
             this.plantListService.ratePlant(this.plant["_id"]["$oid"], like)
                 .subscribe(succeeded => {
