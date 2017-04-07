@@ -259,10 +259,10 @@ public class ExcelParser {
     --------------------------- SERVER UTILITIES -------------------------------
      */
 
-    public static void setLiveUploadId(String uploadID){
+    public void setLiveUploadId(String uploadID){
 
         MongoClient mongoClient = new MongoClient();
-        MongoDatabase test = mongoClient.getDatabase("test");
+        MongoDatabase test = mongoClient.getDatabase(databaseName);
         MongoCollection configCollection = test.getCollection("config");
 
         configCollection.deleteMany(exists("liveUploadId"));
