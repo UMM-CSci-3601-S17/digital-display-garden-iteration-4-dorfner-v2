@@ -125,7 +125,7 @@ public class PlantController {
             Iterator<Document> iterator = jsonPlant.iterator();
 
             if (iterator.hasNext()) {
-                addVisit(plantID);
+                addVisit(plantID, uploadID);
                 returnVal = iterator.next().toJson();
             } else {
                 returnVal = "null";
@@ -456,10 +456,11 @@ public class PlantController {
 //        return JSON.serialize(plantCollection.distinct("uploadId","".getClass()));
     }
 
-    public boolean addVisit(String plantID) {
+    public boolean addVisit(String plantID, String uploadID) {
 
         Document filterDoc = new Document();
         filterDoc.append("id", plantID);
+        filterDoc.append("uploadId", uploadID);
 
         Document visit = new Document();
         visit.append("visit", new ObjectId());
