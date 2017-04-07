@@ -125,8 +125,7 @@ public class PlantController {
             Iterator<Document> iterator = jsonPlant.iterator();
 
             if (iterator.hasNext()) {
-                incrementMetadata(plantID, "pageViews");
-                addVisit(plantID);
+                addVisit(plantID, uploadID);
                 returnVal = iterator.next().toJson();
             } else {
                 returnVal = "null";
@@ -307,40 +306,59 @@ public class PlantController {
      * @param outputStream stream to which the excel file is written
      * @param uploadId Dataset to find a plant
      */
-    public void writeComments(OutputStream outputStream, String uploadId) throws IOException {
+    public void exportCollectedData(OutputStream outputStream, String uploadId) throws IOException {
 
-        //finding all the plantIds
-        AggregateIterable<Document> plantIds = plantCollection.aggregate(
-                Arrays.asList(
-                        Aggregates.match(eq("uploadId", uploadId)),
-                        Aggregates.group("$id")
-                ));
-        CommentWriter commentWriter = new CommentWriter(outputStream);
+        CollectedDataWriter collectedDataWriter = new CollectedDataWriter(outputStream);
+
+        FindIterable<Document> plantFindIterable = plantCollection.find(new Document().append("uploadId", uploadId));
+        Iterator<Document> plantIterator = plantFindIterable.iterator();
 
         //for each plant, get a list of comments and write each comment to the excel
-        for(Document plantId: plantIds) {
-            String plantID = plantId.getString("_id");
-            FindIterable doc = plantCollection.find(new Document().append("id", plantID).append("uploadId", uploadId));
+        while(plantIterator.hasNext()) {
+            Document plant = plantIterator.next();
 
-            Iterator iterator = doc.iterator();
-            if (iterator.hasNext()) {
-                Document plant = (Document) iterator.next();
-                List<Document> plantComments = (List<Document>) ((Document) plant.get("metadata")).get("comments");
+            String plantID = plant.getString("id");
 
-                for(Document plantComment : plantComments) {
-                    String strPlantComment = plantComment.getString("comment");
-                    commentWriter.writeComment(plantID,
-                            plant.getString("commonName"),
-                            plant.getString("cultivar"),
-                            plant.getString("gardenLocation"),
-                            strPlantComment,
-                            plantComment.getObjectId("_id").getDate());
-                }
-
+            List<Document> plantComments = (List<Document>) ((Document) plant.get("metadata")).get("comments");
+            for(Document plantComment : plantComments) {
+                String strPlantComment = plantComment.getString("comment");
+                collectedDataWriter.writeComment(plantID,
+                        plant.getString("commonName"),
+                        plant.getString("cultivar"),
+                        plant.getString("gardenLocation"),
+                        strPlantComment,
+                        plantComment.getObjectId("_id").getDate());
             }
 
+            long comments = plantComments.size();
+            long likes = 0;
+            long dislikes = 0;
+
+            //Get metadata.rating array
+            List<Document> ratings = (List<Document>) ((Document) plant.get("metadata")).get("ratings");
+
+            //Loop through all of the entries within the array, counting like=true(like) and like=false(dislike)
+            for(Document rating : ratings)
+            {
+                if(rating.get("like").equals(true))
+                    likes++;
+                else if(rating.get("like").equals(false))
+                    dislikes++;
+            }
+
+            List<Document> visits = (List<Document>) ((Document) plant.get("metadata")).get("visits");
+            long numVisits = visits.size();
+
+            collectedDataWriter.writeRating(plantID,
+                    plant.getString("commonName"),
+                    plant.getString("cultivar"),
+                    plant.getString("gardenLocation"),
+                    (int) likes,
+                    (int) dislikes,
+                    (int) numVisits,
+                    (int) comments);
         }
-        commentWriter.complete();
+        collectedDataWriter.complete();
     }
 
     /**
@@ -438,35 +456,11 @@ public class PlantController {
 //        return JSON.serialize(plantCollection.distinct("uploadId","".getClass()));
     }
 
-
-
-
-
-
-    /**
-     * Finds a plant and atomically increments the specified field
-     * in its metadata object. This method returns true if the plant was
-     * found successfully (false otherwise), but there is no indication of
-     * whether the field was found.
-     *
-     * @param plantID a ID number of a plant in the DB
-     * @param field a field to be incremented in the metadata object of the plant
-     * @return true if a plant was found
-     * @throws com.mongodb.MongoCommandException when the id is valid and the field is empty
-     */
-    public boolean incrementMetadata(String plantID, String field) {
-
-        Document searchDocument = new Document();
-        searchDocument.append("id", plantID);
-
-        Bson updateDocument = inc("metadata." + field, 1);
-
-        return null != plantCollection.findOneAndUpdate(searchDocument, updateDocument);
-    }
-    public boolean addVisit(String plantID) {
+    public boolean addVisit(String plantID, String uploadID) {
 
         Document filterDoc = new Document();
         filterDoc.append("id", plantID);
+        filterDoc.append("uploadId", uploadID);
 
         Document visit = new Document();
         visit.append("visit", new ObjectId());
