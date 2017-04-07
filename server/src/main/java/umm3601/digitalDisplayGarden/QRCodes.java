@@ -1,7 +1,9 @@
 package umm3601.digitalDisplayGarden;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -17,7 +19,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-
+import org.bson.Document;
 
 
 public class QRCodes {
@@ -72,7 +74,16 @@ public class QRCodes {
         for(int i = 0; i < numBeds; i++) {
             bedURLs[i] = urlPrefix + bedNames[i];
             try {
-                qrCodeImages.add(createQRFromBedURL(bedURLs[i]));
+                BufferedImage QRImage = createQRFromBedURL(bedURLs[i]);
+
+                Graphics g = QRImage.getGraphics();
+                g.setColor(Color.black);
+                g.drawString(bedURLs[i], QRImage.getWidth()/20, 290);
+                g.dispose();
+
+                qrCodeImages.add(QRImage);
+                //qrCodeImages.add(createQRFromBedURL(bedURLs[i]));
+
             }
             catch(IOException ioe)
             {
@@ -97,6 +108,7 @@ public class QRCodes {
             for (int i = 0; i < qrCodeImages.size(); i++) {
                 File outputFile = new File(qrTempPath + '/' + bedNames[i] + ".png");
                 ImageIO.write(qrCodeImages.get(i), "png", outputFile);
+
             }
         }
         catch(IOException ioe)
