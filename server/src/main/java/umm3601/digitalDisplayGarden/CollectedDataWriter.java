@@ -45,7 +45,7 @@ public class CollectedDataWriter {
 
         commentCount = 1;
 
-        Row ratingRow = commentsSheet.createRow(0);
+        Row ratingRow = ratingsSheet.createRow(0);
         cell = ratingRow.createCell(0);
         cell.setCellValue("#");
 
