@@ -5,7 +5,6 @@ import { HttpModule, JsonpModule } from '@angular/http';
 import { AppComponent }         from './app/app.component';
 import { NavbarComponent } from './app/navbar/navbar.component';
 import { BedComponent } from './app/plants/bed.component';
-import { PlantListComponent } from './app/plants/plant-list.component';
 import { PlantComponent } from './app/plants/plant.component';
 import { PlantListService } from './app/plants/plant-list.service';
 import { routing } from './app/app.routes';
@@ -34,7 +33,6 @@ import {HomepageComponent} from "./app/homepage/homepage.component";
     declarations: [
         AppComponent,
         NavbarComponent,
-        PlantListComponent,
         PlantComponent,
         AdminComponent,
         ExportComponent,

@@ -1,7 +1,6 @@
 // Imports
 import { ModuleWithProviders }  from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {PlantListComponent} from "./plants/plant-list.component";
 import {PlantComponent} from "./plants/plant.component";
 import {AdminComponent} from "./admin/admin.component";
 import {ExportComponent} from "./admin/export.component";
