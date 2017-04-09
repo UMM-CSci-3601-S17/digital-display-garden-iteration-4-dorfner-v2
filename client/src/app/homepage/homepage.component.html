@@ -20,4 +20,8 @@ Select Bed
 <h3> Find location of your favorite flower </h3>
 <!--Searchbar that causes a list of flowers that has a commonname equal to the search value-->
 <!--TODO Give the searchbar Funcionality, offer autocomplete to their text?-->
-<input #input type="text" placeholder="Favorite Flower" (input)="searchID = $event.target.value">
+<input #input type="text" placeholder="Type a flower name" (input)="currentCN = $event.target.value">
+<ul class="list-group" *ngIf="currentCN">
+    <li class="list-group-item list-group-item-info"
+        *ngFor="let each of currentList | filterBy: {commonName: currentCN}">{{each.commonName}}</li>
+</ul>
