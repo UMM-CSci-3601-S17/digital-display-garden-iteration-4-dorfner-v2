@@ -183,6 +183,13 @@ public class Server {
 
         });
 
+        delete("api/deleteData/:uploadId", (req, res) -> {
+
+            res.type("application/json");
+            String uploadID = req.params("uploadId");
+            return plantController.deleteUploadID(uploadID);
+        });
+
         get("/*", clientRoute);
 
         // Handle "404" file not found requests:

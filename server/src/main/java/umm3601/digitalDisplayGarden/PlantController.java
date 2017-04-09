@@ -366,6 +366,12 @@ public class PlantController {
         collectedDataWriter.complete();
     }
 
+    public long deleteUploadID (String uploadID) {
+        Document filterDoc = new Document();
+        filterDoc.append("uploadId", uploadID);
+        return plantCollection.deleteMany(filterDoc).getDeletedCount();
+    }
+
     /**
      * Adds a like or dislike to the specified plant.
      *
