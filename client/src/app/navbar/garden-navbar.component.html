@@ -1,25 +1,29 @@
-<div class="navbar-fixed-top">
-    <h1 class="row"><a class="navbar-brand" [routerLink]="['/']">Digital Display Garden</a></h1>
-    <ul class="row nav navbar-nav">
-        <li><a [routerLink]="['/bed/7']">Bed7</a></li>
-    </ul>
+<div class="navbar-fixed-top top-navbar">
+    <div class="row">
+        <a class="col-xs-12 text-center" [routerLink]="['/']"><h2 class="title">Digital Display Garden</h2></a>
+    </div>
+    <div class="row">
+        <div class="searchField col-xs-8">
+            <input #input type="text" placeholder="Type a flower name" class="form-control"
+                   (input)="currentCN = $event.target.value">
+        </div>
+        <div class="col-xs-4">
+            <span>Bed</span>
+            <select id="locationDropdown" (change)="this.router.navigate(['/bed', this.bed])" [(ngModel)]=bed>
+                <option *ngFor="let location of locations" value="{{location._id}}">{{location._id}}</option>
+            </select>
+        </div>
+    </div>
 </div>
 
-<!--<nav class="navbar navbar-default navbar-static-top">-->
-    <!--<div class="container">-->
-        <!--<div class="navbar-header">-->
-            <!--<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">-->
-                <!--<span class="sr-only">Toggle navigation</span>-->
-                <!--<span class="icon-bar"></span>-->
-                <!--<span class="icon-bar"></span>-->
-                <!--<span class="icon-bar"></span>-->
-            <!--</button>-->
-            <!--<a class="navbar-brand" [routerLink]="['/']">Digital Display Garden</a>-->
-        <!--</div>-->
-        <!--<div id="navbar" class="navbar-collapse collapse">-->
-            <!--<ul class="nav navbar-nav">-->
-                <!--<li><a [routerLink]="['/bed/7']">Bed7</a></li>-->
-            <!--</ul>-->
-        <!--</div>-->
-    <!--</div>-->
-<!--</nav>-->
+<style>
+    .title, span {
+        color: gold;
+    }
+    .top-navbar {
+        background-color: maroon;
+    }
+    .row {
+        margin-bottom: 4%;
+    }
+</style>
