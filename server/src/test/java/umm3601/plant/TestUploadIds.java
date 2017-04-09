@@ -1,5 +1,6 @@
 package umm3601.plant;
 
+import com.mongodb.util.JSON;
 import org.junit.Before;
 import org.junit.Test;
 import umm3601.digitalDisplayGarden.PlantController;
@@ -29,7 +30,7 @@ public class TestUploadIds {
     @Test
     public void testGetLiveUploadId() throws IOException {
         String expect = "[ \"first uploadId\" , \"second uploadId\"]";
-        String uploadArr = plantController.listUploadIds();
+        String uploadArr = JSON.serialize(plantController.listUploadIds());
 
         assertEquals("Incorrect distinct uploadIDs", expect, uploadArr);
     }

@@ -21,8 +21,11 @@ export class DeleteComponent implements OnInit {
     delete(uploadID : string)
     {
         this.adminService.deleteUploadId(uploadID)
-            .subscribe(x => this.adminService.getUploadIds()
-                .subscribe(result => this.uploadIds = result, err => console.log(err)));
+            .subscribe(response => {
+                if (response.success === true) {
+                    this.uploadIds = response.uploadIds;
+                }
+            });
     }
 
     ngOnInit(): void {

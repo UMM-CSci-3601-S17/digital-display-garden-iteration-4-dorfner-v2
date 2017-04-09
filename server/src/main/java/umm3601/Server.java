@@ -100,7 +100,7 @@ public class Server {
         // List all uploadIds
         get("api/uploadIds", (req, res) -> {
             res.type("application/json");
-            return plantController.listUploadIds();
+            return JSON.serialize(plantController.listUploadIds());
         });
 
         post("api/plants/rate", (req, res) -> {
@@ -187,7 +187,7 @@ public class Server {
 
             res.type("application/json");
             String uploadID = req.params("uploadId");
-            return plantController.deleteUploadID(uploadID);
+            return JSON.serialize(plantController.deleteUploadID(uploadID));
         });
 
         get("/*", clientRoute);

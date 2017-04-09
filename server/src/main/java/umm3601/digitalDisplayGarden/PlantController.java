@@ -366,10 +366,15 @@ public class PlantController {
         collectedDataWriter.complete();
     }
 
-    public long deleteUploadID (String uploadID) {
+    public Document deleteUploadID (String uploadID) {
         Document filterDoc = new Document();
+        Document returnDoc = new Document();
+
         filterDoc.append("uploadId", uploadID);
-        return plantCollection.deleteMany(filterDoc).getDeletedCount();
+        long deleted = plantCollection.deleteMany(filterDoc).getDeletedCount();
+        returnDoc.append("success", deleted != 0);
+        returnDoc.append("uploadIds", listUploadIds());
+        return returnDoc;
     }
 
     /**
@@ -452,7 +457,7 @@ public class PlantController {
      *
      * @return a sorted JSON array of all the distinct uploadIds in plant collection of the DB
      */
-    public String listUploadIds() {
+    public List<String> listUploadIds() {
         AggregateIterable<Document> documents
                 = plantCollection.aggregate(
                 Arrays.asList(
@@ -463,7 +468,7 @@ public class PlantController {
         for(Document d: documents) {
             lst.add(d.getString("_id"));
         }
-        return JSON.serialize(lst);
+        return lst;
 //        return JSON.serialize(plantCollection.distinct("uploadId","".getClass()));
     }
 

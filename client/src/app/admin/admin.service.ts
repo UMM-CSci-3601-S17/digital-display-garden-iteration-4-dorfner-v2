@@ -15,7 +15,7 @@ export class AdminService {
         return this.http.request(this.url + "liveUploadId").map(res => res.json());
     }
 
-    deleteUploadId(uploadId : string) : Observable<number> {
+    deleteUploadId(uploadId : string) : Observable<any> {
         return this.http.delete(this.url + "deleteData/" + uploadId).map(res => res.json());
     }
 }
