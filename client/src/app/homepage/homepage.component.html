@@ -1,17 +1,17 @@
 <garden-navbar-component #nav></garden-navbar-component>
 
-<ul class="list-group" *ngIf="nav.currentCN">
-    <li class="list-group-item list-group-item-info">
-        <span>Matching flowers</span>
-    </li>
-    <li *ngFor="let each of currentList | filterBy: {commonName: nav.currentCN}"  class="list-group-item">
-        <!--Button is a hyperlink to a plant page "/plants/:plantID"-->
-        <!--See app.routes.ts-->
-        <button [routerLink]="['/plants', each.id, {srcBed:bed}]" style="white-space: normal" class="btn btn-link btn-block" >
-            <strong style="font-size:18px">{{each.cultivar}}</strong><br>
-            {{each.commonName}}</button>
-    </li>
-</ul>
+<div class="panel panel-info" *ngIf="nav.currentCN">
+    <table class="table text-center">
+        <tr>
+            <th class="flower-col text-center panel-heading">Flower</th>
+            <th class="bed-col text-center panel-heading">Bed</th>
+        </tr>
+        <tr *ngFor="let each of currentList | filterBy: {commonName: nav.currentCN}">
+            <td class="flower-col" [routerLink]="['/plants', each.id, {srcBed:bed}]">{{each.cultivar}}<br>{{each.commonName}}</td>
+            <td class="bed-col">{{each.gardenLocation}}</td>
+        </tr>
+    </table>
+</div>
 
 <!--Todo Add instructions :)-->
 
@@ -19,3 +19,12 @@
 <h3> Instructions: </h3>
 <b>Step 1)</b> Open a QR-Code Scanner App on your smartphone.<br/>
 <b>Step 2)</b> Point the camera towards the QR-Code on the sign to scan it.
+
+<style>
+    .flower-col {
+        width: 70%;
+    }
+    .bed-col {
+        width: 30%;
+    }
+</style>
