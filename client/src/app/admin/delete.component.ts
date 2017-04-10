@@ -1,10 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminService } from './admin.service';
+import {Positioning} from "angular2-bootstrap-confirm/position";
+import {ConfirmOptions, Position} from 'angular2-bootstrap-confirm';
 
 
 @Component({
     selector: 'delete-component',
     templateUrl: 'delete.component.html',
+    providers: [
+        ConfirmOptions,
+        {provide: Position, useClass: Positioning}],
 })
 
 export class DeleteComponent implements OnInit {

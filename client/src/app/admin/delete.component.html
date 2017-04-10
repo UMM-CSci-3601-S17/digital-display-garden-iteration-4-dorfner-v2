@@ -14,7 +14,15 @@
             {{ uploadId }}
         </div>
         <div class="col-sm-4">
-            <button (click)="this.delete(uploadId)" class="btn-link">
+            <button
+                    class="btn-link"
+                    mwlConfirm
+                    title="Warning!"
+                    message="You are about to irreversibly delete this data."
+                    placement="right"
+                    confirmText="Proceed"
+                    confirmButtonType="danger"
+                    (confirm)="this.delete(uploadId)">
                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                 Delete this data set
             </button>
