@@ -1,5 +1,17 @@
-<garden-navbar-component></garden-navbar-component>
+<garden-navbar-component #nav></garden-navbar-component>
 
+<ul class="list-group" *ngIf="nav.currentCN">
+    <li class="list-group-item list-group-item-info">
+        <span>Matching flowers</span>
+    </li>
+    <li *ngFor="let each of currentList | filterBy: {commonName: nav.currentCN}"  class="list-group-item">
+        <!--Button is a hyperlink to a plant page "/plants/:plantID"-->
+        <!--See app.routes.ts-->
+        <button [routerLink]="['/plants', each.id, {srcBed:bed}]" style="white-space: normal" class="btn btn-link btn-block" >
+            <strong style="font-size:18px">{{each.cultivar}}</strong><br>
+            {{each.commonName}}</button>
+    </li>
+</ul>
 
 <!--Todo Add instructions :)-->
 
@@ -7,22 +19,3 @@
 <h3> Instructions: </h3>
 <b>Step 1)</b> Open a QR-Code Scanner App on your smartphone.<br/>
 <b>Step 2)</b> Point the camera towards the QR-Code on the sign to scan it.
-
-
-<!--<h3> Check out a bed </h3>-->
-<!--&lt;!&ndash;Bed dropdown list&ndash;&gt;-->
-<!--&lt;!&ndash;TODO Make the bed options send them to the corresponding bedpage&ndash;&gt;-->
-<!--Select Bed-->
-<!--<select id="locationDropdown" (change)="this.router.navigate(['/bed', this.bed])" [(ngModel)]=bed>-->
-    <!--&lt;!&ndash;<option value="">Select Bed</option>&ndash;&gt;-->
-    <!--<option *ngFor="let location of locations" value="{{location._id}}">{{location._id}}</option>-->
-<!--</select>-->
-
-<h3> Find location of your favorite flower </h3>
-<!--Searchbar that causes a list of flowers that has a commonname equal to the search value-->
-<!--TODO Give the searchbar Funcionality, offer autocomplete to their text?-->
-<input #input type="text" placeholder="Type a flower name" (input)="currentCN = $event.target.value">
-<ul class="list-group" *ngIf="currentCN">
-    <li class="list-group-item list-group-item-info"
-        *ngFor="let each of currentList | filterBy: {commonName: currentCN}">{{each.commonName}}</li>
-</ul>

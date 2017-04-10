@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { PlantListService } from "../plants/plant-list.service";
 import { Plant } from "../plants/plant";
 import {Params, ActivatedRoute, Router} from "@angular/router";
 import { FilterBy } from "../plants/filter.pipe";
+import { GardenNavbarComponent } from "../navbar/garden-navbar.component"
 
 @Component({
     selector: 'homepage-component',
@@ -14,8 +15,8 @@ export class HomepageComponent implements OnInit {
     public bed : string;
     public plants: Plant[]; // not used - so delete it
     public locations: Plant[];
-    public currentCN: string;
     public currentList: Plant[];
+    @ViewChild('nav') nav;
 
     constructor(private plantListService: PlantListService, private router: Router) {
         this.refreshInformation();

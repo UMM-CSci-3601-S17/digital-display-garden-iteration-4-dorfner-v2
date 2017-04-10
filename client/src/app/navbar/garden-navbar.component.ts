@@ -28,13 +28,6 @@ export class GardenNavbarComponent {
 
     refreshInformation() : void
     {
-        this.plantListService.getFlowersByBed(this.bed).subscribe (
-            plants => this.plants = plants,
-            err => {
-                console.log(err);
-            }
-        );
-
         this.plantListService.getGardenLocations().subscribe(
             locations => this.locations = locations,
             err => {
