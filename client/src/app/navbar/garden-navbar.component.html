@@ -3,9 +3,9 @@
         <a class="col-xs-12 text-center" [routerLink]="['/']"><h2 class="title">Digital Display Garden</h2></a>
     </div>
     <div class="row search-tab">
-        <div class="search-bar col-xs-8">
-            <input #input type="text" placeholder="Type a flower name" class="form-control search-field"
-                   (input)="currentCN = $event.target.value">
+        <div class="searchField col-xs-8">
+            <input type="text" placeholder="Type a flower name" class="form-control search-field"
+                   [(ngModel)]="currentCN">
         </div>
         <div class="col-xs-4 bed-tab">
             <select class="form-control bed-field" (change)="this.router.navigate(['/bed', this.bed])" [(ngModel)]="bed">

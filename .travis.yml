@@ -1,5 +1,7 @@
 language: java
 services: mongodb
+before_install:
+  - export TZ=America/Chicago
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/

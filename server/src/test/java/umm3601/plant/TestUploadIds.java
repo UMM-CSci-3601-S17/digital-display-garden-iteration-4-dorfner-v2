@@ -46,6 +46,12 @@ public class TestUploadIds {
         assertEquals(expectedIDs, JSON.serialize(result.get("uploadIds")));
     }
 
+    @Test(expected = IllegalStateException.class)
+    public void testDeleteUploadPreventsRemovalOfLiveUploadId() {
+        plantController.deleteUploadID("second uploadId");
+        assertTrue(false); // this line shouldn't be reached
+    }
+
     @Test
     public void testDeleteUploadIdSucceedsProperly() {
         Document result = plantController.deleteUploadID("first uploadId");

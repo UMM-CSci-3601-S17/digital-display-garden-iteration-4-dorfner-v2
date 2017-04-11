@@ -10,6 +10,7 @@ import {Params, ActivatedRoute, Router} from "@angular/router";
 })
 
 export class GardenNavbarComponent {
+    public currentCN : string;
     public bed : string;
     public plants: Plant[];
     public locations: Plant[];

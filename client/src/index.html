@@ -4,6 +4,7 @@
     <title>Digital Display Garden</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 
 <body style="margin: 0; padding: 0; height: 100%;background-color:#f3eddc;">
@@ -14,33 +15,44 @@
     </div>
 
 
-    <footer style="width: 100%;
-     background-color: maroon;
-     color: gold;
-     position: absolute;
-     bottom: 0px;
-     height: 104px;
-     text-align: center;">
-        <b><p>West Central Research and Outreach Center <br/> 46352 State Hwy 329 <br/> Morris MN, 56267 <br/></b>
-
-        <button type="submit" onclick="location.href='https://www.facebook.com/HorticultureDisplayGarden/';"
-                class="btn btn-fb" style="background-color: #4264aa; color: white">
-            <i class="fa fa-facebook left"></i> <b>Facebook</b>
-        </button>
-
-        <button type="submit" onclick="location.href='https://twitter.com/wcrocmorris';" class="btn btn-tw"
-                style="background-color: #55acee; color: white">
-            <i class="fa fa-twitter left"></i> <b>Twitter</b>
-        </button>
-
-        <button type="submit" onclick="location.href='https://wcroc.cfans.umn.edu/';" class="btn btn-tw"
-                style="background-color: goldenrod; color: white">
-            <b>WCROC</b>
-        </button>
-
+    <footer>
+        <p class="info-text">West Central Research and Outreach Center <br/> 46352 State Hwy 329 <br/> Morris MN, 56267 <br/>
         </p>
+        <a href='https://www.facebook.com/HorticultureDisplayGarden/' class="btn btn-fb" style="background-color: #4264aa; color: white">
+            <i class="fa fa-facebook left" aria-hidden="true"></i> <b>Facebook</b>
+        </a>
+
+        <a href='https://twitter.com/wcrocmorris' class="btn btn-tw" style="background-color: #55acee; color: white">
+            <i class="fa fa-twitter left" aria-hidden="true"></i> <b>Twitter</b>
+        </a>
+
+        <a href='https://wcroc.cfans.umn.edu/' class="btn btn-tw" style="background-color: goldenrod; color: white">
+            <i class="fa fa-leaf left" aria-hidden="true"></i> <b>WCROC</b>
+        </a>
+
+
     </footer>
 </div>
 </body>
+
+<style>
+    .info-text {
+        padding-top: 5px;
+        margin-bottom: 5px;
+    }
+    footer {
+        font-weight: bold;
+        width: 100%;
+        background-color: maroon;
+        color: gold;
+        position: absolute;
+        bottom: 0px;
+        text-align: center;
+        padding-bottom: 10px;
+    }
+    .btn-fb, .btn-tw {
+        margin-right: 3px;
+    }
+</style>
 
 </html>
