@@ -4,6 +4,7 @@ import { Plant } from "../plants/plant";
 import {Params, ActivatedRoute, Router} from "@angular/router";
 import { FilterBy } from "../plants/filter.pipe";
 import { GardenNavbarComponent } from "../navbar/garden-navbar.component"
+import { Location } from '@angular/common';
 
 @Component({
     selector: 'homepage-component',
@@ -18,7 +19,7 @@ export class HomepageComponent implements OnInit {
     public currentList: Plant[] = [];
     @ViewChild('nav') nav;
 
-    constructor(private plantListService: PlantListService, private router: Router, private route: ActivatedRoute) {
+    constructor(private plantListService: PlantListService, private router: Router, private route: ActivatedRoute, private location: Location) {
         this.refreshInformation();
     }
 
@@ -31,6 +32,11 @@ export class HomepageComponent implements OnInit {
             }
         );
         this.route.queryParams.subscribe((params: Params) => this.nav.currentCN = params['query']);
+    }
+
+    goToPlant(plant: string[]) {
+        this.location.replaceState("?query=" + this.nav.currentCN);
+        this.router.navigate(plant);
     }
 
     // Get rid of this method and move `this.plantListService.getGardenLocations().subscribe(`
