@@ -12,6 +12,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Date;
+import java.util.TimeZone;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -23,6 +24,9 @@ public class TestCollectedDataWriter {
 
     @Test
     public void CollectedDataWriterProducesCorrectFiles() throws IOException, FileNotFoundException {
+
+            // required to make the tests pass reliably across various boxes
+            TimeZone.setDefault(TimeZone.getTimeZone("CST"));
 
             OutputStream outputStream = new FileOutputStream(fileName);
             CollectedDataWriter collectedDataWriter = new CollectedDataWriter(outputStream);
