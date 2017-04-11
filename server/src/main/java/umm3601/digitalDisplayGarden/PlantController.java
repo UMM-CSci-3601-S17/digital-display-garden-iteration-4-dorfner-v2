@@ -366,6 +366,17 @@ public class PlantController {
         collectedDataWriter.complete();
     }
 
+    public Document deleteUploadID (String uploadID) {
+        Document filterDoc = new Document();
+        Document returnDoc = new Document();
+
+        filterDoc.append("uploadId", uploadID);
+        long deleted = plantCollection.deleteMany(filterDoc).getDeletedCount();
+        returnDoc.append("success", deleted != 0);
+        returnDoc.append("uploadIds", listUploadIds());
+        return returnDoc;
+    }
+
     /**
      * Adds a like or dislike to the specified plant.
      *
@@ -446,7 +457,7 @@ public class PlantController {
      *
      * @return a sorted JSON array of all the distinct uploadIds in plant collection of the DB
      */
-    public String listUploadIds() {
+    public List<String> listUploadIds() {
         AggregateIterable<Document> documents
                 = plantCollection.aggregate(
                 Arrays.asList(
@@ -457,7 +468,7 @@ public class PlantController {
         for(Document d: documents) {
             lst.add(d.getString("_id"));
         }
-        return JSON.serialize(lst);
+        return lst;
 //        return JSON.serialize(plantCollection.distinct("uploadId","".getClass()));
     }
 

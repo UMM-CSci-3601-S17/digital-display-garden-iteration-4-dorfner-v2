@@ -7,6 +7,7 @@ import {ExportComponent} from "./admin/export.component";
 import {ImportComponent} from "./admin/import.component";
 import {BedComponent} from "./plants/bed.component";
 import {HomepageComponent} from "./homepage/homepage.component";
+import {DeleteComponent} from "./admin/delete.component";
 
 // Route Configuration
 export const routes: Routes = [
@@ -15,6 +16,7 @@ export const routes: Routes = [
     { path: 'admin', component: AdminComponent},
     { path: 'admin/exportData', component: ExportComponent},
     { path: 'admin/importData', component: ImportComponent},
+    { path: 'admin/deleteData', component: DeleteComponent },
     { path: 'bed/:gardenLocation', component: BedComponent },
 ];
 
