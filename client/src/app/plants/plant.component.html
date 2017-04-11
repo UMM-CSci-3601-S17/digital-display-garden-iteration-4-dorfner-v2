@@ -53,7 +53,7 @@
     <br/>
     <br/>
     <span *ngIf="srcBed !== null">
-        <button  type="button" [routerLink]="['/bed', srcBed]" class="btn btn-primary btn-lg" style="float: right">Back</button>
+        <button type="button" (click)="backClicked()" class="btn btn-primary btn-lg" style="float: right">Back</button>
     </span>
 
 </div>

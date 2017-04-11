@@ -4,6 +4,7 @@ import { Plant } from "./plant";
 import { Component, OnInit} from '@angular/core';
 import { Params,  ActivatedRoute} from '@angular/router';
 import {PlantFeedback} from "./plant.feedback";
+import {Location} from '@angular/common';
 
 @Component({
     selector: 'plant-component',
@@ -25,7 +26,7 @@ export class PlantComponent implements OnInit {
     private plantID: string;
     private srcBed : string;
 
-    constructor(private plantListService: PlantListService, private route: ActivatedRoute) {
+    constructor(private plantListService: PlantListService, private route: ActivatedRoute, private _location: Location) {
         this.srcBed = this.route.snapshot.params["srcBed"];
     }
 
@@ -59,7 +60,9 @@ export class PlantComponent implements OnInit {
     }
 
 
-
+    backClicked() {
+        this._location.back();
+    }
 
     ngOnInit(): void {
 
