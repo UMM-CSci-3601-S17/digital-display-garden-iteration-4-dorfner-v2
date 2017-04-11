@@ -1,29 +1,47 @@
-<div class="navbar-fixed-top top-navbar">
+<header class="navbar-fixed-top top-navbar">
     <div class="row">
         <a class="col-xs-12 text-center" [routerLink]="['/']"><h2 class="title">Digital Display Garden</h2></a>
     </div>
-    <div class="row">
-        <div class="searchField col-xs-8">
-            <input #input type="text" placeholder="Type a flower name" class="form-control"
+    <div class="row search-tab">
+        <div class="search-bar col-xs-8">
+            <input #input type="text" placeholder="Type a flower name" class="form-control search-field"
                    (input)="currentCN = $event.target.value">
         </div>
-        <div class="col-xs-4">
-            <span>Bed</span>
-            <select id="locationDropdown" (change)="this.router.navigate(['/bed', this.bed])" [(ngModel)]=bed>
+        <div class="col-xs-4 bed-tab">
+            <select class="form-control bed-field" (change)="this.router.navigate(['/bed', this.bed])" [(ngModel)]="bed">
+                <option class="default-text" disabled="disabled">{{this.bed}}</option>
                 <option *ngFor="let location of locations" value="{{location._id}}">{{location._id}}</option>
             </select>
         </div>
     </div>
-</div>
+</header>
 
 <style>
-    .title, span {
+    .title {
         color: gold;
     }
     .top-navbar {
         background-color: maroon;
     }
-    .row {
-        margin-bottom: 4%;
+    .search-tab {
+        color: #404D5B;
+        background-color: gold;
+        display: flex;
+        align-items: center;
+        padding-top: 8px;
+        padding-bottom: 8px;
     }
+
+    .bed-tab {
+        margin-right: 10px;
+    }
+
+    .search-bar {
+        margin-left: 5px;
+    }
+
+    .search-field {
+        border-radius: 20px;
+    }
+
 </style>
