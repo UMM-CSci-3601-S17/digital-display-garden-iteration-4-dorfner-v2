@@ -4,8 +4,8 @@
     </div>
     <div class="row">
         <div class="searchField col-xs-8">
-            <input #input type="text" placeholder="Type a flower name" class="form-control"
-                   (input)="currentCN = $event.target.value">
+            <input type="text" placeholder="Type a flower name" class="form-control"
+                   [(ngModel)]="currentCN">
         </div>
         <div class="col-xs-4">
             <span>Bed</span>

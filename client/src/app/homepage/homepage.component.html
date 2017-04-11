@@ -10,7 +10,7 @@
             <th class="flower-col text-center panel-heading">No flowers found for "{{nav.currentCN}}"</th>
         </tr>
         <tr *ngFor="let each of currentList | filterBy: {commonName: nav.currentCN}">
-            <td class="flower-col" [routerLink]="['/plants', each.id, {srcBed:bed}]">{{each.cultivar}}<br>{{each.commonName}}</td>
+            <td class="flower-col" (click)="this.goToPlant(['/plants', each.id])">{{each.cultivar}}<br>{{each.commonName}}</td>
             <td class="bed-col">{{each.gardenLocation}}</td>
         </tr>
     </table>
