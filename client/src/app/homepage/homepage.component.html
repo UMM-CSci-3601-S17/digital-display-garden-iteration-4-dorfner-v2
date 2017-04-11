@@ -2,9 +2,12 @@
 
 <div class="panel panel-info" *ngIf="nav.currentCN">
     <table class="table text-center">
-        <tr>
+        <tr *ngIf="(currentList | filterBy: {commonName: nav.currentCN}).length !== 0">
             <th class="flower-col text-center panel-heading">Flower</th>
             <th class="bed-col text-center panel-heading">Bed</th>
+        </tr>
+        <tr *ngIf="(currentList | filterBy: {commonName: nav.currentCN}).length === 0">
+            <th class="flower-col text-center panel-heading">No flowers found for "{{nav.currentCN}}"</th>
         </tr>
         <tr *ngFor="let each of currentList | filterBy: {commonName: nav.currentCN}">
             <td class="flower-col" [routerLink]="['/plants', each.id, {srcBed:bed}]">{{each.cultivar}}<br>{{each.commonName}}</td>
