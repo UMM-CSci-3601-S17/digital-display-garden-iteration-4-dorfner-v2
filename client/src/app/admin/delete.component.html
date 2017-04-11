@@ -15,7 +15,8 @@
         </div>
         <div class="col-sm-10">
             <button
-                    class="btn-link"
+                    *ngIf="uploadId !== this.liveUploadId"
+                    class="btn btn-link"
                     mwlConfirm
                     title="Warning!"
                     message="You are about to irreversibly delete this data."
@@ -23,6 +24,19 @@
                     confirmText="Proceed"
                     confirmButtonType="danger"
                     (confirm)="this.delete(uploadId)">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                Delete this data set
+            </button>
+            <button *ngIf="uploadId === this.liveUploadId"
+                    class="btn btn-link disabled"
+                    mwlConfirm
+                    title="Notice"
+                    message="This data set is currently being displayed on the visitor website.
+                             You must upload a new data set before deleting this one."
+                    placement="right"
+                    cancelText="Close"
+                    confirmButtonType="danger"
+                    hideConfirmButton="true">
                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                 Delete this data set
             </button>
