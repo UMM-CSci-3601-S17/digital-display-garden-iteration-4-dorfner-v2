@@ -22,9 +22,8 @@ public class TestCollectedDataWriter {
     static String fileName = "/tmp/testingtestcollecteddatawriter.xlsx";
 
     @Test
-    public void CollectedDataWriterProducesCorrectFiles() {
+    public void CollectedDataWriterProducesCorrectFiles() throws IOException, FileNotFoundException {
 
-        try {
             OutputStream outputStream = new FileOutputStream(fileName);
             CollectedDataWriter collectedDataWriter = new CollectedDataWriter(outputStream);
 
@@ -275,17 +274,6 @@ public class TestCollectedDataWriter {
 
             Row ratingRow3 = ratingsSheet.getRow(3);
             assertNull(ratingRow3);
-        }
-        catch (FileNotFoundException e){
-            e.printStackTrace();
-            System.out.println(e.getMessage());
-            assertTrue(false);
-        }
-        catch(IOException e){
-            e.printStackTrace();
-            System.out.println(e.getMessage());
-            assertTrue(false);
-        }
     }
 
     @AfterClass
