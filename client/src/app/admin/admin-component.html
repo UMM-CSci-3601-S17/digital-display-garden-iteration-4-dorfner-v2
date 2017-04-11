@@ -1,4 +1,3 @@
-<!--<navbar-component></navbar-component>-->
 <div class="menu">
     <h2>Administrator Tasks</h2>
 
@@ -18,6 +17,12 @@
             Download QR Codes
         </button>
     </a>
+
+    <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/admin/deleteData']">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+        Delete Old Data
+    </button>
+
 </div>
 
 <style>
@@ -26,8 +31,4 @@
     }
 </style>
 
-<button type="button" class="btn btn-primary btn-lg" [routerLink]="['/admin/deleteData']">
-<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-Delete Old Data
-</button>
 
