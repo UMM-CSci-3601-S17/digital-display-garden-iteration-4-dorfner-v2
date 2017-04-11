@@ -1,5 +1,6 @@
 package umm3601;
 
+import org.bson.Document;
 import spark.Route;
 import spark.utils.IOUtils;
 import com.mongodb.util.JSON;
@@ -187,7 +188,14 @@ public class Server {
 
             res.type("application/json");
             String uploadID = req.params("uploadId");
-            return JSON.serialize(plantController.deleteUploadID(uploadID));
+            try {
+                return JSON.serialize(plantController.deleteUploadID(uploadID));
+            } catch (IllegalStateException e) {
+                Document failureStatus = new Document();
+                failureStatus.append("message", e.getMessage());
+                res.status(400);
+                return JSON.serialize(failureStatus);
+            }
         });
 
         get("/*", clientRoute);
