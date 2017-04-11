@@ -4,6 +4,7 @@ import { HttpModule, JsonpModule } from '@angular/http';
 
 import { AppComponent }         from './app/app.component';
 import { NavbarComponent } from './app/navbar/navbar.component';
+import { GardenNavbarComponent } from './app/navbar/garden-navbar.component';
 import { BedComponent } from './app/plants/bed.component';
 import { PlantComponent } from './app/plants/plant.component';
 import { PlantListService } from './app/plants/plant-list.service';
@@ -38,6 +39,7 @@ import {Positioning} from 'angular2-bootstrap-confirm/position';
     declarations: [
         AppComponent,
         NavbarComponent,
+        GardenNavbarComponent,
         PlantComponent,
         AdminComponent,
         ExportComponent,

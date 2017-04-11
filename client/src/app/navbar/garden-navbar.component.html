@@ -1,0 +1,29 @@
+<div class="navbar-fixed-top top-navbar">
+    <div class="row">
+        <a class="col-xs-12 text-center" [routerLink]="['/']"><h2 class="title">Digital Display Garden</h2></a>
+    </div>
+    <div class="row">
+        <div class="searchField col-xs-8">
+            <input #input type="text" placeholder="Type a flower name" class="form-control"
+                   (input)="currentCN = $event.target.value">
+        </div>
+        <div class="col-xs-4">
+            <span>Bed</span>
+            <select id="locationDropdown" (change)="this.router.navigate(['/bed', this.bed])" [(ngModel)]=bed>
+                <option *ngFor="let location of locations" value="{{location._id}}">{{location._id}}</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<style>
+    .title, span {
+        color: gold;
+    }
+    .top-navbar {
+        background-color: maroon;
+    }
+    .row {
+        margin-bottom: 4%;
+    }
+</style>

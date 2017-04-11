@@ -1,4 +1,20 @@
-<h2> Digital Display Garden</h2>
+<garden-navbar-component #nav></garden-navbar-component>
+
+<div class="panel panel-info" *ngIf="nav.currentCN">
+    <table class="table text-center">
+        <tr *ngIf="(currentList | filterBy: {commonName: nav.currentCN}).length !== 0">
+            <th class="flower-col text-center panel-heading">Flower</th>
+            <th class="bed-col text-center panel-heading">Bed</th>
+        </tr>
+        <tr *ngIf="(currentList | filterBy: {commonName: nav.currentCN}).length === 0">
+            <th class="flower-col text-center panel-heading">No flowers found for "{{nav.currentCN}}"</th>
+        </tr>
+        <tr *ngFor="let each of currentList | filterBy: {commonName: nav.currentCN}">
+            <td class="flower-col" [routerLink]="['/plants', each.id, {srcBed:bed}]">{{each.cultivar}}<br>{{each.commonName}}</td>
+            <td class="bed-col">{{each.gardenLocation}}</td>
+        </tr>
+    </table>
+</div>
 
 <!--Todo Add instructions :)-->
 
@@ -7,17 +23,11 @@
 <b>Step 1)</b> Open a QR-Code Scanner App on your smartphone.<br/>
 <b>Step 2)</b> Point the camera towards the QR-Code on the sign to scan it.
 
-
-<h3> Check out a bed </h3>
-<!--Bed dropdown list-->
-<!--TODO Make the bed options send them to the corresponding bedpage-->
-Select Bed
-<select id="locationDropdown" (change)="this.router.navigate(['/bed', this.bed])" [(ngModel)]=bed>
-    <!--<option value="">Select Bed</option>-->
-    <option *ngFor="let location of locations" value="{{location._id}}">{{location._id}}</option>
-</select>
-
-<h3> Find location of your favorite flower </h3>
-<!--Searchbar that causes a list of flowers that has a commonname equal to the search value-->
-<!--TODO Give the searchbar Funcionality, offer autocomplete to their text?-->
-<input #input type="text" placeholder="Favorite Flower" (input)="searchID = $event.target.value">
+<style>
+    .flower-col {
+        width: 70%;
+    }
+    .bed-col {
+        width: 30%;
+    }
+</style>

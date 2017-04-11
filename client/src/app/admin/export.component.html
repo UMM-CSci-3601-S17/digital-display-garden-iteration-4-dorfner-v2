@@ -1,25 +1,32 @@
-<navbar-component></navbar-component>
+<div class="export-page">
+    <h2>Export Feedback</h2>
 
-<h2>Export Feedback</h2>
+    <ul class="list-group">
+        <li class="row list-group-item">
+            <div class="col-sm-2">
+                Data Set
+            </div>
+        </li>
+        <li *ngFor="let uploadId of uploadIds" class="row list-group-item">
 
-<ul class="list-group">
-    <li class="row list-group-item">
-        <div class="col-sm-2">
-            Data Set
-        </div>
-    </li>
-    <li *ngFor="let uploadId of uploadIds" class="row list-group-item">
+            <div class="col-sm-2">
+                {{ uploadId }}
+            </div>
+            <div class="col-sm-4">
+                <a [attr.href]="this.url + uploadId">
+                    <span class="glyphicon glyphicon-download" aria-hidden="true"></span>
+                    Download feedback for this data set
+                </a>
+            </div>
+        </li>
+    </ul>
 
-        <div class="col-sm-2">
-            {{ uploadId }}
-        </div>
-        <div class="col-sm-4">
-            <a [attr.href]="this.url + uploadId">
-                <span class="glyphicon glyphicon-download" aria-hidden="true"></span>
-                Download feedback for this data set
-            </a>
-        </div>
-    </li>
-</ul>
+    <button  [routerLink]="['/admin']" class="btn btn-primary btn-lg" style="float: right">Back to Admin Page</button>
+</div>
 
-<button  [routerLink]="['/admin']" class="btn btn-primary btn-lg" style="float: right">Back to Admin Page</button>
+<style>
+    .export-page {
+        margin-top: -55%;
+    }
+</style>
+

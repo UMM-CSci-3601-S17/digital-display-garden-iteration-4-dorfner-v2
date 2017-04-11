@@ -1,33 +1,40 @@
-<navbar-component></navbar-component>
+<div class="delete-page">
+    <h2>Delete Data</h2>
 
-<h2>Delete Data</h2>
+    <ul class="list-group">
+        <li class="row list-group-item">
+            <div class="col-sm-2">
+                Data Set
+            </div>
+        </li>
+        <li *ngFor="let uploadId of uploadIds" class="row list-group-item">
 
-<ul class="list-group">
-    <li class="row list-group-item">
-        <div class="col-sm-2">
-            Data Set
-        </div>
-    </li>
-    <li *ngFor="let uploadId of uploadIds" class="row list-group-item">
+            <div class="col-sm-2">
+                {{ uploadId }}
+            </div>
+            <div class="col-sm-10">
+                <button
+                        class="btn-link"
+                        mwlConfirm
+                        title="Warning!"
+                        message="You are about to irreversibly delete this data."
+                        placement="right"
+                        confirmText="Proceed"
+                        confirmButtonType="danger"
+                        (confirm)="this.delete(uploadId)">
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    Delete this data set
+                </button>
+            </div>
+        </li>
+    </ul>
 
-        <div class="col-sm-2">
-            {{ uploadId }}
-        </div>
-        <div class="col-sm-10">
-            <button
-                    class="btn-link"
-                    mwlConfirm
-                    title="Warning!"
-                    message="You are about to irreversibly delete this data."
-                    placement="right"
-                    confirmText="Proceed"
-                    confirmButtonType="danger"
-                    (confirm)="this.delete(uploadId)">
-                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                Delete this data set
-            </button>
-        </div>
-    </li>
-</ul>
+    <button  [routerLink]="['/admin']" class="btn btn-primary btn-lg" style="float: right">Back to Admin Page</button>
+</div>
 
-<button  [routerLink]="['/admin']" class="btn btn-primary btn-lg" style="float: right">Back to Admin Page</button>
+<style>
+    .delete-page {
+        margin-top: -55%;
+    }
+</style>
+
