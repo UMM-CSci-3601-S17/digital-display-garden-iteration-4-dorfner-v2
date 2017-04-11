@@ -12,7 +12,7 @@ import {Params, ActivatedRoute, Router} from "@angular/router";
 
 export class BedComponent implements OnInit {
     public bed : string;
-    public plants: Plant[];
+    public plants: Plant[] = [];
     public locations: Plant[];
 
     constructor(private plantListService: PlantListService, private route: ActivatedRoute, private router: Router) {

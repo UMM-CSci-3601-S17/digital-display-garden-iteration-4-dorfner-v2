@@ -1,8 +1,11 @@
 <garden-navbar-component #nav></garden-navbar-component>
 
 <ul class="list-group">
-    <li class="list-group-item list-group-item-info">
+    <li class="list-group-item list-group-item-info" *ngIf="(plants | filterBy: {commonName: nav.currentCN}).length !== 0">
         <span>Flowers</span>
+    </li>
+    <li class="list-group-item list-group-item-info" *ngIf="(plants | filterBy: {commonName: nav.currentCN}).length === 0">
+        <span>No flowers found for "{{nav.currentCN}}"</span>
     </li>
     <li *ngFor="let plant of plants | filterBy: {commonName: nav.currentCN}"  class="list-group-item">
         <!--Button is a hyperlink to a plant page "/plants/:plantID"-->
