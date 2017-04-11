@@ -15,10 +15,10 @@ export class HomepageComponent implements OnInit {
     public bed : string;
     public plants: Plant[]; // not used - so delete it
     public locations: Plant[];
-    public currentList: Plant[];
+    public currentList: Plant[] = [];
     @ViewChild('nav') nav;
 
-    constructor(private plantListService: PlantListService, private router: Router) {
+    constructor(private plantListService: PlantListService, private router: Router, private route: ActivatedRoute) {
         this.refreshInformation();
     }
 
@@ -30,6 +30,7 @@ export class HomepageComponent implements OnInit {
                 console.log(err);
             }
         );
+        this.route.queryParams.subscribe((params: Params) => this.nav.currentCN = params['query']);
     }
 
     // Get rid of this method and move `this.plantListService.getGardenLocations().subscribe(`
