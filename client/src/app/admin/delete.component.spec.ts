@@ -62,7 +62,6 @@ describe("Delete Component", () => {
     it("changes nothing on failed deletions", () => {
        deleteComponent.delete("blablabla");
        expect(deleteComponent.uploadIds).toEqual(["upload id 1", "upload id 2"]);
-       console.log("BORK\n\nBORKBORK\n\n\n\nBORKBORKBORKBORKBORK\n\n\n\n");
     });
 
 });
