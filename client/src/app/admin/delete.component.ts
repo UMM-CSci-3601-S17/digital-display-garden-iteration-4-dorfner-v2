@@ -16,7 +16,7 @@ export class DeleteComponent implements OnInit {
 
     // private url: string = API_URL + "deleteData/";
 
-    private uploadIds: string[];
+    uploadIds: string[];
     private liveUploadId: string;
 
     constructor(private adminService: AdminService) {
