@@ -17,12 +17,17 @@ import {AdminService} from "./app/admin/admin.service";
 import {ImportComponent} from "./app/admin/import.component";
 import {FileUploadComponent} from "./app/admin/file-upload.component";
 import {HomepageComponent} from "./app/homepage/homepage.component";
+import {DeleteComponent} from "./app/admin/delete.component";
+
+import {ConfirmOptions, Position, ConfirmModule} from 'angular2-bootstrap-confirm';
+import {Positioning} from 'angular2-bootstrap-confirm/position';
 
 
 
 
 @NgModule({
     imports: [
+        ConfirmModule,
         BrowserModule,
         HttpModule,
         JsonpModule,
@@ -37,6 +42,7 @@ import {HomepageComponent} from "./app/homepage/homepage.component";
         AdminComponent,
         ExportComponent,
         ImportComponent,
+        DeleteComponent,
         FileUploadComponent,
         BedComponent,
         HomepageComponent
