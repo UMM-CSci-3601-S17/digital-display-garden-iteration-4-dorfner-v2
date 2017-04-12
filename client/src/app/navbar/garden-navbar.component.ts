@@ -17,7 +17,6 @@ export class GardenNavbarComponent {
 
     constructor(private plantListService: PlantListService, private route: ActivatedRoute, private router: Router) {
         //Get the bed from the params of the route
-
     }
 
     ngOnInit(): void{
@@ -29,6 +28,9 @@ export class GardenNavbarComponent {
 
     refreshInformation() : void
     {
+        if (!this.bed) {
+            this.bed = "Bed"
+        }
         this.plantListService.getGardenLocations().subscribe(
             locations => this.locations = locations,
             err => {

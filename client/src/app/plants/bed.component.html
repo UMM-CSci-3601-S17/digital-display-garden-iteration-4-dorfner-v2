@@ -1,17 +1,17 @@
 <garden-navbar-component #nav></garden-navbar-component>
 
-<ul class="list-group">
-    <li class="list-group-item list-group-item-info" *ngIf="(plants | filterBy: {commonName: nav.currentCN}).length !== 0">
-        <span>Flowers</span>
+<ul class="list-group" style="font-size: medium">
+    <li class="list-group-item" *ngIf="(plants | filterBy: {commonName: nav.currentCN}).length !== 0">
+        <strong>Flowers</strong>
     </li>
-    <li class="list-group-item list-group-item-info" *ngIf="(plants | filterBy: {commonName: nav.currentCN}).length === 0">
-        <span>No flowers found for "{{nav.currentCN}}"</span>
+    <li class="text-center list-group-item list-group-item-info" *ngIf="(plants | filterBy: {commonName: nav.currentCN}).length === 0">
+        <strong>No flowers found for "{{nav.currentCN}}"</strong>
     </li>
-    <li *ngFor="let plant of plants | filterBy: {commonName: nav.currentCN}"  class="list-group-item">
+    <li *ngFor="let plant of plants | filterBy: {commonName: nav.currentCN}"  class="list-group-item text-center">
         <!--Button is a hyperlink to a plant page "/plants/:plantID"-->
         <!--See app.routes.ts-->
-        <button [routerLink]="['/plants', plant.id, {srcBed:bed}]" style="white-space: normal" class="btn btn-link btn-block" >
-            <strong style="font-size:18px">{{plant.cultivar}}</strong><br>
-            {{plant.commonName}}</button>
+        <span [routerLink]="['/plants', plant.id, {srcBed:bed}]" style="white-space: normal">
+            <strong>{{plant.commonName}}</strong><br>
+            {{plant.cultivar}}</span>
     </li>
 </ul>

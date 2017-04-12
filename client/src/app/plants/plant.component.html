@@ -40,7 +40,7 @@
         <br/>
     </span>
 
-    <div style="padding-top: 0.3em" style="text-align:right;">
+    <div style="padding-top: 0.3em; text-align:right;">
         <span>
             {{plantFeedback.interactionCount}} interactions with this plant.
         </span>
@@ -51,16 +51,16 @@
     </div>
     <br/>
     <br/>
-    <br/>
-    <span *ngIf="srcBed !== null">
-        <button type="button" (click)="backClicked()" class="btn btn-primary btn-lg" style="float: right">Back</button>
-    </span>
+
+    <div *ngIf="srcBed !== null" style="text-align: right; padding-bottom: 15px;">
+        <button type="button" (click)="backClicked()" class="btn btn-primary btn-lg">Back</button>
+    </div>
 
 </div>
 
 
 <style>
     .plant {
-        margin-top: -30%;
+        margin-top: -115px;
     }
 </style>
