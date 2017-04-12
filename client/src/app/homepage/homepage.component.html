@@ -1,16 +1,18 @@
 <garden-navbar-component #nav></garden-navbar-component>
 
-<div class="panel panel-info" *ngIf="nav.currentCN">
+<div class="panel panel-default" *ngIf="nav.currentCN">
     <table class="table text-center">
         <tr *ngIf="(currentList | filterBy: {commonName: nav.currentCN}).length !== 0">
-            <th class="flower-col text-center panel-heading">Flower</th>
-            <th class="bed-col text-center panel-heading">Bed</th>
+            <th class="flower-col text-center">Flower</th>
+            <th class="bed-col text-center">Bed</th>
         </tr>
         <tr *ngIf="(currentList | filterBy: {commonName: nav.currentCN}).length === 0">
-            <th class="flower-col text-center panel-heading">No flowers found for "{{nav.currentCN}}"</th>
+            <th class="flower-col text-center list-group-item-info">No flowers found for "{{nav.currentCN}}"</th>
         </tr>
         <tr *ngFor="let each of currentList | filterBy: {commonName: nav.currentCN}">
-            <td class="flower-col" (click)="this.goToPlant(['/plants', each.id])">{{each.cultivar}}<br>{{each.commonName}}</td>
+            <td class="flower-col" (click)="this.goToPlant(['/plants', each.id])">
+                <strong>{{each.commonName}}</strong><br/>{{each.cultivar}}
+            </td>
             <td class="bed-col">{{each.gardenLocation}}</td>
         </tr>
     </table>
