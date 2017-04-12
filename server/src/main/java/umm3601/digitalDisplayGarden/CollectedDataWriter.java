@@ -3,9 +3,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
 
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -81,7 +83,7 @@ public class CollectedDataWriter {
      * @param timestamp: time the user left the comment
      */
     public void writeComment(String id, String commonName, String cultivar, String gardenLocation, String comment, Date timestamp){
-        Row row = commentsSheet.createRow(commentCount);
+        Row row = commentsSheet.createRow((short) commentCount);
 
         Cell cell = row.createCell(0);
         cell.setCellValue(id);
@@ -159,7 +161,7 @@ public class CollectedDataWriter {
             if(!header.equals("comment")){
                 commentsSheet.autoSizeColumn(i);}
             else {
-                commentsSheet.setColumnWidth(i,50*256);
+                commentsSheet.setColumnWidth(i,100*256);
             }
         }
         for(int i=0; i<8; i++){
