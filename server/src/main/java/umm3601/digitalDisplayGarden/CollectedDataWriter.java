@@ -4,6 +4,7 @@ import java.io.OutputStream;
 import java.util.Date;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -95,6 +96,10 @@ public class CollectedDataWriter {
         cell.setCellValue(gardenLocation);
 
         cell = row.createCell(4);
+
+        CellStyle style = workbook.createCellStyle();
+        style.setWrapText(true);
+        cell.setCellStyle(style);
         cell.setCellValue(comment);
 
         cell = row.createCell(5);
@@ -148,6 +153,19 @@ public class CollectedDataWriter {
      * @throws IOException
      */
     public void complete() throws IOException{
+
+        for(int i=0; i<6; i++) {
+            String header = commentsSheet.getRow(0).getCell(i).getStringCellValue();
+            if(!header.equals("comment")){
+                commentsSheet.autoSizeColumn(i);}
+            else {
+                commentsSheet.setColumnWidth(i,50*256);
+            }
+        }
+        for(int i=0; i<8; i++){
+            ratingsSheet.autoSizeColumn(i);
+        }
+
         workbook.write(outputStream);
         outputStream.close();
     }
