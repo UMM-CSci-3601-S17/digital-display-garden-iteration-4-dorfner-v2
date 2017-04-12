@@ -3,7 +3,7 @@ import { Plant } from "./plant";
 import { PlantComponent } from "./plant.component";
 import { PlantListService } from "./plant-list.service";
 import { Observable } from "rxjs";
-import {PlantFeedback} from "./plant.feedback";
+import {PlantFeedback} from "./plant-feedback";
 import { ActivatedRoute} from "@angular/router";
 import {FormsModule} from "@angular/forms";
 import {RouterTestingModule} from "@angular/router/testing";
