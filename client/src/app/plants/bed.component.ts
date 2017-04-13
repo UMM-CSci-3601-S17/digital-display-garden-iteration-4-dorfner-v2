@@ -14,7 +14,7 @@ export class BedComponent implements OnInit {
     public bed : string;
     public plants: Plant[] = [];
 
-    constructor(private plantListService: PlantListService, private route: ActivatedRoute, private router: Router) {
+    constructor(private plantListService: PlantListService, public route: ActivatedRoute, private router: Router) {
         // this.plants = this.plantListService.getPlants()
 
         //Get the bed from the params of the route
