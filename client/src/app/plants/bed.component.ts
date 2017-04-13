@@ -13,7 +13,6 @@ import {Params, ActivatedRoute, Router} from "@angular/router";
 export class BedComponent implements OnInit {
     public bed : string;
     public plants: Plant[] = [];
-    public locations: Plant[];
 
     constructor(private plantListService: PlantListService, private route: ActivatedRoute, private router: Router) {
         // this.plants = this.plantListService.getPlants()
@@ -38,12 +37,6 @@ export class BedComponent implements OnInit {
             }
         );
 
-        this.plantListService.getGardenLocations().subscribe(
-            locations => this.locations = locations,
-            err => {
-                console.log(err);
-            }
-        );
     }
 
 
