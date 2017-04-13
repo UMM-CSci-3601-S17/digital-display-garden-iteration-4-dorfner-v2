@@ -1,4 +1,4 @@
-<html style="margin: 0; padding: 0; height: 100%">
+<html>
 <head>
     <base href="/">
     <title>Digital Display Garden</title>
@@ -9,10 +9,10 @@
 
 </head>
 
-<body style="margin: 0; padding: 0; height: 100%;background-color:#f3eddc;">
+<body style="">
 
-<div id="container" style="min-height:100%; position:relative;">
-    <div style=" padding-bottom: 104px; padding-top: 115px">
+<div id="container">
+    <div id="inner-body">
     <app>Loading...</app>
     </div>
 
@@ -38,10 +38,59 @@
 </body>
 
 <style>
+    html {
+        margin: 0;
+        padding: 0;
+        height: 100%
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        background-color:#f3eddc;
+        min-width: 320px
+    }
+
+    /* IntelliJ lies: #container IS being used!!! */
+    #container {
+        min-height:100%;
+        position:relative;
+    }
+
+
+    /* see comment above */
     .info-text {
         padding-top: 5px;
         margin-bottom: 5px;
     }
+
+    /* see comment above */
+    #inner-body {
+        padding-top: 115px;
+    }
+
+    /* below this size, the buttons wrap */
+    @media (max-width: 333px) {
+        #inner-body {
+            padding-bottom: 168px;
+        }
+    }
+
+    /* in this range only the address is wrapped */
+    @media (max-width:351px) and (min-width: 334px){
+        #inner-body {
+            padding-bottom: 134px;
+        }
+    }
+
+    /* at this size and up, the footer has no wrapping */
+    @media (min-width:352px) {
+        #inner-body {
+            padding-bottom: 114px;
+        }
+    }
+
     footer {
         font-weight: bold;
         width: 100%;
