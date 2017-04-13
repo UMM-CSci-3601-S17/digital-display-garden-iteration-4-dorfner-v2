@@ -3,12 +3,12 @@
 <div class="panel panel-default" *ngIf="nav.currentCN">
     <table class="table text-center">
         <tr *ngIf="(currentList | filterBy: {commonName: nav.currentCN}).length !== 0">
-            <th class="flower-col text-center">Flower</th>
-            <th class="bed-col text-center">Bed</th>
+            <th class="flower-col flower-header text-center list-group-item-success">Flower</th>
+            <th class="bed-col text-center flower-header list-group-item-success">Bed</th>
         </tr>
         <tr *ngIf="(currentList | filterBy: {commonName: nav.currentCN}).length === 0">
-            <th class="flower-col text-center list-group-item-success">No flowers found for<br> "{{nav.currentCN}}"</th>
-            <th class="flower-col text-center list-group-item-success"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></th>
+            <th class="flower-col flower-header text-center list-group-item-success">No flowers found for<br> "{{nav.currentCN}}"</th>
+            <th class="flower-col flower-header text-center list-group-item-success"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></th>
         </tr>
         <tr *ngFor="let each of currentList | filterBy: {commonName: nav.currentCN}">
             <td class="flower-col" (click)="this.goToPlant(['/plants', each.id])">
@@ -20,9 +20,10 @@
 </div>
 
 <h3> Welcome to the WCROC Horticulture Display Garden</h3>
-    <p>The garden includes plantings and research from several plant breeding companies from around the world.
-    We invite you to look, smell and touch, but please do not dig, pick or cut any flowers or plant materials.
-    </p>
+<i class="fa fa-quote-left fa-3x fa-pull-left fa-border" aria-hidden="true"></i>
+<p>The garden includes plantings and research from several plant breeding companies from around the world.
+We invite you to look, smell and touch, but please do not dig, pick or cut any flowers or plant materials.
+</p>
 
 <h4 class="instruction-font">From this page you can search for your favorite flower types in two ways:</h4>
 <ol>
@@ -43,5 +44,8 @@
     }
     .instruction-font{
         font-size: 1.2em;
+    }
+    .flower-header {
+        background-color: #ffe87c;
     }
 </style>
