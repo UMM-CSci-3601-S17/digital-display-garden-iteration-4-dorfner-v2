@@ -7,7 +7,8 @@
             <th class="bed-col text-center">Bed</th>
         </tr>
         <tr *ngIf="(currentList | filterBy: {commonName: nav.currentCN}).length === 0">
-            <th class="flower-col text-center list-group-item-info">No flowers found for "{{nav.currentCN}}"</th>
+            <th class="flower-col text-center list-group-item-success">No flowers found for<br> "{{nav.currentCN}}"</th>
+            <th class="flower-col text-center list-group-item-success"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></th>
         </tr>
         <tr *ngFor="let each of currentList | filterBy: {commonName: nav.currentCN}">
             <td class="flower-col" (click)="this.goToPlant(['/plants', each.id])">
@@ -18,7 +19,6 @@
     </table>
 </div>
 
-<br/>
 <h3> Welcome to the WCROC Horticulture Display Garden</h3>
     <p>The garden includes plantings and research from several plant breeding companies from around the world.
     We invite you to look, smell and touch, but please do not dig, pick or cut any flowers or plant materials.
