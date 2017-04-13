@@ -19,6 +19,7 @@ import {ImportComponent} from "./app/admin/import.component";
 import {FileUploadComponent} from "./app/admin/file-upload.component";
 import {HomepageComponent} from "./app/homepage/homepage.component";
 import {DeleteComponent} from "./app/admin/delete.component";
+import {NotFoundComponent} from "./app/not-found.component"
 
 import {ConfirmOptions, Position, ConfirmModule} from 'angular2-bootstrap-confirm';
 import {Positioning} from 'angular2-bootstrap-confirm/position';
@@ -34,7 +35,7 @@ import {Positioning} from 'angular2-bootstrap-confirm/position';
         JsonpModule,
         routing,
         FormsModule,
-        PipeModule
+        PipeModule,
     ],
     declarations: [
         AppComponent,
@@ -47,7 +48,8 @@ import {Positioning} from 'angular2-bootstrap-confirm/position';
         DeleteComponent,
         FileUploadComponent,
         BedComponent,
-        HomepageComponent
+        HomepageComponent,
+        NotFoundComponent,
 
     ],
     providers: [ PlantListService, AdminService ],
