@@ -11,9 +11,9 @@
     <li *ngFor="let plant of plants | filterBy: {commonName: nav.currentCN}"  class="list-group-item text-center">
         <!--Button is a hyperlink to a plant page "/plants/:plantID"-->
         <!--See app.routes.ts-->
-        <span [routerLink]="['/plants', plant.id, {srcBed:bed}]" style="white-space: normal">
+        <a [routerLink]="['/plants', plant.id, {srcBed:bed}]" style="white-space: normal; color: black">
             <strong>{{plant.commonName}}</strong><br>
-            {{plant.cultivar}}</span>
+            {{plant.cultivar}}</a>
     </li>
 </ul>
 
