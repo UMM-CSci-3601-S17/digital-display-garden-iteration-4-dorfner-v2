@@ -4,8 +4,11 @@
     </div>
     <div class="row search-tab">
         <div class="searchField col-xs-8">
-            <input type="text" placeholder="Type a flower name" class="form-control search-field"
+            <form>
+            <input type="text" placeholder="Type a flower name" name="searchbar" required class="form-control search-field search-box"
                    [(ngModel)]="currentCN">
+                <button class="close-icon" type="reset"></button>
+            </form>
         </div>
         <div class="col-xs-4 bed-tab">
             <select class="form-control bed-field" (change)="this.router.navigate(['/bed', this.bed])" [(ngModel)]="bed">
@@ -46,4 +49,40 @@
         border-radius: 20px;
     }
 
+    .close-icon {
+        border:1px solid transparent;
+        background-color: transparent;
+        display: inline-block;
+        vertical-align: middle;
+        outline: 0;
+        cursor: pointer;
+    }
+    .close-icon:after {
+        content: "x";
+        display: block;
+        width: 17px;
+        height: 17px;
+        position: absolute;
+        background-color: maroon;
+        z-index:1;
+        right: 35px;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        /*padding: 2px;*/
+        border-radius: 50%;
+        text-align: center;
+        color: gold;
+        font-weight: bold;
+        font-size: 16px;
+        box-shadow: 0 0 2px gold;
+        cursor: pointer;
+    }
+    .search-box:not(:valid) ~ .close-icon {
+        display: none;
+    }
+
+    form {
+        margin-bottom: 0px;
+    }
 </style>
