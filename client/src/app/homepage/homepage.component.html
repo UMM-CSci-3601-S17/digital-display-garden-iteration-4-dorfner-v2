@@ -7,8 +7,7 @@
             <th class="bed-col text-center flower-header list-group-item-success">Bed</th>
         </tr>
         <tr *ngIf="(currentList | filterBy: {commonName: nav.currentCN}).length === 0">
-            <th class="flower-col flower-header text-center list-group-item-success">No flowers found for<br> "{{nav.currentCN}}"</th>
-            <th class="flower-col flower-header text-center list-group-item-success"><span class="x-icon"><i class="fa fa-window-close" aria-hidden="true"></i></span></th>
+            <th class="col-xs-12 flower-header text-center list-group-item-success">No flowers found for<br> "{{nav.currentCN}}"</th>
         </tr>
         <tr *ngFor="let each of currentList | filterBy: {commonName: nav.currentCN}">
             <td class="flower-col" (click)="this.goToPlant(['/plants', each.id])">
