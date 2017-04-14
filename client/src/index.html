@@ -1,16 +1,18 @@
-<html style="margin: 0; padding: 0; height: 100%">
+<html>
 <head>
     <base href="/">
     <title>Digital Display Garden</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet">
+
 </head>
 
-<body style="margin: 0; padding: 0; height: 100%;background-color:#f3eddc;">
+<body style="">
 
-<div id="container" style="min-height:100%; position:relative;">
-    <div style=" padding-bottom: 104px; padding-top: 115px">
+<div id="container">
+    <div id="inner-body">
     <app>Loading...</app>
     </div>
 
@@ -36,10 +38,39 @@
 </body>
 
 <style>
+    html {
+        margin: 0;
+        padding: 0;
+        height: 100%
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        background-color:#f3eddc;
+        min-width: 320px
+    }
+
+    /* IntelliJ lies: #container IS being used!!! */
+    #container {
+        min-height:100%;
+        position:relative;
+    }
+
+
+    /* see comment above */
     .info-text {
         padding-top: 5px;
         margin-bottom: 5px;
     }
+
+    /* see comment above */
+    #inner-body {
+        padding-top: 115px;
+        padding-bottom: 114px;
+    }
+
     footer {
         font-weight: bold;
         width: 100%;

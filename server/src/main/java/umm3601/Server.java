@@ -69,6 +69,11 @@ public class Server {
             InputStream stream = plantController.getClass().getResourceAsStream("/public/index.html");
             return IOUtils.toString(stream);
         };
+        Route notFoundRoute = (req, res) -> {
+            res.type("text");
+            res.status(404);
+            return "Sorry, we couldn't find that!";
+        };
 
         get("/", clientRoute);
 
@@ -198,13 +203,14 @@ public class Server {
             }
         });
 
+        // requests starting with 'api' should always be handled
+        // by Spark, so if we haven't found a match yet we
+        // return a 404 error
+        get("api/*", notFoundRoute);
+
         get("/*", clientRoute);
 
         // Handle "404" file not found requests:
-        notFound((req, res) -> {
-            res.type("text");
-            res.status(404);
-            return "Sorry, we couldn't find that!";
-        });
+        notFound(notFoundRoute);
     }
 }

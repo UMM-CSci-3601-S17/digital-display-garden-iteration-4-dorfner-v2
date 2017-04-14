@@ -3,7 +3,7 @@ import { PlantListService } from "./plant-list.service";
 import { Plant } from "./plant";
 import { Component, OnInit} from '@angular/core';
 import { Params,  ActivatedRoute} from '@angular/router';
-import {PlantFeedback} from "./plant.feedback";
+import {PlantFeedback} from "./plant-feedback";
 import {Location} from '@angular/common';
 
 @Component({

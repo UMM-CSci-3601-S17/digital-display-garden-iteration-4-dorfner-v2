@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Plant } from './plant';
 import { Observable } from "rxjs";
-import {PlantFeedback} from "./plant.feedback";
+import {PlantFeedback} from "./plant-feedback";
 
 @Injectable()
 export class PlantListService {
