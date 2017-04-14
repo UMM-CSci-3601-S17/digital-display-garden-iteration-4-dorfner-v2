@@ -4,22 +4,6 @@ Software Design S2017, Iteration 3, Team _dorfner_
 
 This repository is a fork from [Iteration 2 , Team _grimaldi_](https://travis-ci.org/UMM-CSci-3601-S17/digital-display-garden-iteration-2-grimaldi).
 
-## Setup
-
-Cloning the project inside IntelliJ:
-
-- When prompted to create a new IntelliJ project, select **yes**.
-- Select **import project from existing model** and select **Gradle.**
-  - Make sure **Use default Gradle wrapper** is selected.
-- Click **Finish.**
-
-:fire: If IntelliJ ever prompts you to compile typescript files into
-javascript **say no!**. Doing this will confuse webpack and break the client
-side of your project during build. No permanent damage will be done, but it's
-pretty annoying to deal with.
-
-When you load the project on a new machine, tell Gradle to Refresh linked Gradle projects.
-
 ## Running your project
 > Run the server  
 > Run the client  
