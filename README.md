@@ -43,7 +43,7 @@ that interface.
 * Track the number of times a flower page is visited (Client-side not done)
 * Import Excel Spreadsheet to Database
 
-### Stories forIteration 3
+### Stories for Iteration 3
 - [x] Updating comment data to include following columns (3 jellybeans):
   - CommonName,
   - Cultivar,
@@ -74,7 +74,7 @@ that interface.
 * **Java** 
 * **Spark** is used for the server operations
 * **JUnit** is used for testing
-* **Apache** is used for importing and exporting data in .xlsx format
+* **Apache POI** is used for importing and exporting data in .xlsx format
 * **zxing** is used for generating QR codes (supports reading them if we want) 
 * **joda** is used for making an unique LiveUploadID
 
