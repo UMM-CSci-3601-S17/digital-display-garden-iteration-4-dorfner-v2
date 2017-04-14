@@ -2,7 +2,7 @@
 [![Build Status](https://travis-ci.org/UMM-CSci-3601-S17/digital-display-garden-iteration-3-dorfner.svg?branch=master)](https://travis-ci.org/UMM-CSci-3601-S17/digital-display-garden-iteration-3-dorfner)
 Software Design S2017, Iteration 3, Team _dorfner_ 
 
-This repository is a fork from [Iteration 2 , Team _grimaldi_](ttps://travis-ci.org/UMM-CSci-3601-S17/digital-display-garden-iteration-2-grimaldi).
+This repository is a fork from [Iteration 2 , Team _grimaldi_](https://travis-ci.org/UMM-CSci-3601-S17/digital-display-garden-iteration-2-grimaldi).
 
 ## Setup
 
