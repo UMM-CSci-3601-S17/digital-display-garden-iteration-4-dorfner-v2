@@ -32,33 +32,32 @@ Before attempting to browse the visitor website, be sure to visit
 that interface.
 
 ## Attempted or Completed Stories
-### Iteration 3
-* Updating comment data to include following columns (3 jellybeans):
->CommonName,
->Clutivar,
->Bed Location
-* Add an URL beneath QR-Code (3 jellybeans)
-* Export Ratings (2 jellybeans)
-* Change like/dislike counter to a single number (1 jellybean)
-* Ability to Delete old Data (1 jellybean)
-* Add a footer to pages (1 jellybean)
-* (Epic) Create a homepage that consists of (4 jellybeans)
->QR-Code instructions, 
->Ability to search by common name,
->Bed Navigation
-### Iteration 2
+
+### Stories/Features inherited from previous iterations
 * Leave Comments About a Flower
 * Allow a visitor to rate a flower
 * Display counts of likes and dislikes on visitor website
 * Display counts of comments on visitor website
-* Extra: Add Bed Pages (required for QR Codes)
 * Generate QR Codes
 * Export Feedback to a File (Only plant comments are done)
 * Track the number of times a flower page is visited (Client-side not done)
-* Track the number of times a bed page is visited (Not attempted)
-
-Finished by Claude Arabo
 * Import Excel Spreadsheet to Database
+
+### Stories forIteration 3
+- [x] Updating comment data to include following columns (3 jellybeans):
+  - CommonName,
+  - Cultivar,
+  - Bed Location
+- [x] Add an URL beneath QR-Code (_3 jellybeans_)
+- [x] Export Plant Ratings (_2 jellybeans_)
+   - Counts of Likes, Dislikes, Comments, and Page Views are all exported
+- [x] Change like/dislike counter to a single number (_1 jellybean_)
+- [x] Ability to Delete old Data (_1 jellybean_)
+- [x] Add a footer to pages (_1 jellybean_)
+- [x] (Epic) Create a homepage that consists of (_4 jellybeans_)
+  - ~~QR-Code instructions~~, A general welcome message 
+  - Ability to search by common name,
+  - Bed Navigation
 
 ## Documentation
 * [Excel File Requirements](Documentation/ExcelFileRequirements.md)  
