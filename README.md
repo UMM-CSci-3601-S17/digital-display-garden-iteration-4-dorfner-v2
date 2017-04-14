@@ -65,29 +65,6 @@ Finished by Claude Arabo
 * **zxing** is used for generating QR codes (supports reading them if we want) 
 * **joda** is used for making an unique LiveUploadID
 
-### Source of branches at end of Iteration 2 
-
-Most of these branches can be deleted in the next Iterations' forks of this repo.
-
-* **fix-tests** Very behind, fixed tests at beginning of iteration
-* **comments** Implements capability for comments
-* **rating-flowers** Implements capability for flower likes and dislikes
-* **improving-deployment** Changes API_URL
-* **chg-dialog** Changes plant information to be displayed from DialogComponent to PlantComponent
-* **rm-unnecessary** Removes unnecessary files, imports, config from files
-* **count** Implement the ability to count and display count for feedback on a plant
-* **bed-pages** Creates pages for beds (BedComponent)
-* **feedback-export** Implements ability to export comments to spreadsheet (xlsx)
-* **QR-Generation** Implements ability to generate QRCodes and request a .zip from the server.
-* **qr+text-export** A merge of QR-Generation and feedback-export with bug fixes  
-* **fixing-deployment**
-* **prettify** Makes things look nicer
-* **testing-client** Tests
-* **testing-PlantController** Tests
-* **update-plantController-for-uploadIds**
-* **improving-navigation**
-* **master**
-
 ## Resources
 
 - [Bootstrap Components][bootstrap]
