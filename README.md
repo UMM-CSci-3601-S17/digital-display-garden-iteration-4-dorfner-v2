@@ -43,21 +43,14 @@ that interface.
 * Track the number of times a flower page is visited (Client-side not done)
 * Import Excel Spreadsheet to Database
 
-### Stories for Iteration 3
-- [x] Updating comment data to include following columns (3 jellybeans):
-  - CommonName,
-  - Cultivar,
-  - Bed LocationUpdating comment data to include following columns (3 jellybeans):
-- [x] Add an URL beneath QR-Code (_3 jellybeans_)
-- [x] Export Plant Ratings (_2 jellybeans_)
-   - Counts of Likes, Dislikes, Comments, and Page Views are all exported
-- [x] Change like/dislike counter to a single number (_1 jellybean_)
-- [x] Ability to Delete old Data (_1 jellybean_)
-- [x] Add a footer to pages (_1 jellybean_)
-- [x] (Epic) Create a homepage that consists of (_4 jellybeans_)
-  - ~~QR-Code instructions~~, A general welcome message 
-  - Ability to search by common name,
-  - Bed Navigation
+### Stories for Iteration 4
+- [] Generate QR-code link for the homepage (_1 jellybean_)
+- [] In the search results, group flowers by bed name then by cultivar (_2 jellybeans_)
+- [] On the bed page, sort flowers by common name, then sort by cultivar (_2 jellybeans_)
+- [] Export of visit timestamps of plants (_2 jellybean_)
+- [] Add feature to cancel like/dislike (_3 jellybeans_)
+- [] Ability for admin to selectively upload pictures for plants (_**8** jellybean_)
+- [] Limit Admin page to authorized WCROC employees (_**10** jellybeans_)
 
 ## Documentation
 * [Excel File Requirements](Documentation/ExcelFileRequirements.md)  
