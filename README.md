@@ -42,6 +42,20 @@ that interface.
 * Export Feedback to a File (Only plant comments are done)
 * Track the number of times a flower page is visited (Client-side not done)
 * Import Excel Spreadsheet to Database
+* Update comment data to include:
+    * Common name
+    * Cultivar
+    * Bed location
+* Add an URL beneath QR-code
+* Export plant rating
+    * Counts of likes, dislikes, comments, and page views are all exported
+* Change like/dislike counter to a single number
+* Ability to delete old data
+* Add a footer to pages
+* (Epic) Create a homepage that consits of:
+    * A general welcome message 
+    * Ability to search by common name
+    * Bed navigation
 
 ### Stories for Iteration 4
 - [] Generate QR-code link for the homepage (_1 jellybean_)
