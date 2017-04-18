@@ -1,8 +1,8 @@
 # Digital Display Garden
-[![Build Status](https://travis-ci.org/UMM-CSci-3601-S17/digital-display-garden-iteration-3-dorfner.svg?branch=master)](https://travis-ci.org/UMM-CSci-3601-S17/digital-display-garden-iteration-3-dorfner)
+[![Build Status](https://travis-ci.org/UMM-CSci-3601-S17/digital-display-garden-iteration-4-dorfner-v2.svg?branch=master)](https://travis-ci.org/UMM-CSci-3601-S17/digital-display-garden-iteration-4-dorfner-v2)
 Software Design S2017, Iteration 3, Team _dorfner_ 
 
-This repository is a fork from [Iteration 2 , Team _grimaldi_](https://travis-ci.org/UMM-CSci-3601-S17/digital-display-garden-iteration-2-grimaldi).
+This repository is a fork from [Iteration 3 , Team _dorfner_](https://travis-ci.org/UMM-CSci-3601-S17/digital-display-garden-iteration-3-dorfner).
 
 ## Running your project
 The project assumes that you have Java 8, and Mongo installed on your machine. 
@@ -47,7 +47,7 @@ that interface.
 - [x] Updating comment data to include following columns (3 jellybeans):
   - CommonName,
   - Cultivar,
-  - Bed Location
+  - Bed LocationUpdating comment data to include following columns (3 jellybeans):
 - [x] Add an URL beneath QR-Code (_3 jellybeans_)
 - [x] Export Plant Ratings (_2 jellybeans_)
    - Counts of Likes, Dislikes, Comments, and Page Views are all exported
