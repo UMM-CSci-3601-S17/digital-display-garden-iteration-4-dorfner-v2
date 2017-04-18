@@ -43,7 +43,8 @@ export class PlantComponent implements OnInit {
     }
 
     public ratePlant(like: boolean): void {
-        if(this.rating === null && like !== null) {
+        // if(this.rating === null && like !== null)
+        {
             this.plantListService.ratePlant(this.plant["_id"]["$oid"], like)
                 .subscribe(succeeded => {
                     this.rating = like;
@@ -51,6 +52,17 @@ export class PlantComponent implements OnInit {
                 });
         }
     }
+    // to remove a like and change to dislike
+    // public unratePlant(like: boolean): void {
+    //     // if(this.rating === null && like !== null)
+    //     {
+    //         this.plantListService.ratePlant(this.plant["_id"]["$oid"], like)
+    //             .subscribe(succeeded => {
+    //                 this.rating = like;
+    //                 this.refreshFeedback();
+    //             });
+    //     }
+    // }
 
     private refreshFeedback(): void {
         //Update flower feedback numbers
