@@ -1,8 +1,8 @@
 # Digital Display Garden
 [![Build Status](https://travis-ci.org/UMM-CSci-3601-S17/digital-display-garden-iteration-4-dorfner-v2.svg?branch=master)](https://travis-ci.org/UMM-CSci-3601-S17/digital-display-garden-iteration-4-dorfner-v2)
-Software Design S2017, Iteration 3, Team _dorfner_ 
+Software Design S2017, Iteration 4, Team _dorfner-v2_ 
 
-This repository is a fork from [Iteration 3 , Team _dorfner_](https://travis-ci.org/UMM-CSci-3601-S17/digital-display-garden-iteration-3-dorfner).
+This repository is a fork from [Iteration 3 , Team _dorfner_](https://github.com/UMM-CSci-3601-S17/digital-display-garden-iteration-3-dorfner).
 
 ## Running your project
 The project assumes that you have Java 8, and Mongo installed on your machine. 
