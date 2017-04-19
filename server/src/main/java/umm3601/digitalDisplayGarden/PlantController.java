@@ -10,6 +10,7 @@ import com.mongodb.util.JSON;
 import org.bson.BsonInvalidOperationException;
 import org.bson.Document;
 import org.bson.types.ObjectId;
+import com.mongodb.client.model.Sorts;
 
 import org.bson.conversions.Bson;
 import org.joda.time.DateTime;
@@ -23,6 +24,7 @@ import static com.mongodb.client.model.Filters.exists;
 import static com.mongodb.client.model.Projections.include;
 import static com.mongodb.client.model.Updates.*;
 import static com.mongodb.client.model.Projections.fields;
+
 
 import java.io.IOException;
 import java.util.*;
@@ -88,7 +90,7 @@ public class PlantController {
             filterDoc = filterDoc.append("commonName", commonName);
         }
 
-        FindIterable<Document> matchingPlants = plantCollection.find(filterDoc);
+        FindIterable<Document> matchingPlants = plantCollection.find(filterDoc).sort(sortByBedAndCultivar());
 
         return JSON.serialize(matchingPlants);
     }
@@ -503,6 +505,15 @@ public class PlantController {
         visit.append("visit", new ObjectId());
 
         return null != plantCollection.findOneAndUpdate(filterDoc, push("metadata.visits", visit));
+    }
+
+    private Bson sortByBedAndCultivar() {
+        List<String> fieldNames = new ArrayList<>();
+        fieldNames.add("gardenLocation");
+        fieldNames.add("cultivar");
+        Bson sortByBedAndCultivar = Sorts.ascending(fieldNames);
+
+        return sortByBedAndCultivar;
     }
 
 }
