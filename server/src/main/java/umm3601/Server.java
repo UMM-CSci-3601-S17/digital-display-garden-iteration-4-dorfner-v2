@@ -24,7 +24,7 @@ import javax.servlet.http.Part;
 
 public class Server {
 
-    public static final String API_URL = "http://dorfner.congrue.xyz:2538";
+    public static final String API_URL = "https://dorfner.congrue.xyz:2538";
 
     public static String databaseName = "test";
 
