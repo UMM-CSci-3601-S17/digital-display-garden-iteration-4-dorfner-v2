@@ -55,7 +55,7 @@ At this point, you should be able to visit `http://yourdomainname` and see
 the site. (Note how you don't need to specify a port number anymore.)
 
 
-## Installing & Running certbot
+## Installing and Running certbot
 
 First install certbot with the following commands:
 ```
