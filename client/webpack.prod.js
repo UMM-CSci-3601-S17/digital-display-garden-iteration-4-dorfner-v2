@@ -62,7 +62,7 @@ module.exports = {
         }),
         new DefinePlugin({
             'ENV': JSON.stringify('development'),
-            'API_URL': JSON.stringify('https://dorfner.congrue.xyz/api')
+            'API_URL': JSON.stringify('https://dorfner.congrue.xyz/api/')
             //TODO: The above domain name will need to be changed to the machine hosting this
         })
     ],
