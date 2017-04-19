@@ -85,6 +85,7 @@ public class PlantController {
         if (queryParams.containsKey("gardenLocation")) {
             String location =(queryParams.get("gardenLocation")[0]);
             filterDoc = filterDoc.append("gardenLocation", location);
+            sortFilter.set(0, "commonName");
         }
 
 
