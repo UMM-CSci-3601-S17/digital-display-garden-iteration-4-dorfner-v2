@@ -424,7 +424,8 @@ public class PlantController {
 
         Document rating = new Document();
         rating.append("like", like);
-        rating.append("ratingOnObjectOfId", objectId);
+        rating.append("id", new ObjectId(id));
+//        rating.append("ratingOnObjectOfId", objectId);
 
         return null != plantCollection.findOneAndUpdate(filterDoc, push("metadata.ratings", rating));
     }

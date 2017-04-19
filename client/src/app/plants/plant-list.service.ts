@@ -43,8 +43,15 @@ export class PlantListService {
     ratePlant(id: string, like: boolean): Observable<boolean> {
         let returnObject = {
             id: id,
-            like: like
+            like: like 
         };
         return this.http.post(this.plantUrl + "/" + "rate", JSON.stringify(returnObject)).map(res => res.json());
     }
+
+    deleteRate(id: string): Observable<any> {
+        return this.http.delete(this.plantUrl + "/" + "rate" + id).map(res => res.json());
+    }
+
+
+
 }

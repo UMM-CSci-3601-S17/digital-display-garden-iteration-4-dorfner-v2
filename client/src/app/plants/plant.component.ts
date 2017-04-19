@@ -52,6 +52,16 @@ export class PlantComponent implements OnInit {
                 });
         }
     }
+
+    public deleteRate (id: string): void {
+        {
+            this.plantListService.deleteRate(this.plant["_id"]["$oid"])
+                .subscribe(succeeded => {
+                    // this.rating = id;
+                    this.refreshFeedback();
+                });
+        }
+    }
     // to remove a like and change to dislike
     // public unratePlant(like: boolean): void {
     //     // if(this.rating === null && like !== null)
