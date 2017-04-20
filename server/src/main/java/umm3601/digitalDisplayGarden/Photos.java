@@ -3,13 +3,19 @@ package umm3601.digitalDisplayGarden;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import org.bson.BSON;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
+import static com.mongodb.client.model.Updates.push;
 
 
 public class Photos {
@@ -26,14 +32,39 @@ public class Photos {
         plantCollection = db.getCollection("plants");
     }
 
-    public void saveImage(String plantId, RenderedImage photo){
+    public void saveImage(String plantId, RenderedImage photo, String uploadId){
         try {
-            File outputFile = new File(".photos" + '/' + plantId + ".png");
+            if (Files.notExists(Paths.get(".photos"))) {
+                Files.createDirectory(Paths.get(".photos"));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            String filePath = ".photos" + '/' + plantId + ".png";
+            File outputFile = new File(filePath);
+            String absPath = outputFile.getAbsolutePath();
+//            System.out.println(outputFile.getAbsolutePath());
+//            System.out.println(outputFile.getPath());
             ImageIO.write(photo, "png", outputFile);
+
+
+            Document filterDoc = new Document();
+            filterDoc.append("id", plantId);
+            filterDoc.append("uploadId", uploadId);
+
+            Document photoLocation = new Document();
+            photoLocation.append("metadata.photoLocation", absPath);
+
+            plantCollection.findOneAndUpdate(filterDoc,new Document("$set", photoLocation));
         }
         catch (IOException ioe) {
             ioe.printStackTrace();
             System.err.println("Could not write some Images to disk, exiting.");
         }
     }
+
+
+
 }
