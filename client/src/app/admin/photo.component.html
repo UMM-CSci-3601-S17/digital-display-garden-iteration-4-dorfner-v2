@@ -4,7 +4,7 @@
 <div>
     Plant ID#
     <input #textbox type="text" [(ngModel)]="textValue">
-    <button (click)="getPlant(textbox.value)" class="btn btn-primary">Find</button>
+    <button (click)="getPlant(textbox.value)" value = "clicked" class="btn btn-primary">Find</button>
 </div>
 
     <div *ngIf="plant" >
@@ -17,6 +17,10 @@
             <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
             Upload
         </button>
+    </div>
+
+    <div *ngIf="!plant && clicked">
+        Invalid plant ID
     </div>
 
 </div>

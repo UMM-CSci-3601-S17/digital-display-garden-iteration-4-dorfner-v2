@@ -11,6 +11,7 @@ import {Plant} from "../plants/plant";
 export class PhotoComponent implements OnInit {
     public id: string;
     public plant: Plant;
+    public clicked: boolean;
 
 
     constructor(private adminService: AdminService, private plantListService: PlantListService) {
@@ -18,6 +19,7 @@ export class PhotoComponent implements OnInit {
     }
 
     public getPlant(id: string): void {
+        this.clicked = true;
         this.plantListService.getPlantById(id).subscribe(
             plant => this.plant = plant,
             err => {
