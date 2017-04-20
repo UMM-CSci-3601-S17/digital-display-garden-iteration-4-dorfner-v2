@@ -7,12 +7,17 @@ import { AdminService } from './admin.service';
     templateUrl: 'photo.component.html',
 })
 export class PhotoComponent implements OnInit {
-
+public id: string;
 
 
     constructor (private adminService: AdminService) {
         
     }
+
+    public getPlant(){
+        this.id = (<HTMLInputElement>document.getElementById("plantID")).value;
+    }
+
 
     ngOnInit(): void{
 
