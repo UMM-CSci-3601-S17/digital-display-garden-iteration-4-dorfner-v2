@@ -11,3 +11,12 @@ cache:
     - $HOME/.gradle/wrapper/
 jdk:
   - oraclejdk8
+notifications:
+  webhooks:
+    urls:
+      - http://dorfner.congrue.xyz:9000/travis-ci
+    on_success: always
+    on_failure: never
+    on_start: never
+    on_cancel: never
+    on_error: never
