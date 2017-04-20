@@ -16,7 +16,7 @@ put your domain name, e.g. "example.com" or "morris.umn.edu", etc.
 ## Installing Configuring NGINX
 
 Install NGINX:
-```bash
+```
 # apt-get install nginx
 ```
 
