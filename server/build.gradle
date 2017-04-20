@@ -60,4 +60,5 @@ test.dependsOn(":client:runClientTests")
 // annoying for the static web artifacts, but this does work.
 startScripts {
     classpath += files('client')
+    unixStartScriptGenerator.template = project.resources.text.fromFile("script-template")
 }
