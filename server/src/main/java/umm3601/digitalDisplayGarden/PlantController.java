@@ -78,14 +78,10 @@ public class PlantController {
     public String listPlants(Map<String, String[]> queryParams, String uploadId) {
         Document filterDoc = new Document();
         filterDoc.append("uploadId", uploadId);
-        ArrayList<String> sortFilter = new ArrayList<>();
-        sortFilter.add("gardenLocation");
-        sortFilter.add("cultivar");
 
         if (queryParams.containsKey("gardenLocation")) {
             String location =(queryParams.get("gardenLocation")[0]);
             filterDoc = filterDoc.append("gardenLocation", location);
-            sortFilter.set(0, "commonName");
         }
 
 
@@ -94,9 +90,13 @@ public class PlantController {
             filterDoc = filterDoc.append("commonName", commonName);
         }
 
-        FindIterable<Document> matchingPlants = plantCollection.find(filterDoc).sort(sortBy(sortFilter));
-
-        return JSON.serialize(matchingPlants);
+        FindIterable<Document> matchingPlants = plantCollection.find(filterDoc);
+        List<Document> sortedPlants = new ArrayList<>();
+        for (Document doc : matchingPlants) {
+            sortedPlants.add(doc);
+        }
+        sortedPlants.sort(new PlantComparator());
+        return JSON.serialize(sortedPlants);
     }
 
     /**
@@ -520,7 +520,67 @@ public class PlantController {
     private Bson sortBy(ArrayList<String> criteria) {
         List<String> fieldNames = new ArrayList<>(criteria);
         Bson sortByBson = Sorts.ascending(fieldNames);
+        // { "gardenLocation" : 1, "cultivar" : 1 }
+        System.out.println(sortByBson);
 
         return sortByBson;
+    }
+
+    // Credits: Shawn Saliyev and Nathan Beneke
+    public int numericPrefix(String bed) {
+        int n = 0;
+        for (int i = 0; i < bed.length(); i++) {
+            char character = bed.charAt(i);
+            if (Character.isDigit(character)) {
+                n *= 10;
+                n += (character - '0');
+            } else if (i == 0) {
+                // Assume there is only one non-digit bed
+                n = 100;
+                break;
+            } else {
+                break;
+            }
+        }
+
+        return n;
+    }
+
+    class BedComparator implements Comparator<Document> {
+        @Override
+        public int compare(Document bedDoc1, Document bedDoc2) {
+            String bed1 = bedDoc1.getString("_id");
+            String bed2 = bedDoc2.getString("_id");
+            if (numericPrefix(bed1) == numericPrefix(bed2)) {
+                return bed1.compareTo(bed2);
+            } else {
+                return numericPrefix(bed1) - numericPrefix(bed2);
+            }
+        }
+
+    }
+
+    class PlantComparator implements Comparator<Document> {
+        @Override
+        public int compare(Document plantDoc1, Document plantDoc2) {
+            String bed1 = plantDoc1.getString("gardenLocation");
+            String bed2 = plantDoc2.getString("gardenLocation");
+            String name1 = plantDoc1.getString("commonName");
+            String name2 = plantDoc2.getString("commonName");
+            String cultivar1 = plantDoc1.getString("cultivar");
+            String cultivar2 = plantDoc2.getString("cultivar");
+
+            if (!bed1.equals(bed2)) {
+                if (numericPrefix(bed1) == numericPrefix(bed2)) {
+                    return bed1.compareTo(bed2);
+                } else {
+                    return numericPrefix(bed1) - numericPrefix(bed2);
+                }
+            } else if (!name1.equals(name2)) {
+                return name1.compareTo(name2);
+            } else {
+                return cultivar1.compareTo(cultivar2);
+            }
+        }
     }
 }
