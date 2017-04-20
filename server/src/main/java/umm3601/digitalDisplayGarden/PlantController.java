@@ -214,7 +214,14 @@ public class PlantController {
                         Aggregates.group("$gardenLocation"),
                         Aggregates.sort(Sorts.ascending("_id"))
                 ));
-        return JSON.serialize(documents);
+
+        List<Document> listDoc = new ArrayList<>();
+        for (Document doc : documents) {
+            listDoc.add(doc);
+        }
+        listDoc.sort(new BedComparator());
+
+        return JSON.serialize(listDoc);
     }
 
     // Used in the QR code generation
