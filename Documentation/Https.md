@@ -110,13 +110,27 @@ server {
 }
 ```
 
+## Configuring the firewall
 
+Since clients could always just access your server via `yourdomainname:2538`, you will
+need to block the port to force clients to go through the secure proxy.
+
+First, allow `ssh` through the firewall
+```
+# ufw add ssh
+```
+Then enable the firewall
+```
+# ufw enable
+```
+Finally, allow ports 80 and 443 for the server
+```
+# ufw enable 80
+# ufw enable 443
+```
 ## Final Remarks
 
-Your site is now served over HTTPS just fine. You should change any HTTP requests
+Your site is now served over HTTPS just fine. You will have to change any HTTP requests
 in your JavaScript to HTTPS requests since most browsers will prevent insecure
 requests on secure pages. 
-
-You should also consider closing port `2538` in your firewall, so that no 
-insecure requests can be made.
 
