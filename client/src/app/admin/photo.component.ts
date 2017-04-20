@@ -10,7 +10,7 @@ import {Plant} from "../plants/plant";
 })
 export class PhotoComponent implements OnInit {
     public id: string;
-    plant: Plant = new Plant();
+    public plant: Plant;
 
 
     constructor(private adminService: AdminService, private plantListService: PlantListService) {

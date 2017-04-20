@@ -4,15 +4,19 @@
 <div>
     Plant ID#
     <input #textbox type="text" [(ngModel)]="textValue">
-    <button (click)="getPlant(textbox.value)">Find</button>
+    <button (click)="getPlant(textbox.value)" class="btn btn-primary">Find</button>
 </div>
 
-    <div *ngIf="plant">
-        Plant <br>
-        {{plant.commonName}}<br>
-        {{plant.cultivar}}<br>
+    <div *ngIf="plant" >
         <br>
-        <button>Upload</button>
+        <u><strong>Plant</strong></u><br>
+        <strong>Common Name:</strong> {{plant.commonName}}<br>
+        <strong>Cultivar:</strong> {{plant.cultivar}}<br>
+        <br>
+        <button class="btn btn-primary">
+            <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
+            Upload
+        </button>
     </div>
 
 </div>
