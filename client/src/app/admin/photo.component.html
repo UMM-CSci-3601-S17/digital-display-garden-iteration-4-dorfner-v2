@@ -1,14 +1,17 @@
 <div class="photo-page">
     <h2>Upload a Plant Photo</h2>
 
-<form>
+<div>
     Plant ID#
-    <input type="text" id="plantID">
-    <input type="submit" value="Find">
-</form>
+    <input #textbox type="text" [(ngModel)]="textValue">
+    <button (click)="getPlant(textbox.value)">Find</button>
+</div>
 
-    <div>
-        Plant
+    <div *ngIf="plant">
+        Plant <br>
+        {{plant.commonName}}<br>
+        {{plant.cultivar}}<br>
+        <br>
         <button>Upload</button>
     </div>
 
