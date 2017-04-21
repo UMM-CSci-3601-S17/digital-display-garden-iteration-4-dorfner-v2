@@ -475,8 +475,38 @@ public class PlantController {
         return addFlowerRating(id, like, uploadID);
     }
 
+    public boolean changeRating(String json, String uploadID){
+        boolean like;
+        String id;
 
-    public void changeRating(String id, boolean like, String uploadID) {
+        try {
+
+            Document parsedDocument = Document.parse(json);
+
+            if(parsedDocument.containsKey("id") && parsedDocument.get("id") instanceof String){
+                id = parsedDocument.getString("id");
+            } else {
+                return false;
+            }
+
+            if(parsedDocument.containsKey("like") && parsedDocument.get("like") instanceof Boolean){
+                like = parsedDocument.getBoolean("like");
+            } else {
+                return false;
+            }
+
+        } catch (BsonInvalidOperationException e){
+            e.printStackTrace();
+            return false;
+        } catch (org.bson.json.JsonParseException e){
+            return false;
+        }
+
+        return changeRating(id, like, uploadID);
+    }
+
+
+    public boolean changeRating(String id, boolean like, String uploadID) {
 
         Document filterDoc = new Document();
 
@@ -492,10 +522,11 @@ public class PlantController {
         filterDoc.append("uploadId", uploadID);
 
         Document rating = new Document();
-        rating.append("like", !like);
+        rating.append("like", like);
         rating.append("id", new ObjectId(id));
 
-        plantCollection.findOneAndReplace(filterDoc, rating);
+        plantCollection.findOneAndUpdate(filterDoc, popFirst("metadata.ratings"));
+        return null != plantCollection.findOneAndUpdate(filterDoc, push("metadata.ratings", rating));
 //        return null != plantCollection.findOneAndUpdate(filterDoc, push("metadata.ratings", rating));
     }
 
