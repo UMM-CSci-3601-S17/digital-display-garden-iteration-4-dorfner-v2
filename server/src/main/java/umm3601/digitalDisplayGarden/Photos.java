@@ -32,19 +32,20 @@ public class Photos {
         plantCollection = db.getCollection("plants");
     }
 
-    public void saveImage(String plantId, RenderedImage photo, String uploadId){
+    public boolean saveImage(String plantId, RenderedImage photo, String uploadId){
         try {
             if (Files.notExists(Paths.get(".photos"))) {
                 Files.createDirectory(Paths.get(".photos"));
             }
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
 
         try {
             String filePath = ".photos" + '/' + plantId + ".png";
             File outputFile = new File(filePath);
-            String absPath = outputFile.getAbsolutePath();
+            String relPath = outputFile.getPath();
 //            System.out.println(outputFile.getAbsolutePath());
 //            System.out.println(outputFile.getPath());
             ImageIO.write(photo, "png", outputFile);
@@ -55,14 +56,16 @@ public class Photos {
             filterDoc.append("uploadId", uploadId);
 
             Document photoLocation = new Document();
-            photoLocation.append("metadata.photoLocation", absPath);
+            photoLocation.append("metadata.photoLocation", relPath);
 
             plantCollection.findOneAndUpdate(filterDoc,new Document("$set", photoLocation));
         }
         catch (IOException ioe) {
             ioe.printStackTrace();
             System.err.println("Could not write some Images to disk, exiting.");
+            return false;
         }
+        return true;
     }
 
 
