@@ -5,6 +5,7 @@ import spark.Route;
 import spark.utils.IOUtils;
 import com.mongodb.util.JSON;
 import umm3601.digitalDisplayGarden.Authentication.Auth;
+import umm3601.digitalDisplayGarden.Authentication.Cookie;
 import umm3601.digitalDisplayGarden.PlantController;
 
 import java.io.*;
@@ -104,7 +105,12 @@ public class Server {
            String state = params.get("state")[0];
            String code = params.get("code")[0];
 
-           return auth.getEmails(state, code);
+           String userEmail = auth.getEmail(state, code);
+
+           Cookie c = auth.getCookie();
+           res.cookie(c.name, c.value, c.max_age);
+
+           return auth.userIsVerified(userEmail);
         });
 
         // List plants

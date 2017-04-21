@@ -37,11 +37,18 @@ public class Auth {
     private final Gson gson;
 //    private static final String PROTECTED_RESOURCE_URL = "https://accounts.google.com/o/oauth2/v2/auth";
 
+    private List<String> authUsers;
+    private List<Cookie> authCookies;
+
     public Auth(String clientId, String clientSecret){
         this.clientId = clientId;
         this.clientSecret = clientSecret;
         this.quedAuth = new HashMap<String, OAuth20Service>();
         this.gson = new Gson();
+        this.authUsers = new ArrayList<>();
+        authUsers.add("gordo580@morris.umn.edu");
+        authUsers.add("schr1230@morris.umn.edu");
+        this.authCookies = new LinkedList<>();
     }
 
     public String getAuthURL(){
@@ -66,7 +73,7 @@ public class Auth {
 
 
 
-    public String getEmails(String state, String code){
+    public String getEmail(String state, String code){
 
         try {
             OAuth20Service service = quedAuth.get(state);
@@ -77,10 +84,12 @@ public class Auth {
             GoogleToken googleToken = gson.fromJson(accessToken.getRawResponse(), GoogleToken.class);
             OpenIDConfiguration openIDConfiguration = getJwksUrl();
 
-            String body = parseAndValidate(googleToken.id_token, new URL(openIDConfiguration.jwks_uri));
-
-            return body;
-
+            String stringBody = parseAndValidate(googleToken.id_token, new URL(openIDConfiguration.jwks_uri));
+            GoogleJwtBody body = gson.fromJson(stringBody, GoogleJwtBody.class);
+//            if (!body.email_verified){
+//                return
+//            }
+            return body.email;
         } catch (Exception e) {
             e.printStackTrace();
             return "";
@@ -117,6 +126,18 @@ public class Auth {
             System.out.println("Failed fetching Google's OpenID configuration.");
             throw e;
         }
+    }
+
+    public boolean userIsVerified(String email){
+        return authUsers.contains(email);
+    }
+
+    public Cookie getCookie(){
+        String cookieBody = "" + new Random().nextInt(Integer.MAX_VALUE);
+        Cookie c = new Cookie("ddg", cookieBody, 86400);
+        authCookies.add(c);
+
+        return c;
     }
 
 }
