@@ -87,16 +87,32 @@ public class QRCodes {
             }
         }
 
+        try {
+            qrCodeImages.add(createQRFromURL(urlPrefix.substring(0, urlPrefix.length() - 4)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (WriterException we) {
+            we.printStackTrace();
+        }
+
+
+
         //WRITE IMAGES TO FILE
 
-        if(numBeds != qrCodeImages.size()) {
-            System.err.println("a QR code could not be made for each Bed.");
+        if((numBeds + 1) != qrCodeImages.size()) {
+            System.err.println("a QR code could not be made for homepage and each Bed.");
             return null;
         }
 
         try {
             for (int i = 0; i < qrCodeImages.size(); i++) {
-                File outputFile = new File(qrTempPath + '/' + bedNames[i] + ".png");
+                String pathName = "";
+                if (i < 12) {
+                    pathName = qrTempPath + '/' + bedNames[i] + ".png";
+                } else {
+                    pathName = qrTempPath + "/homepage.png";
+                }
+                File outputFile = new File(pathName);
                 ImageIO.write(qrCodeImages.get(i), "png", outputFile);
             }
         }
