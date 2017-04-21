@@ -53,11 +53,11 @@ export class PlantComponent implements OnInit {
         }
     }
 
-    public deleteRate (id: string): void {
+    public changeRate (like: boolean): void {
         {
-            this.plantListService.deleteRate(this.plant["_id"]["$oid"])
+            this.plantListService.changeRate(this.plant["_id"]["$oid"], like)
                 .subscribe(succeeded => {
-                    // this.rating = id;
+                    this.rating = like;
                     this.refreshFeedback();
                 });
         }
