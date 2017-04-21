@@ -27,7 +27,7 @@ public class QRCodes {
 
     private static String qrTempPath = ".qrcode";
 
-    public static BufferedImage createQRFromBedURL(String url) throws IOException,WriterException{
+    public static BufferedImage createQRFromURL(String url) throws IOException,WriterException{
 
         Map hintMap = new HashMap();
         hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
@@ -44,7 +44,7 @@ public class QRCodes {
      * @return the path to the new .zip file or null if there was a disk IO issue
      */
 
-    public static String CreateQRCodesFromAllBeds(String uploadId, String bedNames[], String urlPrefix){
+    public static String CreateQRCodes(String uploadId, String bedNames[], String urlPrefix){
         //Get all unique beds from Database
         //Create URLs for all unique beds
         //Create QRCode BufferedImages for all URLs
@@ -73,7 +73,7 @@ public class QRCodes {
         for(int i = 0; i < numBeds; i++) {
             bedURLs[i] = urlPrefix + bedNames[i];
             try {
-                BufferedImage QRImage = createQRFromBedURL(bedURLs[i]);
+                BufferedImage QRImage = createQRFromURL(bedURLs[i]);
 
                 Graphics g = QRImage.getGraphics();
                 int width = QRImage.getWidth();

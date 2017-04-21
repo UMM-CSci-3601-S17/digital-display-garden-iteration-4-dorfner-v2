@@ -137,7 +137,7 @@ public class Server {
 
             String liveUploadID = plantController.getLiveUploadId();
             System.err.println("liveUploadID=" + liveUploadID);
-            String zipPath = QRCodes.CreateQRCodesFromAllBeds(
+            String zipPath = QRCodes.CreateQRCodes(
                     liveUploadID,
                     plantController.getGardenLocations(liveUploadID),
                     API_URL + "/bed/");
