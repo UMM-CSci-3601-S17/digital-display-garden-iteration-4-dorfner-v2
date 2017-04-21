@@ -4,6 +4,7 @@ import org.bson.Document;
 import spark.Route;
 import spark.utils.IOUtils;
 import com.mongodb.util.JSON;
+import umm3601.digitalDisplayGarden.Auth;
 import umm3601.digitalDisplayGarden.PlantController;
 
 import java.io.File;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Map;
 
 import static spark.Spark.*;
 
@@ -43,7 +45,12 @@ public class Server {
         // a problem which is resolved in `server/build.gradle`.
         staticFiles.location("/public");
 
+        final String clientId = "";
+        final String clientSecret = "";
+
+
         PlantController plantController = new PlantController(databaseName);
+        Auth auth = new Auth(clientId, clientSecret);
 
         options("/*", (request, response) -> {
 
@@ -76,6 +83,22 @@ public class Server {
         };
 
         get("/", clientRoute);
+
+        get("api/helloWorld", (req, res) ->{
+           res.type("text/plain");
+           res.redirect(auth.getAuthURL());
+
+           return res;
+        });
+
+        get("callback", (req, res) ->{
+           res.type("application/json");
+           Map<String, String[]> params = req.queryMap().toMap();
+           String state = params.get("state")[0];
+           String code = params.get("code")[0];
+
+           return auth.getProfile(state, code);
+        });
 
         // List plants
         get("api/plants", (req, res) -> {
