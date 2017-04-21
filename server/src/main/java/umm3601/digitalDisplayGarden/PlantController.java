@@ -1,9 +1,7 @@
 package umm3601.digitalDisplayGarden;
 
-import com.google.gson.Gson;
 import com.mongodb.MongoClient;
 import com.mongodb.client.*;
-import com.mongodb.client.model.Accumulators;
 import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Sorts;
 import com.mongodb.util.JSON;
@@ -12,7 +10,6 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 
 import org.bson.conversions.Bson;
-import org.joda.time.DateTime;
 
 import java.io.OutputStream;
 import java.util.Iterator;
@@ -21,8 +18,8 @@ import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.exists;
 import static com.mongodb.client.model.Projections.include;
-import static com.mongodb.client.model.Updates.*;
 import static com.mongodb.client.model.Projections.fields;
+
 
 import java.io.IOException;
 import java.util.*;
@@ -89,8 +86,12 @@ public class PlantController {
         }
 
         FindIterable<Document> matchingPlants = plantCollection.find(filterDoc);
-
-        return JSON.serialize(matchingPlants);
+        List<Document> sortedPlants = new ArrayList<>();
+        for (Document doc : matchingPlants) {
+            sortedPlants.add(doc);
+        }
+        sortedPlants.sort(new PlantComparator());
+        return JSON.serialize(sortedPlants);
     }
 
     /**
@@ -208,7 +209,14 @@ public class PlantController {
                         Aggregates.group("$gardenLocation"),
                         Aggregates.sort(Sorts.ascending("_id"))
                 ));
-        return JSON.serialize(documents);
+
+        List<Document> listDoc = new ArrayList<>();
+        for (Document doc : documents) {
+            listDoc.add(doc);
+        }
+        listDoc.sort(new BedComparator());
+
+        return JSON.serialize(listDoc);
     }
 
     // Used in the QR code generation
@@ -505,4 +513,61 @@ public class PlantController {
         return null != plantCollection.findOneAndUpdate(filterDoc, push("metadata.visits", visit));
     }
 
+    // Credits: Shawn Saliyev and Nathan Beneke
+    public int numericPrefix(String bed) {
+        int n = 0;
+        for (int i = 0; i < bed.length(); i++) {
+            char character = bed.charAt(i);
+            if (Character.isDigit(character)) {
+                n *= 10;
+                n += (character - '0');
+            } else if (i == 0) {
+                // Assume there is only one non-digit bed
+                n = 100;
+                break;
+            } else {
+                break;
+            }
+        }
+
+        return n;
+    }
+
+    class BedComparator implements Comparator<Document> {
+        @Override
+        public int compare(Document bedDoc1, Document bedDoc2) {
+            String bed1 = bedDoc1.getString("_id");
+            String bed2 = bedDoc2.getString("_id");
+            if (numericPrefix(bed1) == numericPrefix(bed2)) {
+                return bed1.compareTo(bed2);
+            } else {
+                return numericPrefix(bed1) - numericPrefix(bed2);
+            }
+        }
+
+    }
+
+    class PlantComparator implements Comparator<Document> {
+        @Override
+        public int compare(Document plantDoc1, Document plantDoc2) {
+            String bed1 = plantDoc1.getString("gardenLocation");
+            String bed2 = plantDoc2.getString("gardenLocation");
+            String name1 = plantDoc1.getString("commonName");
+            String name2 = plantDoc2.getString("commonName");
+            String cultivar1 = plantDoc1.getString("cultivar");
+            String cultivar2 = plantDoc2.getString("cultivar");
+
+            if (!bed1.equals(bed2)) {
+                if (numericPrefix(bed1) == numericPrefix(bed2)) {
+                    return bed1.compareTo(bed2);
+                } else {
+                    return numericPrefix(bed1) - numericPrefix(bed2);
+                }
+            } else if (!name1.equals(name2)) {
+                return name1.compareTo(name2);
+            } else {
+                return cultivar1.compareTo(cultivar2);
+            }
+        }
+    }
 }
