@@ -46,8 +46,6 @@ public class Photos {
             String filePath = ".photos" + '/' + plantId + ".png";
             File outputFile = new File(filePath);
             String relPath = outputFile.getPath();
-//            System.out.println(outputFile.getAbsolutePath());
-//            System.out.println(outputFile.getPath());
             ImageIO.write(photo, "png", outputFile);
 
 
@@ -56,7 +54,7 @@ public class Photos {
             filterDoc.append("uploadId", uploadId);
 
             Document photoLocation = new Document();
-            photoLocation.append("metadata.photoLocation", relPath);
+            photoLocation.append("photoLocation", relPath);
 
             plantCollection.findOneAndUpdate(filterDoc,new Document("$set", photoLocation));
         }

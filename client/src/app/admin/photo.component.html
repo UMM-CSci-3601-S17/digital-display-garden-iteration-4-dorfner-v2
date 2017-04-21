@@ -12,7 +12,12 @@
         <u><strong>Plant</strong></u><br>
         <strong>Common Name:</strong> {{plant.commonName}}<br>
         <strong>Cultivar:</strong> {{plant.cultivar}}<br>
+            location: {{plant.photoLocation}}
         <br>
+
+        <div>
+            <img [attr.src]="this.url + 'plants/' + this.id + '/getImage'">
+        </div><br>
 
         <file-upload #fu (change)="filename = undefined; uploadAttempted = false" [multiple]="false">-</file-upload>
 
@@ -25,11 +30,12 @@
         </div>
         <div *ngIf="filename === undefined && uploadAttempted === true">File upload failed.</div>
 
-
     </div>
 
     <div *ngIf="!plant && clicked">
         Invalid plant ID
+
+
     </div>
 
 </div>

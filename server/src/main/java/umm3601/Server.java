@@ -130,6 +130,14 @@ public class Server {
             return res;
         });
 
+        get("api/plants/:plantID/getImage", (req,res) ->{
+           res.type("application/png");
+           plantController.getImage(res.raw().getOutputStream(),
+                                    req.params("plantID"),
+                                   null);
+           return res;
+        });
+
         get("api/liveUploadId", (req, res) -> {
             res.type("application/json");
             return JSON.serialize(plantController.getLiveUploadId());

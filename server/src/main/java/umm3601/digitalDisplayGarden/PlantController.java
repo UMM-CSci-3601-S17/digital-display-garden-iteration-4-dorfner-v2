@@ -14,7 +14,11 @@ import org.bson.types.ObjectId;
 import org.bson.conversions.Bson;
 import org.joda.time.DateTime;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.OutputStream;
+import java.nio.Buffer;
 import java.util.Iterator;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -125,7 +129,7 @@ public class PlantController {
 
             jsonPlant = plantCollection.find(and(eq("id", plantID),
                     eq("uploadId", uploadID)))
-                    .projection(fields(include("commonName", "cultivar")));
+                    .projection(fields(include("commonName", "cultivar", "photoLocation")));
 
             Iterator<Document> iterator = jsonPlant.iterator();
 
@@ -366,6 +370,19 @@ public class PlantController {
         collectedDataWriter.complete();
     }
 
+    public void getImage(OutputStream outputStream, String plantId, String uploadID) {
+        try {
+            String filePath = ".photos" + '/' + plantId + ".png";
+            File file = new File(filePath);
+            BufferedImage photo = ImageIO.read(file);
+            ImageIO.write(photo,"PNG",outputStream);
+
+        }
+        catch (IOException ioe) {
+            ioe.printStackTrace();
+            System.err.println("Could not write some Images to disk, exiting.");
+        }
+    }
     /**
      * Deletes all data associated with the specified uploadID
      * in the database.
