@@ -117,7 +117,7 @@ need to block the port to force clients to go through the secure proxy.
 
 First, allow `ssh` through the firewall
 ```
-# ufw add ssh
+# ufw allow ssh
 ```
 Then enable the firewall
 ```
@@ -125,8 +125,8 @@ Then enable the firewall
 ```
 Finally, allow ports 80 and 443 for the server
 ```
-# ufw enable 80
-# ufw enable 443
+# ufw allow 80
+# ufw allow 443
 ```
 ## Final Remarks
 
