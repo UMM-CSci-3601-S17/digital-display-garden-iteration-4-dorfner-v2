@@ -111,7 +111,7 @@ public class Server {
 
         post("api/plants/rate", (req, res) -> {
             res.type("application/json");
-            return plantController.addFlowerRating(req.body(), plantController.getLiveUploadId());
+            return JSON.serialize(plantController.addFlowerRating(req.body(), plantController.getLiveUploadId()));
         });
 
         post("api/plants/changeRate", (req, res) -> {

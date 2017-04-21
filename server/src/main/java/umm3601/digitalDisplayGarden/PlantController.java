@@ -14,6 +14,7 @@ import org.bson.types.ObjectId;
 import org.bson.conversions.Bson;
 import org.joda.time.DateTime;
 
+import javax.print.Doc;
 import java.io.OutputStream;
 import java.util.Iterator;
 
@@ -407,7 +408,7 @@ public class PlantController {
      * @return true iff the operation succeeded.
      */
 
-    public boolean addFlowerRating(String id, boolean like, String uploadID) {
+    public ObjectId addFlowerRating(String id, boolean like, String uploadID) {
 
         Document filterDoc = new Document();
 
@@ -416,7 +417,7 @@ public class PlantController {
         try {
             objectId = new ObjectId(id);
         } catch (IllegalArgumentException e) {
-            return false;
+            return null;
         }
 
         filterDoc.append("_id", new ObjectId(id));
@@ -424,10 +425,11 @@ public class PlantController {
 
         Document rating = new Document();
         rating.append("like", like);
-        rating.append("id", new ObjectId(id));
+        ObjectId ratingId = new ObjectId();
+        rating.append("id", ratingId);
 //        rating.append("ratingOnObjectOfId", objectId);
-
-        return null != plantCollection.findOneAndUpdate(filterDoc, push("metadata.ratings", rating));
+        plantCollection.findOneAndUpdate(filterDoc, push("metadata.ratings", rating));
+        return ratingId;
     }
 
     /**
@@ -440,13 +442,15 @@ public class PlantController {
      *     }
      * </code>
      *
+     * Returns an ObjectId.
+     *
      * @param json string representation of a JSON object
      * @param uploadID Dataset to find the plant
-     * @return true iff the operation succeeded.
+     * @return ObjectId of the rating, or null if the ObjectId was not added.
      */
 
-    public boolean addFlowerRating(String json, String uploadID){
-        boolean like;
+    public ObjectId addFlowerRating(String json, String uploadID){
+        boolean like; // gets overwritten in the try-block
         String id;
 
         try {
@@ -456,22 +460,21 @@ public class PlantController {
             if(parsedDocument.containsKey("id") && parsedDocument.get("id") instanceof String){
                 id = parsedDocument.getString("id");
             } else {
-                return false;
+                return null;
             }
 
             if(parsedDocument.containsKey("like") && parsedDocument.get("like") instanceof Boolean){
                 like = parsedDocument.getBoolean("like");
             } else {
-                return false;
+                return null;
             }
 
         } catch (BsonInvalidOperationException e){
             e.printStackTrace();
-            return false;
+            return null;
         } catch (org.bson.json.JsonParseException e){
-            return false;
+            return null;
         }
-
         return addFlowerRating(id, like, uploadID);
     }
 
@@ -525,7 +528,11 @@ public class PlantController {
         rating.append("like", like);
         rating.append("id", new ObjectId(id));
 
+
+//        List<Document> ratings = (List<Document>) ((Document) plant.get("metadata")).get("ratings");
+
         plantCollection.findOneAndUpdate(filterDoc, popFirst("metadata.ratings"));
+//        plantCollection.findOneAndUpdate(filterDoc, )
         return null != plantCollection.findOneAndUpdate(filterDoc, push("metadata.ratings", rating));
 //        return null != plantCollection.findOneAndUpdate(filterDoc, push("metadata.ratings", rating));
     }
