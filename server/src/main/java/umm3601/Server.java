@@ -7,13 +7,11 @@ import com.mongodb.util.JSON;
 import umm3601.digitalDisplayGarden.Auth;
 import umm3601.digitalDisplayGarden.PlantController;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
+import java.util.Properties;
 
 import static spark.Spark.*;
 
@@ -32,7 +30,18 @@ public class Server {
 
     private static String excelTempDir = "/tmp/digital-display-garden";
 
+    private static String clientId;
+    private static String clientSecret;
+
     public static void main(String[] args) throws IOException {
+
+        String configFileLocation;
+        if (args.length == 0) {
+            configFileLocation = "config.properties";
+        } else {
+            configFileLocation = args[0];
+        }
+        readConfig(configFileLocation);
 
         port(2538);
 
@@ -45,8 +54,6 @@ public class Server {
         // a problem which is resolved in `server/build.gradle`.
         staticFiles.location("/public");
 
-        final String clientId = "";
-        final String clientSecret = "";
 
 
         PlantController plantController = new PlantController(databaseName);
@@ -235,5 +242,29 @@ public class Server {
 
         // Handle "404" file not found requests:
         notFound(notFoundRoute);
+    }
+
+    public static void readConfig(String configFileLocation) {
+        try {
+            InputStream input = new FileInputStream(configFileLocation);
+            Properties props = new Properties();
+            props.load(input);
+
+            clientId = props.getProperty("clientID");
+            if (null == clientId) {
+                System.err.println("Could not read Google OAuth Client ID (clientID) from properties file");
+            }
+            clientSecret = props.getProperty("clientSecret");
+            if (null == clientSecret) {
+                System.err.println("Could not read Google OAuth Client secret (clientSecretz) from properties file");
+            }
+
+        } catch (FileNotFoundException e) {
+            System.err.println("Failed to open the config file for reading");
+            System.exit(1);
+        } catch (IOException e) {
+            System.out.println("Failed to read the config file");
+            System.exit(1);
+        }
     }
 }
