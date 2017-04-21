@@ -69,11 +69,15 @@ Then run it interactively:
 # certbot certonly
 ```
 
-There are two steps that are a little confusing. The first 
-is when it asks you to choose between "webroot" and "standalone".
-Choose "webroot". The other trouble-point is when it asks you to
-choose what webroot to use. You must first enter "1", and then it
-will prompt you for the path. Use `/var/www/html`.
+The script will ask you a bunch of questions, but there
+should only be a couple that are non-obvious.
+
+The first is when it asks you to choose between "webroot" and "standalone".
+Choose "webroot". The second is when it asks you to enter your domain name(s).
+Simply use the domain name of your server (which we've been referring to as
+"yourdomainname"). The final trouble-point is when it asks you to
+select what webroot to use. You must first enter "1", and then it
+will prompt you to input the webroot. Use `/var/www/html`.
 
 ## Re-configuring NGINX
 
