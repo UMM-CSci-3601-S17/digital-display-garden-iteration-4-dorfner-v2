@@ -1,15 +1,24 @@
 package umm3601.digitalDisplayGarden.Authentication;
 
+// For interacting with Google OAuth
 import com.github.scribejava.apis.GoogleApi20;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.OAuth2AccessToken;
 import com.github.scribejava.core.oauth.OAuth20Service;
 
+// For parsing the JWT from Google OAuth
+import com.nimbusds.jose.JWSAlgorithm;
+import com.nimbusds.jose.jwk.source.RemoteJWKSet;
+import com.nimbusds.jose.jwk.source.JWKSource;
+import com.nimbusds.jose.proc.JWSKeySelector;
+import com.nimbusds.jose.proc.JWSVerificationKeySelector;
+import com.nimbusds.jose.proc.SecurityContext;
+import com.nimbusds.jwt.proc.ConfigurableJWTProcessor;
+import com.nimbusds.jwt.proc.DefaultJWTProcessor;
+import com.nimbusds.jwt.JWTClaimsSet;
+
 import com.google.gson.Gson;
 import spark.utils.IOUtils;
-// import sun.security.rsa.RSAPublicKeyImpl;
-import java.security.*;
-import java.security.spec.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,14 +26,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 
-import com.nimbusds.jose.proc.JWSKeySelector;
-import com.nimbusds.jose.proc.JWSVerificationKeySelector;
-import com.nimbusds.jose.proc.SecurityContext;
-
-import com.nimbusds.jose.*;
-import com.nimbusds.jose.jwk.source.*;
-import com.nimbusds.jwt.*;
-import com.nimbusds.jwt.proc.*;
 
 public class Auth {
 
