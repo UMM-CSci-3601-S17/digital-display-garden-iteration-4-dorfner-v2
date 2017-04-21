@@ -27,7 +27,7 @@ Remove the default configuration:
 # rm default
 ```
 
-Create a new file in that location with the following content:
+Create a new file with any name in that location with the following content:
 ```
 server {
         listen 80 default_server;
@@ -81,7 +81,7 @@ will prompt you to input the webroot. Use `/var/www/html`.
 
 ## Re-configuring NGINX
 
-Now, modify your config file to look like the following and the 
+Now, replace the contents of your config file with the following and then
 restart NGINX again.
 
 ```
