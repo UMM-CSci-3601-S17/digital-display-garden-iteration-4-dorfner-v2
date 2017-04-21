@@ -118,14 +118,4 @@ public class Auth {
         }
     }
 
-    public GoogleKeyList getCerts(String url) throws IOException {
-        try {
-            InputStream in = new URL(url).openStream();
-            return gson.fromJson(IOUtils.toString(in),GoogleKeyList.class);
-        } catch (MalformedURLException e) {
-            System.out.println("Failed in Fetching Google certs");
-            throw e;
-        }
-    }
-
 }
