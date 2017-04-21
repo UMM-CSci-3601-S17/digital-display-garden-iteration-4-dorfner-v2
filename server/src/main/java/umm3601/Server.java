@@ -114,6 +114,11 @@ public class Server {
             return plantController.addFlowerRating(req.body(), plantController.getLiveUploadId());
         });
 
+        post("api/plants/changeRate", (req, res) -> {
+            res.type("application/json");
+            return plantController.changeRating(req.body(), plantController.getLiveUploadId());
+        });
+
         get("api/export", (req, res) -> {
             res.type("application/vnd.ms-excel");
             res.header("Content-Disposition", "attachment; filename=\"plant-comments.xlsx\"");
