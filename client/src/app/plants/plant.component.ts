@@ -5,6 +5,7 @@ import { Component, OnInit} from '@angular/core';
 import { Params,  ActivatedRoute} from '@angular/router';
 import {PlantFeedback} from "./plant-feedback";
 import {Location} from '@angular/common';
+import { ObjectID } from './object-id';
 
 @Component({
     selector: 'plant-component',
@@ -20,6 +21,7 @@ export class PlantComponent implements OnInit {
     // true - means that the plant was liked
     // false - means the the plant was disliked
     private rating: boolean = null;
+    private ratingID: ObjectID;
 
     //public plant: Plant = null;
     private id: string;
@@ -46,8 +48,9 @@ export class PlantComponent implements OnInit {
         // if(this.rating === null && like !== null)
         {
             this.plantListService.ratePlant(this.plant["_id"]["$oid"], like)
-                .subscribe(succeeded => {
+                .subscribe(objectID => {
                     this.rating = like;
+                    this.ratingID = objectID;
                     this.refreshFeedback();
                 });
         }
@@ -55,7 +58,7 @@ export class PlantComponent implements OnInit {
 
     public changeRate (like: boolean): void {
         {
-            this.plantListService.changeRate(this.plant["_id"]["$oid"], like)
+            this.plantListService.changeRate(this.plant["_id"]["$oid"], this.ratingID["$oid"], like)
                 .subscribe(succeeded => {
                     this.rating = like;
                     this.refreshFeedback();

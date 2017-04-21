@@ -3,6 +3,7 @@ import { Http } from '@angular/http';
 import { Plant } from './plant';
 import { Observable } from "rxjs";
 import {PlantFeedback} from "./plant-feedback";
+import { ObjectID } from "./object-id";
 
 @Injectable()
 export class PlantListService {
@@ -40,7 +41,7 @@ export class PlantListService {
         };
         return this.http.post(this.plantUrl + "/" + "leaveComment", JSON.stringify(returnObject)).map(res => res.json());
     }
-    ratePlant(id: string, like: boolean): Observable<boolean> {
+    ratePlant(id: string, like: boolean): Observable<ObjectID> {
         let returnObject = {
             id: id,
             like: like
@@ -52,9 +53,10 @@ export class PlantListService {
     //     return this.http.delete(this.plantUrl + "/" + "rate/" + id).map(res => res.json());
     // }
 
-    changeRate(id: string, like: boolean): Observable<any> {
+    changeRate(id: string, ratingID: string, like: boolean): Observable<any> {
         let returnObject = {
             id: id,
+            ratingID: ratingID,
             like: like
         };
         return this.http.post(this.plantUrl + "/" + "changeRate", JSON.stringify(returnObject)).map(res => res.json());
