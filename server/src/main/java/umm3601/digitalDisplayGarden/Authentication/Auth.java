@@ -6,26 +6,25 @@ import com.github.scribejava.core.model.OAuth2AccessToken;
 import com.github.scribejava.core.oauth.OAuth20Service;
 
 import com.google.gson.Gson;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwsHeader;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SigningKeyResolver;
-import io.jsonwebtoken.impl.Base64Codec;
-import io.jsonwebtoken.impl.Base64UrlCodec;
-import io.jsonwebtoken.impl.TextCodec;
 import spark.utils.IOUtils;
-import sun.security.rsa.RSAPublicKeyImpl;
+// import sun.security.rsa.RSAPublicKeyImpl;
 import java.security.*;
 import java.security.spec.*;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.Key;
-import java.security.PublicKey;
 import java.util.*;
+
+import com.nimbusds.jose.proc.JWSKeySelector;
+import com.nimbusds.jose.proc.JWSVerificationKeySelector;
+import com.nimbusds.jose.proc.SecurityContext;
+
+import com.nimbusds.jose.*;
+import com.nimbusds.jose.jwk.source.*;
+import com.nimbusds.jwt.*;
+import com.nimbusds.jwt.proc.*;
 
 public class Auth {
 
@@ -76,71 +75,33 @@ public class Auth {
 
             GoogleToken googleToken = gson.fromJson(accessToken.getRawResponse(), GoogleToken.class);
             OpenIDConfiguration openIDConfiguration = getJwksUrl();
-            GoogleKeyList googleKeyList = getCerts(openIDConfiguration.jwks_uri);
 
-//            System.out.println(Jwts.parser().setSigningKeyResolver(new SigningKeyResolver() {
-//                @Override
-//                public Key resolveSigningKey(JwsHeader header, Claims claims) {
-//                    return null;
-//                }
-//
-//                @Override
-//                public Key resolveSigningKey(JwsHeader header, String plaintext) {
-//                    return null;
-//                }
-//            }));
-            TextCodec tc = new Base64UrlCodec();
-            String[] chunks = googleToken.id_token.split("\\.");
-            JwtHeader jwtHeader = gson.fromJson(tc.decodeToString(chunks[0]), JwtHeader.class);
+            String body = parseAndValidate(googleToken.id_token, new URL(openIDConfiguration.jwks_uri));
 
-            GoogleKeyInfo googleKeyInfo = null;
-            for (int i = 0; i < googleKeyList.keys.length; i++) {
-                GoogleKeyInfo gki = googleKeyList.keys[i];
-
-                if (gki.kid.equals(jwtHeader.kid)){
-                    System.out.println(gki.kid);
-                    googleKeyInfo = gki;
-                    break;
-                }
-            }
-            if (googleKeyInfo == null) {
-                System.out.println("Blargggggggg\n\nadfasf\n\n");
-            }
-
-
-            BigInteger n = new BigInteger(tc.decode(googleKeyInfo.n));
-            BigInteger e = new BigInteger(tc.decode(googleKeyInfo.e));
-            // byte[] header = tc.decode(chunks[0]);
-            byte[] message = tc.decode(chunks[1]);
-
-            RSAPublicKeySpec keySpec = new RSAPublicKeySpec(n,e);
-            KeyFactory factory = KeyFactory.getInstance("RSA");
-            PublicKey publicKey = factory.generatePublic(keySpec);
-            Signature sig = Signature.getInstance("SHA1withRSA");
-            sig.initVerify(publicKey);
-            sig.update((chunks[0] + "." + chunks[1]).getBytes());
-            System.out.println(sig.verify(tc.decode(chunks[2])));
-
-            // PublicKey publicKey = new RSAPublicKeyImpl(n,e);
-
-//            System.out.println();
-            System.out.println(tc.decodeToString(chunks[0]));
-//            System.out.println(tc.decodeToString(chunks[2]));
-            // System.out.println(googleToken.id_token);
-            // System.out.println(Jwts.parser()
-            //     .setSigningKey(publicKey)
-            //                    .parseClaimsJws(googleToken.id_token).getBody());
-//            System.out.println(googleToken.id_token);
-            return "Fooooo";
-//            return accessToken.toString();
-//            final OAuthRequest request = new OAuthRequest(Verb.GET, PROTECTED_RESOURCE_URL);
-//            service.signRequest(accessToken, request);
-//            final Response response = service.execute(request);
-//            return response.getBody();
+            return body;
 
         } catch (Exception e) {
             e.printStackTrace();
             return "";
+        }
+    }
+
+    private String parseAndValidate(String jwt, URL keyOptions) {
+
+        try {
+            ConfigurableJWTProcessor jwtProcessor = new DefaultJWTProcessor();
+            JWKSource keySource = new RemoteJWKSet(keyOptions);
+            JWSAlgorithm expectedJWSAlg = JWSAlgorithm.RS256; // should this really be hardcoded?
+            JWSKeySelector keySelector = new JWSVerificationKeySelector(expectedJWSAlg, keySource);
+            jwtProcessor.setJWSKeySelector(keySelector);
+
+            SecurityContext ctx = null; // optional context parameter, not required here
+            JWTClaimsSet claimsSet = jwtProcessor.process(jwt, null);
+
+            return claimsSet.toJSONObject().toString();
+        } catch (Exception e) {
+            System.err.println("Nooooo\n\nooooooooooo");
+            return null;
         }
     }
 

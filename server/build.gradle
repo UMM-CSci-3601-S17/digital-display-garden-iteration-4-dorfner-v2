@@ -25,6 +25,7 @@ dependencies {
 
     compile 'com.github.scribejava:scribejava-apis:4.1.0'
     compile 'io.jsonwebtoken:jjwt:0.7.0'
+    compile 'com.nimbusds:nimbus-jose-jwt:4.23'
 
     testCompile 'junit:junit:4.12'
 }
