@@ -73,20 +73,7 @@ public class QRCodes {
         for(int i = 0; i < numBeds; i++) {
             bedURLs[i] = urlPrefix + bedNames[i];
             try {
-                BufferedImage QRImage = createQRFromURL(bedURLs[i]);
-
-                Graphics g = QRImage.getGraphics();
-                int width = QRImage.getWidth();
-
-                FontMetrics fmForURL = g.getFontMetrics();
-                int x = (width - fmForURL.stringWidth(bedURLs[i]))/2;
-
-                g.setColor(Color.black);
-                g.setFont(g.getFont().deriveFont(Font.CENTER_BASELINE, 11));
-                g.drawString(bedURLs[i], x, 285);
-                g.dispose();
-
-                qrCodeImages.add(QRImage);
+                qrCodeImages.add(createQRFromURL(bedURLs[i]));
             }
             catch(IOException ioe)
             {
