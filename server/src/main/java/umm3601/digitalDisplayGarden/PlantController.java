@@ -475,6 +475,30 @@ public class PlantController {
         return addFlowerRating(id, like, uploadID);
     }
 
+
+    public void changeRating(String id, boolean like, String uploadID) {
+
+        Document filterDoc = new Document();
+
+        ObjectId objectId;
+
+//        try {
+//            objectId = new ObjectId(id);
+//        } catch (IllegalArgumentException e) {
+//            return false;
+//        }
+
+        filterDoc.append("_id", new ObjectId(id));
+        filterDoc.append("uploadId", uploadID);
+
+        Document rating = new Document();
+        rating.append("like", !like);
+        rating.append("id", new ObjectId(id));
+
+        plantCollection.findOneAndReplace(filterDoc, rating);
+//        return null != plantCollection.findOneAndUpdate(filterDoc, push("metadata.ratings", rating));
+    }
+
     /**
      *
      * @return a sorted JSON array of all the distinct uploadIds in plant collection of the DB
