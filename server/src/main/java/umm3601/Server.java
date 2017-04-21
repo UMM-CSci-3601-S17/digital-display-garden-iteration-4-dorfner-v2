@@ -4,7 +4,7 @@ import org.bson.Document;
 import spark.Route;
 import spark.utils.IOUtils;
 import com.mongodb.util.JSON;
-import umm3601.digitalDisplayGarden.Auth;
+import umm3601.digitalDisplayGarden.Authentication.Auth;
 import umm3601.digitalDisplayGarden.PlantController;
 
 import java.io.*;
@@ -104,7 +104,7 @@ public class Server {
            String state = params.get("state")[0];
            String code = params.get("code")[0];
 
-           return auth.getProfile(state, code);
+           return auth.getEmails(state, code);
         });
 
         // List plants

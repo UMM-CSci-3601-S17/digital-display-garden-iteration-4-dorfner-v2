@@ -24,6 +24,7 @@ dependencies {
     compile 'com.google.zxing:javase:2.2'
 
     compile 'com.github.scribejava:scribejava-apis:4.1.0'
+    compile 'io.jsonwebtoken:jjwt:0.7.0'
 
     testCompile 'junit:junit:4.12'
 }
