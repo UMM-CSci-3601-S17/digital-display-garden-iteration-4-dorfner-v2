@@ -27,7 +27,7 @@ export class PlantListService {
     }
     getFlowersByFilter(filterUrl: string): Observable<Plant[]> {
         return this.http.request(this.plantUrl + filterUrl).map(res => res.json());
-    }
+    } 
     getFlowersByBed(bed: string): Observable<Plant[]> {
         return this.http.request(this.plantUrl + "?gardenLocation=" + bed).map(res => res.json());
     }
@@ -43,14 +43,14 @@ export class PlantListService {
     ratePlant(id: string, like: boolean): Observable<boolean> {
         let returnObject = {
             id: id,
-            like: like 
+            like: like
         };
         return this.http.post(this.plantUrl + "/" + "rate", JSON.stringify(returnObject)).map(res => res.json());
     }
-
-    deleteRate(id: string): Observable<any> {
-        return this.http.delete(this.plantUrl + "/" + "rate" + id).map(res => res.json());
-    }
+        // might not need if we do post request
+    // deleteRate(id: string): Observable<any> {
+    //     return this.http.delete(this.plantUrl + "/" + "rate/" + id).map(res => res.json());
+    // }
 
 
 
