@@ -21,7 +21,7 @@
             Upload
         </button>
 
-        <div *ngIf="filename!==undefined"> Your file was successfully uploaded as data set {{this.filename}}.
+        <div *ngIf="filename!==undefined"> Your file was successfully uploaded for plant {{this.id}}.
         </div>
         <div *ngIf="filename === undefined && uploadAttempted === true">File upload failed.</div>
 
