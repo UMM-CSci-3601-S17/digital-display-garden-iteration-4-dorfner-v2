@@ -27,7 +27,7 @@ Remove the default configuration:
 # rm default
 ```
 
-Create a new file in that location with the following content:
+Create a new file with any name in that location with the following content:
 ```
 server {
         listen 80 default_server;
@@ -69,15 +69,19 @@ Then run it interactively:
 # certbot certonly
 ```
 
-There are two steps that are a little confusing. The first 
-is when it asks you to choose between "webroot" and "standalone".
-Choose "webroot". The other trouble-point is when it asks you to
-choose what webroot to use. You must first enter "1", and then it
-will prompt you for the path. Use `/var/www/html`.
+The script will ask you a bunch of questions, but there
+should only be a couple that are non-obvious.
+
+The first is when it asks you to choose between "webroot" and "standalone".
+Choose "webroot". The second is when it asks you to enter your domain name(s).
+Simply use the domain name of your server (which we've been referring to as
+"yourdomainname"). The final trouble-point is when it asks you to
+select what webroot to use. You must first enter "1", and then it
+will prompt you to input the webroot. Use `/var/www/html`.
 
 ## Re-configuring NGINX
 
-Now, modify your config file to look like the following and the 
+Now, replace the contents of your config file with the following and then
 restart NGINX again.
 
 ```
@@ -117,7 +121,7 @@ need to block the port to force clients to go through the secure proxy.
 
 First, allow `ssh` through the firewall
 ```
-# ufw add ssh
+# ufw allow ssh
 ```
 Then enable the firewall
 ```
@@ -125,8 +129,8 @@ Then enable the firewall
 ```
 Finally, allow ports 80 and 443 for the server
 ```
-# ufw enable 80
-# ufw enable 443
+# ufw allow 80
+# ufw allow 443
 ```
 ## Final Remarks
 
