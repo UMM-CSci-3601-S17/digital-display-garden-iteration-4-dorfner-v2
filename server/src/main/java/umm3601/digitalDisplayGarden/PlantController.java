@@ -11,8 +11,10 @@ import org.bson.BsonInvalidOperationException;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
-import org.bson.conversions.Bson;
-import org.joda.time.DateTime;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+
 
 import java.io.OutputStream;
 import java.util.Iterator;
@@ -318,6 +320,9 @@ public class PlantController {
         FindIterable<Document> plantFindIterable = plantCollection.find(new Document().append("uploadId", uploadId));
         Iterator<Document> plantIterator = plantFindIterable.iterator();
 
+        // [0-1, 1-2, ..., 23-24]
+        int[] timeCounts = new int[24];
+
         //for each plant, get a list of comments and write each comment to the excel
         while(plantIterator.hasNext()) {
             Document plant = plantIterator.next();
@@ -362,6 +367,18 @@ public class PlantController {
                     (int) dislikes,
                     (int) numVisits,
                     (int) comments);
+
+            // Get timestamps of visits for this plant
+            for (Document visit: visits) {
+                // number of seconds since the Unix epoch
+                int epochSecs = visit.getObjectId("visit").getTimestamp();
+                ZoneId zoneId = ZoneId.of( "America/Chicago");
+                ZonedDateTime currentVisitTime = ZonedDateTime.ofInstant(Instant.ofEpochSecond((long) epochSecs), zoneId);
+                timeCounts[currentVisitTime.getHour()]++;
+            }
+
+            collectedDataWriter.writeTimes(timeCounts);
+
         }
         collectedDataWriter.complete();
     }
