@@ -115,6 +115,7 @@ public class Server {
 
         // List plants
         get("api/plants", (req, res) -> {
+            System.out.println(req.cookie("garbage"));
             res.type("application/json");
             return plantController.listPlants(req.queryMap().toMap(), plantController.getLiveUploadId());
         });

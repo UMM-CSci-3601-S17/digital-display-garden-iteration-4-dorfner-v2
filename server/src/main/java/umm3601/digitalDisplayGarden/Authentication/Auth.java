@@ -33,8 +33,11 @@ public class Auth {
     private static final String googleOpenIDConfigurationEndpoint = "https://accounts.google.com/.well-known/openid-configuration";
     private final String clientId;
     private final String clientSecret;
-    private final Map<String, OAuth20Service> quedAuth;
+    private final List<String> states;
     private final Gson gson;
+
+    // For authenticating callbacks
+    private final OAuth20Service globalService;
 //    private static final String PROTECTED_RESOURCE_URL = "https://accounts.google.com/o/oauth2/v2/auth";
 
     private List<String> authUsers;
@@ -43,16 +46,24 @@ public class Auth {
     public Auth(String clientId, String clientSecret){
         this.clientId = clientId;
         this.clientSecret = clientSecret;
-        this.quedAuth = new HashMap<String, OAuth20Service>();
+        this.states = new ArrayList<>();
         this.gson = new Gson();
         this.authUsers = new ArrayList<>();
         authUsers.add("gordo580@morris.umn.edu");
         authUsers.add("schr1230@morris.umn.edu");
         this.authCookies = new LinkedList<>();
+        this.globalService = new ServiceBuilder()
+                .apiKey(clientId)
+                .apiSecret(clientSecret)
+                .scope("email") // replace with desired scope
+                .callback("http://localhost:2538/callback")
+                .build(GoogleApi20.instance());
     }
 
     public String getAuthURL(){
         final String secretState = "secret" + new Random().nextInt(999_999);
+        // I think we have to create a new service for every request we send out
+        // since each one needs a different secretState
         final OAuth20Service service = new ServiceBuilder()
                 .apiKey(clientId)
                 .apiSecret(clientSecret)
@@ -66,7 +77,7 @@ public class Auth {
         additionalParams.put("prompt", "consent");
 //        additionalParams.put("response_type", "code");
         final String authorizationUrl = service.getAuthorizationUrl(additionalParams);
-        quedAuth.put(secretState, service);
+        states.add(secretState);
 
         return authorizationUrl;
     }
@@ -76,9 +87,15 @@ public class Auth {
     public String getEmail(String state, String code){
 
         try {
-            OAuth20Service service = quedAuth.get(state);
-            OAuth2AccessToken accessToken = service.getAccessToken(code);
-            accessToken = service.refreshAccessToken(accessToken.getRefreshToken());
+
+            // check that this is a legitimate request
+            if (states.contains(state)) {
+                states.remove(state);
+            } else {
+                return "";
+            }
+            OAuth2AccessToken accessToken = globalService.getAccessToken(code);
+            accessToken = globalService.refreshAccessToken(accessToken.getRefreshToken());
 
 
             GoogleToken googleToken = gson.fromJson(accessToken.getRawResponse(), GoogleToken.class);
