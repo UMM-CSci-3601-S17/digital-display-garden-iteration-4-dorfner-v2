@@ -17,6 +17,7 @@ public class CollectedDataWriter {
     XSSFWorkbook workbook;
     XSSFSheet commentsSheet;
     XSSFSheet ratingsSheet;
+    XSSFSheet timesSheet;
     int commentCount;
     int ratingCount;
 
@@ -26,6 +27,7 @@ public class CollectedDataWriter {
         this.workbook = new XSSFWorkbook();
         this.commentsSheet = workbook.createSheet("Comments");
         this.ratingsSheet = workbook.createSheet("Counts");
+        this.timesSheet = workbook.createSheet("TimeStamps");
 
         Row commentRow = commentsSheet.createRow(0);
         Cell cell = commentRow.createCell(0);
@@ -74,6 +76,14 @@ public class CollectedDataWriter {
         cell.setCellValue("comments");
 
         ratingCount = 1;
+
+        Row timeRow = timesSheet.createRow(0);
+        cell = timeRow.createCell(0);
+        cell.setCellValue("Hour");
+
+        cell = timeRow.createCell(1);
+        cell.setCellValue("Visits");
+
     }
 
     /**
@@ -150,6 +160,17 @@ public class CollectedDataWriter {
         ratingCount++;
     }
 
+    public void writeTimes(int[] timeCounts) {
+        for (int i = 0; i < timeCounts.length; i++) {
+            Row row = timesSheet.createRow(i + 1);
+            Cell cell = row.createCell(0);
+            cell.setCellValue(i + " - " + (i + 1));
+
+            cell = row.createCell(1);
+            cell.setCellValue(timeCounts[i]);
+        }
+    }
+
     /**
      * Writes the spreadsheet to the outputstream, then closes it.
      * @throws IOException
@@ -166,6 +187,10 @@ public class CollectedDataWriter {
         }
         for(int i=0; i<8; i++){
             ratingsSheet.autoSizeColumn(i);
+        }
+
+        for(int i=0; i<2; i++){
+            timesSheet.autoSizeColumn(i);
         }
 
         workbook.write(outputStream);
