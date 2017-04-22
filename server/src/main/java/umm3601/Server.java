@@ -134,7 +134,7 @@ public class Server {
            res.type("application/png");
            plantController.getImage(res.raw().getOutputStream(),
                                     req.params("plantID"),
-                                   null);
+                                   plantController.getLiveUploadId());
            return res;
         });
 

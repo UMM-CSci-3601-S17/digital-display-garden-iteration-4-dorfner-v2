@@ -16,6 +16,7 @@
 
         <div *ngIf="plant.photoLocation">
             <img [attr.src]="this.url + 'plants/' + this.id + '/getImage'">
+            <br> Uploading new photo will replace this photo.
         </div><br>
 
         <file-upload #fu (change)="filename = undefined; uploadAttempted = false" [multiple]="false">-</file-upload>

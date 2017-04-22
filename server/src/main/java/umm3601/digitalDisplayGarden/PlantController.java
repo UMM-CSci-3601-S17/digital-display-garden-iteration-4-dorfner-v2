@@ -118,23 +118,23 @@ public class PlantController {
      * </code>
      *
      * @param plantID an ID number of a plant in the DB
-     * @param uploadID Dataset to find the plant
+     * @param uploadId Dataset to find the plant
      * @return a string representation of a JSON value
      */
-    public String getPlantByPlantID(String plantID, String uploadID) {
+    public String getPlantByPlantID(String plantID, String uploadId) {
 
         FindIterable<Document> jsonPlant;
         String returnVal;
         try {
 
             jsonPlant = plantCollection.find(and(eq("id", plantID),
-                    eq("uploadId", uploadID)))
+                    eq("uploadId", uploadId)))
                     .projection(fields(include("commonName", "cultivar", "photoLocation")));
 
             Iterator<Document> iterator = jsonPlant.iterator();
 
             if (iterator.hasNext()) {
-                addVisit(plantID, uploadID);
+                addVisit(plantID, uploadId);
                 returnVal = iterator.next().toJson();
             } else {
                 returnVal = "null";
@@ -151,7 +151,7 @@ public class PlantController {
     /**
      *
      * @param plantID The plant to get feedback of
-     * @param uploadID Dataset to find the plant
+     * @param uploadId Dataset to find the plant
      *
      * @return JSON for the number of interactions of a plant (likes + dislikes + comments)
      * Of the form:
@@ -160,7 +160,7 @@ public class PlantController {
      * }
      */
 
-    public String getFeedbackForPlantByPlantID(String plantID, String uploadID) {
+    public String getFeedbackForPlantByPlantID(String plantID, String uploadId) {
         long comments = 0;
         long likes = 0;
         long dislikes = 0;
@@ -168,7 +168,7 @@ public class PlantController {
 
         Document out = new Document();
 
-        FindIterable document = plantCollection.find(new Document().append("id", plantID).append("uploadId", uploadID));
+        FindIterable document = plantCollection.find(new Document().append("id", plantID).append("uploadId", uploadId));
 
         Iterator iterator = document.iterator();
         if(iterator.hasNext()){
@@ -200,15 +200,15 @@ public class PlantController {
 
     // Used in the garden website
     /**
-     * Takes `uploadID` and returns all bed names as a json format string
-     * @param uploadID - the year that the data was uploaded
+     * Takes `uploadId` and returns all bed names as a json format string
+     * @param uploadId - the year that the data was uploaded
      * @return String representation of json with all bed names
      */
-    public String getGardenLocationsAsJson(String uploadID){
+    public String getGardenLocationsAsJson(String uploadId){
         AggregateIterable<Document> documents
                 = plantCollection.aggregate(
                 Arrays.asList(
-                        Aggregates.match(eq("uploadId", uploadID)), //!! Order is important here
+                        Aggregates.match(eq("uploadId", uploadId)), //!! Order is important here
                         Aggregates.group("$gardenLocation"),
                         Aggregates.sort(Sorts.ascending("_id"))
                 ));
@@ -217,13 +217,13 @@ public class PlantController {
 
     // Used in the QR code generation
     /**
-     * Takes `uploadID` and returns all bed names as an array of Strings
-     * @param uploadID - - the year that the data was uploaded
+     * Takes `uploadId` and returns all bed names as an array of Strings
+     * @param uploadId - - the year that the data was uploaded
      * @return an array of strings
      */
-    public String[] getGardenLocations(String uploadID){
+    public String[] getGardenLocations(String uploadId){
         Document filter = new Document();
-        filter.append("uploadId", uploadID);
+        filter.append("uploadId", uploadId);
         DistinctIterable<String>  bedIterator = plantCollection.distinct("gardenLocation", filter, String.class);
         List<String> beds = new ArrayList<String>();
         for(String s : bedIterator)
@@ -238,10 +238,10 @@ public class PlantController {
      *
      * @param id a hexstring specifiying the oid
      * @param comment true if this is a like, false if this is a dislike
-     * @param uploadID Dataset to find the plant
+     * @param uploadId Dataset to find the plant
      * @return true iff the operation succeeded.
      */
-    public boolean addComment(String id, String comment, String uploadID) {
+    public boolean addComment(String id, String comment, String uploadId) {
         Document filterDoc = new Document();
         ObjectId objectId;
 
@@ -252,7 +252,7 @@ public class PlantController {
         }
 
         filterDoc.append("_id", new ObjectId(id));
-        filterDoc.append("uploadId", uploadID);
+        filterDoc.append("uploadId", uploadId);
 
         Document comments = new Document();
         comments.append("comment", comment);
@@ -272,10 +272,10 @@ public class PlantController {
      * If either of the keys are missing or the types of the values are
      * wrong, false is returned.
      * @param json string representation of JSON object
-     * @param uploadID Dataset to find the plant
+     * @param uploadId Dataset to find the plant
      * @return true iff the comment was successfully submitted
      */
-    public boolean addComment(String json, String uploadID) {
+    public boolean addComment(String json, String uploadId) {
         String comment;
         String id;
 
@@ -302,7 +302,7 @@ public class PlantController {
             return false;
         }
 
-    return addComment(id, comment, uploadID);
+        return addComment(id, comment, uploadId);
 
     }
 
@@ -370,12 +370,22 @@ public class PlantController {
         collectedDataWriter.complete();
     }
 
-    public void getImage(OutputStream outputStream, String plantId, String uploadID) {
+    public void getImage(OutputStream outputStream, String plantId, String uploadId) {
         try {
-            String filePath = ".photos" + '/' + plantId + ".png";
+            Document filterDoc = new Document();
+
+            filterDoc.append("id", plantId);
+            filterDoc.append("uploadId", uploadId);
+
+            Iterator<Document> iter = plantCollection.find(filterDoc).iterator();
+
+            Document plant = iter.next();
+            String filePath = plant.getString("photoLocation");
+
+//            String filePath = ".photos" + '/' + plantId + ".png";
             File file = new File(filePath);
             BufferedImage photo = ImageIO.read(file);
-            ImageIO.write(photo,"PNG",outputStream);
+            ImageIO.write(photo,"JPEG",outputStream);
 
         }
         catch (IOException ioe) {
@@ -384,7 +394,7 @@ public class PlantController {
         }
     }
     /**
-     * Deletes all data associated with the specified uploadID
+     * Deletes all data associated with the specified uploadId
      * in the database.
      * Returns a Document of the following form
      * <code>
@@ -393,22 +403,22 @@ public class PlantController {
      *         uploadIds: [ String, ... ]
      *     }
      * </code>
-     * Success will be true if the uploadID was found and false if it wasn't.
+     * Success will be true if the uploadId was found and false if it wasn't.
      * <br/>
-     * uploadIDs contains a list of the remaining uploadIds in the database
-     * @param uploadID the uploadID to delete
+     * uploadIds contains a list of the remaining uploadIds in the database
+     * @param uploadId the uploadId to delete
      * @return A Document specifying the status of the operation
-     * @throws IllegalStateException if the specified uploadID is currently the liveUploadID
+     * @throws IllegalStateException if the specified uploadId is currently the liveUploadID
      */
-    public Document deleteUploadID (String uploadID) {
+    public Document deleteUploadID (String uploadId) {
 
-        if (getLiveUploadId().equals(uploadID)) {
-            throw new IllegalStateException("The uploadID cannot be deleted because it is the liveUploadID");
+        if (getLiveUploadId().equals(uploadId)) {
+            throw new IllegalStateException("The uploadId cannot be deleted because it is the liveUploadID");
         }
         Document filterDoc = new Document();
         Document returnDoc = new Document();
 
-        filterDoc.append("uploadId", uploadID);
+        filterDoc.append("uploadId", uploadId);
         long deleted = plantCollection.deleteMany(filterDoc).getDeletedCount();
         returnDoc.append("success", deleted != 0);
         returnDoc.append("uploadIds", listUploadIds());
@@ -420,11 +430,11 @@ public class PlantController {
      *
      * @param id a hexstring specifiying the oid
      * @param like true if this is a like, false if this is a dislike
-     * @param uploadID Dataset to find the plant
+     * @param uploadId Dataset to find the plant
      * @return true iff the operation succeeded.
      */
 
-    public boolean addFlowerRating(String id, boolean like, String uploadID) {
+    public boolean addFlowerRating(String id, boolean like, String uploadId) {
 
         Document filterDoc = new Document();
 
@@ -437,7 +447,7 @@ public class PlantController {
         }
 
         filterDoc.append("_id", new ObjectId(id));
-        filterDoc.append("uploadId", uploadID);
+        filterDoc.append("uploadId", uploadId);
 
         Document rating = new Document();
         rating.append("like", like);
@@ -457,11 +467,11 @@ public class PlantController {
      * </code>
      *
      * @param json string representation of a JSON object
-     * @param uploadID Dataset to find the plant
+     * @param uploadId Dataset to find the plant
      * @return true iff the operation succeeded.
      */
 
-    public boolean addFlowerRating(String json, String uploadID){
+    public boolean addFlowerRating(String json, String uploadId){
         boolean like;
         String id;
 
@@ -488,7 +498,7 @@ public class PlantController {
             return false;
         }
 
-        return addFlowerRating(id, like, uploadID);
+        return addFlowerRating(id, like, uploadId);
     }
 
     /**
@@ -510,11 +520,11 @@ public class PlantController {
 //        return JSON.serialize(plantCollection.distinct("uploadId","".getClass()));
     }
 
-    public boolean addVisit(String plantID, String uploadID) {
+    public boolean addVisit(String plantID, String uploadId) {
 
         Document filterDoc = new Document();
         filterDoc.append("id", plantID);
-        filterDoc.append("uploadId", uploadID);
+        filterDoc.append("uploadId", uploadId);
 
         Document visit = new Document();
         visit.append("visit", new ObjectId());

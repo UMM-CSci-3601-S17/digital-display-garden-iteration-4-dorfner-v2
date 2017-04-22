@@ -43,10 +43,10 @@ public class Photos {
         }
 
         try {
-            String filePath = ".photos" + '/' + plantId + ".png";
+            String filePath = ".photos/" + uploadId + '/' + plantId + ".jpeg";
             File outputFile = new File(filePath);
             String relPath = outputFile.getPath();
-            ImageIO.write(photo, "png", outputFile);
+            ImageIO.write(photo, "jpeg", outputFile);
 
 
             Document filterDoc = new Document();
