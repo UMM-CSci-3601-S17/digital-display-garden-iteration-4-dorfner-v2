@@ -79,7 +79,7 @@ public class PlantController {
     // List plants
     public String listPlants(Map<String, String[]> queryParams, String uploadID) {
         Document filterDoc = new Document();
-        filterDoc.append("uploadID", uploadID);
+        filterDoc.append("uploadId", uploadID);
 
         if (queryParams.containsKey("gardenLocation")) {
             String location =(queryParams.get("gardenLocation")[0]);
@@ -128,7 +128,7 @@ public class PlantController {
         try {
 
             jsonPlant = plantCollection.find(and(eq("id", plantID),
-                    eq("uploadID", uploadID)))
+                    eq("uploadId", uploadID)))
                     .projection(fields(include("commonName", "cultivar", "photoLocation")));
 
             Iterator<Document> iterator = jsonPlant.iterator();
@@ -168,7 +168,7 @@ public class PlantController {
 
         Document out = new Document();
 
-        FindIterable document = plantCollection.find(new Document().append("id", plantID).append("uploadID", uploadID));
+        FindIterable document = plantCollection.find(new Document().append("id", plantID).append("uploadId", uploadID));
 
         Iterator iterator = document.iterator();
         if(iterator.hasNext()){
@@ -208,7 +208,7 @@ public class PlantController {
         AggregateIterable<Document> documents
                 = plantCollection.aggregate(
                 Arrays.asList(
-                        Aggregates.match(eq("uploadID", uploadID)), //!! Order is important here
+                        Aggregates.match(eq("uploadId", uploadID)), //!! Order is important here
                         Aggregates.group("$gardenLocation"),
                         Aggregates.sort(Sorts.ascending("_id"))
                 ));
@@ -223,7 +223,7 @@ public class PlantController {
      */
     public String[] getGardenLocations(String uploadID){
         Document filter = new Document();
-        filter.append("uploadID", uploadID);
+        filter.append("uploadId", uploadID);
         DistinctIterable<String>  bedIterator = plantCollection.distinct("gardenLocation", filter, String.class);
         List<String> beds = new ArrayList<String>();
         for(String s : bedIterator)
@@ -252,7 +252,7 @@ public class PlantController {
         }
 
         filterDoc.append("_id", new ObjectId(id));
-        filterDoc.append("uploadID", uploadID);
+        filterDoc.append("uploadId", uploadID);
 
         Document comments = new Document();
         comments.append("comment", comment);
@@ -319,7 +319,7 @@ public class PlantController {
 
         CollectedDataWriter collectedDataWriter = new CollectedDataWriter(outputStream);
 
-        FindIterable<Document> plantFindIterable = plantCollection.find(new Document().append("uploadID", uploadID));
+        FindIterable<Document> plantFindIterable = plantCollection.find(new Document().append("uploadId", uploadID));
         Iterator<Document> plantIterator = plantFindIterable.iterator();
 
         //for each plant, get a list of comments and write each comment to the excel
@@ -375,7 +375,7 @@ public class PlantController {
             Document filterDoc = new Document();
 
             filterDoc.append("id", plantId);
-            filterDoc.append("uploadID", uploadID);
+            filterDoc.append("uploadId", uploadID);
 
             Iterator<Document> iter = plantCollection.find(filterDoc).iterator();
 
@@ -418,10 +418,10 @@ public class PlantController {
         Document filterDoc = new Document();
         Document returnDoc = new Document();
 
-        filterDoc.append("uploadID", uploadID);
+        filterDoc.append("uploadId", uploadID);
         long deleted = plantCollection.deleteMany(filterDoc).getDeletedCount();
         returnDoc.append("success", deleted != 0);
-        returnDoc.append("uploadIDs", listUploadIds());
+        returnDoc.append("uploadIds", listUploadIds());
         return returnDoc;
     }
 
@@ -447,7 +447,7 @@ public class PlantController {
         }
 
         filterDoc.append("_id", new ObjectId(id));
-        filterDoc.append("uploadID", uploadID);
+        filterDoc.append("uploadId", uploadID);
 
         Document rating = new Document();
         rating.append("like", like);
@@ -509,7 +509,7 @@ public class PlantController {
         AggregateIterable<Document> documents
                 = plantCollection.aggregate(
                 Arrays.asList(
-                        Aggregates.group("$uploadID"),
+                        Aggregates.group("$uploadId"),
                         Aggregates.sort(Sorts.ascending("_id"))
                 ));
         List<String> lst = new LinkedList<>();
@@ -524,7 +524,7 @@ public class PlantController {
 
         Document filterDoc = new Document();
         filterDoc.append("id", plantID);
-        filterDoc.append("uploadID", uploadID);
+        filterDoc.append("uploadId", uploadID);
 
         Document visit = new Document();
         visit.append("visit", new ObjectId());
