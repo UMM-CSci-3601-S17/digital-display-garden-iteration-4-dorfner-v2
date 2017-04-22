@@ -1,0 +1,47 @@
+<div class="photo-page">
+    <h2>Upload a Plant Photo</h2>
+
+<div>
+    Plant ID#
+    <input #textbox type="text" [(ngModel)]="textValue">
+    <button (click)="getPlant(textbox.value)" value = "clicked" class="btn btn-primary">Find</button>
+</div>
+
+    <div *ngIf="plant" >
+        <br>
+        <u><strong>Plant</strong></u><br>
+        <strong>Common Name:</strong> {{plant.commonName}}<br>
+        <strong>Cultivar:</strong> {{plant.cultivar}}<br>
+        <br>
+
+        <div *ngIf="plant.photoLocation">
+            <img [attr.src]="this.url + 'plants/' + this.id + '/getImage'">
+            <br> Uploading new photo will replace this photo.
+        </div><br>
+
+        <file-upload #fu (change)="filename = undefined; uploadAttempted = false" [multiple]="false">-</file-upload>
+
+        <button *ngIf="filename === undefined" class="btn btn-primary" (click)="this.handleUpload()" style="margin-top: 10px">
+            <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
+            Upload
+        </button>
+
+        <div *ngIf="filename!==undefined"> Your file was successfully uploaded for plant {{this.id}}.
+        </div>
+        <div *ngIf="filename === undefined && uploadAttempted === true">File upload failed.</div>
+
+    </div>
+
+    <div *ngIf="!plant && clicked">
+        Invalid plant ID
+
+
+    </div>
+
+</div>
+
+<style>
+    .photo-page {
+        margin-top: -115px;
+    }
+</style>

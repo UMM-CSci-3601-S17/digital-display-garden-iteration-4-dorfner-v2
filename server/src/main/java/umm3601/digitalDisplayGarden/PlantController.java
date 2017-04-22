@@ -11,7 +11,11 @@ import org.bson.types.ObjectId;
 
 import org.bson.conversions.Bson;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.OutputStream;
+import java.nio.Buffer;
 import java.util.Iterator;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -48,9 +52,9 @@ public class PlantController {
     }
 
     /**
-     * Returns a string representation of uploadId in the config collection.
+     * Returns a string representation of uploadID in the config collection.
      * Assumes there is only one liveUploadId in the config collection for any given time.
-     * @return a string representation of uploadId in the config collection
+     * @return a string representation of uploadID in the config collection
      */
     public String getLiveUploadId() {
         try
@@ -70,9 +74,9 @@ public class PlantController {
     }
 
     // List plants
-    public String listPlants(Map<String, String[]> queryParams, String uploadId) {
+    public String listPlants(Map<String, String[]> queryParams, String uploadID) {
         Document filterDoc = new Document();
-        filterDoc.append("uploadId", uploadId);
+        filterDoc.append("uploadId", uploadID);
 
         if (queryParams.containsKey("gardenLocation")) {
             String location =(queryParams.get("gardenLocation")[0]);
@@ -126,7 +130,7 @@ public class PlantController {
 
             jsonPlant = plantCollection.find(and(eq("id", plantID),
                     eq("uploadId", uploadID)))
-                    .projection(fields(include("commonName", "cultivar")));
+                    .projection(fields(include("commonName", "cultivar", "photoLocation")));
 
             Iterator<Document> iterator = jsonPlant.iterator();
 
@@ -306,7 +310,7 @@ public class PlantController {
             return false;
         }
 
-    return addComment(id, comment, uploadID);
+        return addComment(id, comment, uploadID);
 
     }
 
@@ -317,13 +321,13 @@ public class PlantController {
      * outputStream is closed when this method exits
      *
      * @param outputStream stream to which the excel file is written
-     * @param uploadId Dataset to find a plant
+     * @param uploadID Dataset to find a plant
      */
-    public void exportCollectedData(OutputStream outputStream, String uploadId) throws IOException {
+    public void exportCollectedData(OutputStream outputStream, String uploadID) throws IOException {
 
         CollectedDataWriter collectedDataWriter = new CollectedDataWriter(outputStream);
 
-        FindIterable<Document> plantFindIterable = plantCollection.find(new Document().append("uploadId", uploadId));
+        FindIterable<Document> plantFindIterable = plantCollection.find(new Document().append("uploadId", uploadID));
         Iterator<Document> plantIterator = plantFindIterable.iterator();
 
         //for each plant, get a list of comments and write each comment to the excel
@@ -374,6 +378,29 @@ public class PlantController {
         collectedDataWriter.complete();
     }
 
+    public void getImage(OutputStream outputStream, String plantId, String uploadID) {
+        try {
+            Document filterDoc = new Document();
+
+            filterDoc.append("id", plantId);
+            filterDoc.append("uploadId", uploadID);
+
+            Iterator<Document> iter = plantCollection.find(filterDoc).iterator();
+
+            Document plant = iter.next();
+            String filePath = plant.getString("photoLocation");
+
+//            String filePath = ".photos" + '/' + plantId + ".png";
+            File file = new File(filePath);
+            BufferedImage photo = ImageIO.read(file);
+            ImageIO.write(photo,"JPEG",outputStream);
+
+        }
+        catch (IOException ioe) {
+            ioe.printStackTrace();
+            System.err.println("Could not write some Images to disk, exiting.");
+        }
+    }
     /**
      * Deletes all data associated with the specified uploadID
      * in the database.
@@ -381,12 +408,12 @@ public class PlantController {
      * <code>
      *     {
      *         success: boolean,
-     *         uploadIds: [ String, ... ]
+     *         uploadIDs: [ String, ... ]
      *     }
      * </code>
      * Success will be true if the uploadID was found and false if it wasn't.
      * <br/>
-     * uploadIDs contains a list of the remaining uploadIds in the database
+     * uploadIDs contains a list of the remaining uploadIDs in the database
      * @param uploadID the uploadID to delete
      * @return A Document specifying the status of the operation
      * @throws IllegalStateException if the specified uploadID is currently the liveUploadID
@@ -484,7 +511,7 @@ public class PlantController {
 
     /**
      *
-     * @return a sorted JSON array of all the distinct uploadIds in plant collection of the DB
+     * @return a sorted JSON array of all the distinct uploadIDs in plant collection of the DB
      */
     public List<String> listUploadIds() {
         AggregateIterable<Document> documents
@@ -498,7 +525,7 @@ public class PlantController {
             lst.add(d.getString("_id"));
         }
         return lst;
-//        return JSON.serialize(plantCollection.distinct("uploadId","".getClass()));
+//        return JSON.serialize(plantCollection.distinct("uploadID","".getClass()));
     }
 
     public boolean addVisit(String plantID, String uploadID) {
