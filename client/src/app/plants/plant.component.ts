@@ -65,17 +65,17 @@ export class PlantComponent implements OnInit {
                 });
         }
     }
-    // to remove a like and change to dislike
-    // public unratePlant(like: boolean): void {
-    //     // if(this.rating === null && like !== null)
-    //     {
-    //         this.plantListService.ratePlant(this.plant["_id"]["$oid"], like)
-    //             .subscribe(succeeded => {
-    //                 this.rating = like;
-    //                 this.refreshFeedback();
-    //             });
-    //     }
-    // }
+
+    public deleteRate (): void {
+        {
+            this.plantListService.deleteRate(this.plant["_id"]["$oid"], this.ratingID["$oid"])
+                .subscribe(succeeded => {
+                    this.rating = null;
+                    this.refreshFeedback();
+                });
+        }
+    }
+
 
     private refreshFeedback(): void {
         //Update flower feedback numbers

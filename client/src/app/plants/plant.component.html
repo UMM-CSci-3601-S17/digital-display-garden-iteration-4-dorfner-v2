@@ -15,7 +15,7 @@
     </div>
 
     <div *ngIf="rating === true" style="text-align:center">
-        <button type="button" (click)="this.ratePlant(null)" class="btn btn-success" >
+        <button type="button" (click)="this.deleteRate()" class="btn btn-success" >
             <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"> </span> Like
         </button>
         <button type="button" (click)="this.changeRate(false)" class="btn">
@@ -27,7 +27,7 @@
         <button type="button" (click)="this.changeRate(true)" class="btn" >
             <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"> </span> Like
         </button>
-        <button type="button" (click)="this.ratePlant(null)" class="btn btn-danger">
+        <button type="button" (click)="this.deleteRate()" class="btn btn-danger">
             <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"> </span> Dislike
         </button>
     </div>

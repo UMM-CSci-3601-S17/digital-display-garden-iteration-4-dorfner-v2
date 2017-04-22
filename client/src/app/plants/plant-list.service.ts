@@ -62,5 +62,13 @@ export class PlantListService {
         return this.http.post(this.plantUrl + "/" + "changeRate", JSON.stringify(returnObject)).map(res => res.json());
     }
 
+    deleteRate(id: string, ratingID: string): Observable<any> {
+        let returnObject = {
+            id: id,
+            ratingID: ratingID,
+        };
+        return this.http.post(this.plantUrl + "/" + "deleteRate", JSON.stringify(returnObject)).map(res => res.json());
+    }
+
 
 }
