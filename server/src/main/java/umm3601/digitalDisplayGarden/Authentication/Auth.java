@@ -38,7 +38,6 @@ public class Auth {
 
     // For authenticating callbacks
     private final OAuth20Service globalService;
-//    private static final String PROTECTED_RESOURCE_URL = "https://accounts.google.com/o/oauth2/v2/auth";
 
     private List<String> authUsers;
     private List<Cookie> authCookies;
@@ -75,7 +74,6 @@ public class Auth {
         final Map<String, String> additionalParams = new HashMap<>();
         additionalParams.put("access_type", "offline");
         additionalParams.put("prompt", "consent");
-//        additionalParams.put("response_type", "code");
         final String authorizationUrl = service.getAuthorizationUrl(additionalParams);
         states.add(secretState);
 
@@ -103,9 +101,6 @@ public class Auth {
 
             String stringBody = parseAndValidate(googleToken.id_token, new URL(openIDConfiguration.jwks_uri));
             GoogleJwtBody body = gson.fromJson(stringBody, GoogleJwtBody.class);
-//            if (!body.email_verified){
-//                return
-//            }
             return body.email;
         } catch (Exception e) {
             e.printStackTrace();
