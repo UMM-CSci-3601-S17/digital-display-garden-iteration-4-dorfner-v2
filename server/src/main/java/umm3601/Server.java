@@ -119,6 +119,11 @@ public class Server {
             return plantController.changeRating(req.body(), plantController.getLiveUploadId());
         });
 
+        post("api/plants/deleteRate", (req, res) -> {
+            res.type("application/json");
+            return plantController.deleteRating(req.body(), plantController.getLiveUploadId());
+        });
+
         get("api/export", (req, res) -> {
             res.type("application/vnd.ms-excel");
             res.header("Content-Disposition", "attachment; filename=\"plant-comments.xlsx\"");

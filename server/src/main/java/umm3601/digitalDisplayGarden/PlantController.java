@@ -168,7 +168,7 @@ public class PlantController {
         FindIterable document = plantCollection.find(new Document().append("id", plantID).append("uploadId", uploadID));
 
         Iterator iterator = document.iterator();
-        if(iterator.hasNext()){
+        if (iterator.hasNext()) {
             Document result = (Document) iterator.next();
 
             //Get metadat.comments array
@@ -180,11 +180,10 @@ public class PlantController {
             List<Document> ratings = (List<Document>) ((Document) result.get("metadata")).get("ratings");
 
             //Loop through all of the entries within the array, counting like=true(like) and like=false(dislike)
-            for(Document rating : ratings)
-            {
-                if(rating.get("like").equals(true))
+            for (Document rating : ratings) {
+                if (rating.get("like").equals(true))
                     likes++;
-                else if(rating.get("like").equals(false))
+                else if (rating.get("like").equals(false))
                     dislikes++;
             }
         }
@@ -193,6 +192,7 @@ public class PlantController {
 
         out.put("interactionCount", interactions);
         return JSON.serialize(out);
+
     }
 
     // Used in the garden website
@@ -542,24 +542,88 @@ public class PlantController {
         Iterator iterator = findObjectId.iterator();
         if (iterator.hasNext()) {
             Document plant = (Document) iterator.next();
-            System.out.println("iterator");
 
             List<Document> ratings = (List<Document>) ((Document) plant.get("metadata")).get("ratings");
 
 
             for(Document deleteDoc : ratings)
             {
-                System.out.println("entered loop");
                 if(deleteDoc.get("id").equals(ratingObjectID))
                 {
                     deleteDoc.put("like", like);
-                    System.out.println("in if");
                     return null != plantCollection.findOneAndUpdate(filterDoc, set("metadata.ratings", ratings));
                 }
             }
         }
        return false;
     }
+
+    public boolean deleteRating(String json, String uploadID){
+        String id;
+        String ratingID;
+
+        try {
+
+            Document parsedDocument = Document.parse(json);
+
+            if(parsedDocument.containsKey("id") && parsedDocument.get("id") instanceof String){
+                id = parsedDocument.getString("id");
+            } else {
+                return false;
+            }
+
+            if(parsedDocument.containsKey("ratingID") && parsedDocument.get("ratingID") instanceof String){
+                ratingID = parsedDocument.getString("ratingID");
+            } else {
+                return false;
+            }
+
+        } catch (BsonInvalidOperationException e){
+            e.printStackTrace();
+            return false;
+        } catch (org.bson.json.JsonParseException e){
+            return false;
+        }
+
+        return deleteRating(id, uploadID, ratingID);
+    }
+
+
+    public boolean deleteRating(String id, String uploadID, String ratingID) {
+
+        Document filterDoc = new Document();
+
+        ObjectId objectId;
+        ObjectId ratingObjectID;
+
+        try {
+            objectId = new ObjectId(id);
+            ratingObjectID = new ObjectId(ratingID);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+
+        filterDoc.append("_id", objectId);
+        filterDoc.append("uploadId", uploadID);
+
+        FindIterable findObjectId = plantCollection.find(filterDoc);
+
+        Iterator iterator = findObjectId.iterator();
+        if (iterator.hasNext()) {
+            Document plant = (Document) iterator.next();
+
+            List<Document> ratings = (List<Document>) ((Document) plant.get("metadata")).get("ratings");
+            for (Document deleteDoc : ratings) {
+                if (deleteDoc.get("id").equals(ratingObjectID)) {
+
+                    ratings.remove(deleteDoc);
+                    return null != plantCollection.findOneAndUpdate(filterDoc, set("metadata.ratings", ratings));
+                }
+            }
+        }
+        return false;
+    }
+
     /**
      *
      * @return a sorted JSON array of all the distinct uploadIds in plant collection of the DB
