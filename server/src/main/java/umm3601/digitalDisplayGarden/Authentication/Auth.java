@@ -8,24 +8,34 @@ import com.github.scribejava.core.oauth.OAuth20Service;
 
 // For parsing the JWT from Google OAuth
 import com.nimbusds.jose.JWSAlgorithm;
+import com.nimbusds.jose.crypto.RSASSASigner;
+import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.nimbusds.jose.jwk.source.RemoteJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.JWSKeySelector;
 import com.nimbusds.jose.proc.JWSVerificationKeySelector;
 import com.nimbusds.jose.proc.SecurityContext;
+import com.nimbusds.jwt.SignedJWT;
 import com.nimbusds.jwt.proc.ConfigurableJWTProcessor;
 import com.nimbusds.jwt.proc.DefaultJWTProcessor;
 import com.nimbusds.jwt.JWTClaimsSet;
 
 import com.google.gson.Gson;
+import org.joda.time.DateTime;
 import spark.utils.IOUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 import java.util.*;
 
+import com.nimbusds.jose.*;
 
 public class Auth {
 
@@ -37,11 +47,6 @@ public class Auth {
 
     // Contains the clientSecret from Google API
     private final String clientSecret;
-
-    // Contains a list of states that grows when we issue an
-    // authentication URL and is used to confirm that callbacks
-    // are legitimate
-    private final List<String> states;
 
     // Used for parsing converting to and from JSON
     private final Gson gson;
@@ -55,10 +60,12 @@ public class Auth {
     // list of cookies currently issues to accepted users
     private List<Cookie> authCookies;
 
-    public Auth(String clientId, String clientSecret){
+    // Public/Private Keypair for signing our own JSON Web Tokens
+    private KeyPair keyPair;
+
+    public Auth(String clientId, String clientSecret) throws NoSuchAlgorithmException {
         this.clientId = clientId;
         this.clientSecret = clientSecret;
-        this.states = new ArrayList<>();
         this.gson = new Gson();
         this.authUsers = new ArrayList<>();
         authUsers.add("gordo580@morris.umn.edu");
@@ -70,20 +77,23 @@ public class Auth {
                 .scope("email") // replace with desired scope
                 .callback("http://localhost:2538/callback")
                 .build(GoogleApi20.instance());
+
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+        keyPairGenerator.initialize(2048);
+        this.keyPair = keyPairGenerator.genKeyPair();
     }
 
     /**
      * @return A string containing a URL that we can send visitors to in order to authenticate them
      */
     public String getAuthURL(){
-        final String secretState = "secret" + new Random().nextInt(999_999);
         // I think we have to create a new service for every request we send out
         // since each one needs a different secretState
         final OAuth20Service service = new ServiceBuilder()
                 .apiKey(clientId)
                 .apiSecret(clientSecret)
                 .scope("email") // replace with desired scope
-                .state(secretState)
+                .state(generateSharedGoogleSecret("todo: replace me"))
                 .callback("http://localhost:2538/callback")
                 .build(GoogleApi20.instance());
 
@@ -91,9 +101,57 @@ public class Auth {
         additionalParams.put("access_type", "offline");
         additionalParams.put("prompt", "consent");
         final String authorizationUrl = service.getAuthorizationUrl(additionalParams);
-        states.add(secretState);
 
         return authorizationUrl;
+    }
+
+    String generateSharedGoogleSecret(String originatingURL) {
+        RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
+        JWSSigner signer = new RSASSASigner(privateKey);
+
+        // Expire in 60 seconds
+        DateTime expDate = new DateTime((new Date()).getTime() + 60 * 1000);
+
+        JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
+                .issuer("digital-display-garden")
+                .claim("originating-url", originatingURL)
+                .claim("exp", expDate.toString())
+                .build();
+
+        SignedJWT signedJWT = new SignedJWT(
+                new JWSHeader(JWSAlgorithm.RS256),
+                claimsSet
+        );
+        try {
+            signedJWT.sign(signer);
+            return signedJWT.serialize();
+        } catch (JOSEException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    String unpackSharedGoogleSecret(String state) {
+        try {
+
+            SignedJWT parsedState = SignedJWT.parse(state);
+            JWSVerifier verifier = new RSASSAVerifier((RSAPublicKey)keyPair.getPublic());
+            if (parsedState.verify(verifier)) {
+
+                System.out.println(parsedState.getPayload());
+                CallBackState callBackState = gson.fromJson(parsedState
+                        .getPayload()
+                        .toJSONObject()
+                        .toString(), CallBackState.class);
+                DateTime exp = new DateTime(callBackState.exp);
+                System.out.println(exp.isAfterNow());
+            }
+            return "";
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Nooooo\n\nooooooooooo");
+            return null;
+        }
     }
 
 
@@ -103,11 +161,9 @@ public class Auth {
         try {
 
             // check that this is a legitimate request
-            if (states.contains(state)) {
-                states.remove(state);
-            } else {
-                return "";
-            }
+            String verifiedState = unpackSharedGoogleSecret(state);
+            System.out.println(verifiedState);
+
             OAuth2AccessToken accessToken = globalService.getAccessToken(code);
             accessToken = globalService.refreshAccessToken(accessToken.getRefreshToken());
 
@@ -116,6 +172,7 @@ public class Auth {
             OpenIDConfiguration openIDConfiguration = getJwksUrl();
 
             String stringBody = parseAndValidate(googleToken.id_token, new URL(openIDConfiguration.jwks_uri));
+            System.out.println(stringBody);
             GoogleJwtBody body = gson.fromJson(stringBody, GoogleJwtBody.class);
             return body.email;
         } catch (Exception e) {

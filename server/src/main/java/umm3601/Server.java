@@ -11,6 +11,7 @@ import umm3601.digitalDisplayGarden.PlantController;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import java.util.Properties;
 
@@ -34,7 +35,7 @@ public class Server {
     private static String clientId;
     private static String clientSecret;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
 
         String configFileLocation;
         if (args.length == 0) {
