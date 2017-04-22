@@ -91,24 +91,31 @@ public class Server {
         get("/", clientRoute);
 
         get("api/helloWorld", (req, res) ->{
-           res.type("text/plain");
-           res.redirect(auth.getAuthURL());
+            String cookie = req.cookie("ddg");
+            if (!auth.checkAuthorization(cookie)) {
+                res.redirect(auth.getAuthURL("api/helloWorld"));
+            }
+            res.type("text/plain");
 
-           return res;
+           return "Hello World!";
         });
 
         get("callback", (req, res) ->{
-           res.type("application/json");
            Map<String, String[]> params = req.queryMap().toMap();
            String state = params.get("state")[0];
            String code = params.get("code")[0];
 
-           String userEmail = auth.getEmail(state, code);
-
-           Cookie c = auth.getCookie();
-           res.cookie(c.name, c.value, c.max_age);
-
-           return auth.userIsVerified(userEmail);
+           String originatingURL = auth.verifyCallBack(state, code);
+           if (null != originatingURL) {
+               Cookie c = auth.getCookie();
+               res.cookie(c.name, c.value, c.max_age);
+               res.redirect(originatingURL);
+               System.out.println("good");
+           } else {
+               System.out.println("bad");
+               res.status(403);
+           }
+           return res;
         });
 
         // List plants

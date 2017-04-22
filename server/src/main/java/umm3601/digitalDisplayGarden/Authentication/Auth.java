@@ -33,7 +33,9 @@ import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.text.ParseException;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 import com.nimbusds.jose.*;
 
@@ -86,14 +88,14 @@ public class Auth {
     /**
      * @return A string containing a URL that we can send visitors to in order to authenticate them
      */
-    public String getAuthURL(){
+    public String getAuthURL(String originatingURL){
         // I think we have to create a new service for every request we send out
         // since each one needs a different secretState
         final OAuth20Service service = new ServiceBuilder()
                 .apiKey(clientId)
                 .apiSecret(clientSecret)
                 .scope("email") // replace with desired scope
-                .state(generateSharedGoogleSecret("todo: replace me"))
+                .state(generateSharedGoogleSecret(originatingURL))
                 .callback("http://localhost:2538/callback")
                 .build(GoogleApi20.instance());
 
@@ -105,16 +107,47 @@ public class Auth {
         return authorizationUrl;
     }
 
-    String generateSharedGoogleSecret(String originatingURL) {
+    /**
+     *
+     * @param jwt - a JSON Web Token, signed by us, that contains the authorization
+     *            info
+     * @return true if this is a JWT token, that we signed, that is not expired, else return false
+     */
+    public boolean checkAuthorization(String jwt) {
+        try {
+
+            SignedJWT parsedState = SignedJWT.parse(jwt);
+            JWSVerifier verifier = new RSASSAVerifier((RSAPublicKey)keyPair.getPublic());
+            if (parsedState.verify(verifier)) {
+                // the signature is valid, so check the expiration date
+                TimeStampToken timeStampToken = gson.fromJson(parsedState
+                        .getPayload()
+                        .toJSONObject()
+                        .toString(), TimeStampToken.class);
+                DateTime exp = new DateTime(timeStampToken.exp);
+                return exp.isAfterNow();
+            } else {
+                // cookie had invalid signature
+                return false;
+            }
+        } catch (ParseException e) {
+            // the cookie is not a valid jwt, reject
+            return false;
+        } catch (JOSEException e) {
+            // the cookie "couldn't be verified"
+            return false;
+        }
+    }
+
+    String generateCookieBody() {
         RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
         JWSSigner signer = new RSASSASigner(privateKey);
 
-        // Expire in 60 seconds
-        DateTime expDate = new DateTime((new Date()).getTime() + 60 * 1000);
+        // Expire in 24 hours
+        DateTime expDate = new DateTime((new Date()).getTime() + 24 * 60 * 60 * 1000);
 
         JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
                 .issuer("digital-display-garden")
-                .claim("originating-url", originatingURL)
                 .claim("exp", expDate.toString())
                 .build();
 
@@ -131,57 +164,107 @@ public class Auth {
         }
     }
 
-    String unpackSharedGoogleSecret(String state) {
-        try {
 
+
+    String generateSharedGoogleSecret(String originatingURL) {
+        RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
+        JWSSigner signer = new RSASSASigner(privateKey);
+
+        // Expire in 60 seconds
+        DateTime expDate = new DateTime((new Date()).getTime() + 60 * 1000);
+
+        JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
+                .issuer("digital-display-garden")
+                .claim("originating_url", originatingURL)
+                .claim("exp", expDate.toString())
+                .build();
+
+        SignedJWT signedJWT = new SignedJWT(
+                new JWSHeader(JWSAlgorithm.RS256),
+                claimsSet
+        );
+        try {
+            signedJWT.sign(signer);
+            return signedJWT.serialize();
+        } catch (JOSEException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    /**
+     * This method verifies that we signed the TimeStamp
+     * token and returns the payload parsed into a RedirectToken
+     * @param state a JWT that we generated to send to Google
+     * @return The parsed body of the JWT, or null if an error occurred
+     */
+    RedirectToken unpackSharedGoogleSecret(String state) {
+        try {
             SignedJWT parsedState = SignedJWT.parse(state);
             JWSVerifier verifier = new RSASSAVerifier((RSAPublicKey)keyPair.getPublic());
             if (parsedState.verify(verifier)) {
-
-                System.out.println(parsedState.getPayload());
-                CallBackState callBackState = gson.fromJson(parsedState
+                return gson.fromJson(parsedState
                         .getPayload()
                         .toJSONObject()
-                        .toString(), CallBackState.class);
-                DateTime exp = new DateTime(callBackState.exp);
-                System.out.println(exp.isAfterNow());
+                        .toString(), RedirectToken.class);
+
+            } else {
+                // failed signature
+                return null;
             }
-            return "";
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("Nooooo\n\nooooooooooo");
+        } catch (ParseException e) {
+            // the state couldn't be parsed, so it must be invalid
+            return null;
+        } catch (JOSEException e) {
+            // we got a generic error when verifying the JWT, so it must be invalid
             return null;
         }
     }
 
 
-
-    public String getEmail(String state, String code){
+    public String verifyCallBack(String state, String code) {
+        // parse the state and ensure its validity
+        RedirectToken verifiedState = unpackSharedGoogleSecret(state);
+        DateTime expTime = new DateTime(verifiedState.exp);
+        if(expTime.isAfterNow()) {
+            // error
+        }
 
         try {
-
-            // check that this is a legitimate request
-            String verifiedState = unpackSharedGoogleSecret(state);
-            System.out.println(verifiedState);
-
+            // Use the callback code to get a token from Google with info
+            // about the caller
             OAuth2AccessToken accessToken = globalService.getAccessToken(code);
             accessToken = globalService.refreshAccessToken(accessToken.getRefreshToken());
 
-
+            // parse the token for the fields we want
             GoogleToken googleToken = gson.fromJson(accessToken.getRawResponse(), GoogleToken.class);
+
+            // Get the URL for Google's OpenID description
             OpenIDConfiguration openIDConfiguration = getJwksUrl();
 
+            // Confirm that the token is signed properly and extract the body as JSON
             String stringBody = parseAndValidate(googleToken.id_token, new URL(openIDConfiguration.jwks_uri));
-            System.out.println(stringBody);
+
+            // Parse the JSON for the fields we care about
             GoogleJwtBody body = gson.fromJson(stringBody, GoogleJwtBody.class);
-            return body.email;
-        } catch (Exception e) {
+
+            // Confirm that the user is on our whitelist
+            boolean authorized = userIsVerified(body.email);
+            if (authorized) {
+                return verifiedState.originating_url;
+            } else {
+                return null;
+            }
+
+        } catch (IOException|InterruptedException|ExecutionException e) {
+            // unknown errors
+            // todo: add handling
             e.printStackTrace();
-            return "";
+            return null;
         }
     }
 
-    private String parseAndValidate(String jwt, URL keyOptions) {
+     private String parseAndValidate(String jwt, URL keyOptions) {
 
         try {
             ConfigurableJWTProcessor jwtProcessor = new DefaultJWTProcessor();
@@ -218,7 +301,7 @@ public class Auth {
     }
 
     public Cookie getCookie(){
-        String cookieBody = "" + new Random().nextInt(Integer.MAX_VALUE);
+        String cookieBody = generateCookieBody();
         Cookie c = new Cookie("ddg", cookieBody, 86400);
         authCookies.add(c);
 
