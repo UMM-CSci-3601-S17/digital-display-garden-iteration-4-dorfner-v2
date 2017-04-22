@@ -31,15 +31,28 @@ public class Auth {
 
     // Google recommends that this URL be hardcoded into programs. (see: https://developers.google.com/identity/protocols/OpenIDConnect#discovery)
     private static final String googleOpenIDConfigurationEndpoint = "https://accounts.google.com/.well-known/openid-configuration";
+
+    // Contains the clientId from Google API
     private final String clientId;
+
+    // Contains the clientSecret from Google API
     private final String clientSecret;
+
+    // Contains a list of states that grows when we issue an
+    // authentication URL and is used to confirm that callbacks
+    // are legitimate
     private final List<String> states;
+
+    // Used for parsing converting to and from JSON
     private final Gson gson;
 
     // For authenticating callbacks
     private final OAuth20Service globalService;
 
+    // hard-coded list of users that we will accept
     private List<String> authUsers;
+
+    // list of cookies currently issues to accepted users
     private List<Cookie> authCookies;
 
     public Auth(String clientId, String clientSecret){
@@ -59,6 +72,9 @@ public class Auth {
                 .build(GoogleApi20.instance());
     }
 
+    /**
+     * @return A string containing a URL that we can send visitors to in order to authenticate them
+     */
     public String getAuthURL(){
         final String secretState = "secret" + new Random().nextInt(999_999);
         // I think we have to create a new service for every request we send out
