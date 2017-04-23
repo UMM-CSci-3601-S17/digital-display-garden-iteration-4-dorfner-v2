@@ -129,6 +129,19 @@ public class Server {
             return JSON.serialize(returnDoc);
         });
 
+        get("api/authorize", (req,res) -> {
+            String originatingURLs[] = req.queryMap().toMap().get("originating_url");
+            String originatingURL;
+            if (originatingURLs == null) {
+                originatingURL = API_URL; // todo: what should the default be?
+            } else {
+                originatingURL = originatingURLs[0];
+            }
+            res.redirect(auth.getAuthURL(originatingURL));
+            // I think we could return an arbitrary value since the redirect prevents this from being used
+            return res;
+        });
+
         // List plants
         get("api/plants", (req, res) -> {
             System.out.println(req.cookie("garbage"));
