@@ -95,7 +95,7 @@ public class Server {
 
         get("api/helloWorld", (req, res) ->{
             String cookie = req.cookie("ddg");
-            if (!auth.checkAuthorization(cookie)) {
+            if (!auth.authorized(cookie)) {
                 res.redirect(auth.getAuthURL("api/helloWorld"));
             }
             res.type("text/plain");
@@ -121,11 +121,11 @@ public class Server {
            return res;
         });
 
-        get("api/check-authentication", (req, res) -> {
+        get("api/check-authorization", (req, res) -> {
             res.type("application/json");
             String cookie = req.cookie("ddg");
             Document returnDoc = new Document();
-            returnDoc.append("authorized", auth.checkAuthorization(cookie));
+            returnDoc.append("authorized", auth.authorized(cookie));
             return JSON.serialize(returnDoc);
         });
 
@@ -160,7 +160,7 @@ public class Server {
         get("api/uploadIds", (req, res) -> {
             // todo: this is a test of authorization status
             String cookie = req.cookie("ddg");
-            if(!auth.checkAuthorization(cookie)) {
+            if(!auth.authorized(cookie)) {
                 halt(403);
             }
             res.type("application/json");

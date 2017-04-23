@@ -109,7 +109,7 @@ public class Auth {
      *            info
      * @return true if this is a JWT token, that we signed, that is not expired, else return false
      */
-    public boolean checkAuthorization(String jwt) {
+    public boolean authorized(String jwt) {
         if (null == jwt) {
             // null JWTs are obviously invalid
             return false;
@@ -248,7 +248,7 @@ public class Auth {
             GoogleJwtBody body = gson.fromJson(stringBody, GoogleJwtBody.class);
 
             // Confirm that the user is on our whitelist
-            boolean authorized = userIsVerified(body.email);
+            boolean authorized = userIsAuthorized(body.email);
             if (authorized) {
                 return verifiedState.originating_url;
             } else {
@@ -295,7 +295,7 @@ public class Auth {
         }
     }
 
-    public boolean userIsVerified(String email){
+    public boolean userIsAuthorized(String email){
         return authUsers.contains(email);
     }
 
