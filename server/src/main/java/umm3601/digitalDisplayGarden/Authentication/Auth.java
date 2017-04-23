@@ -97,8 +97,6 @@ public class Auth {
                 .build(GoogleApi20.instance());
 
         final Map<String, String> additionalParams = new HashMap<>();
-        additionalParams.put("access_type", "offline");
-        additionalParams.put("prompt", "consent");
         final String authorizationUrl = service.getAuthorizationUrl(additionalParams);
 
         return authorizationUrl;
@@ -248,7 +246,6 @@ public class Auth {
             // Use the callback code to get a token from Google with info
             // about the caller
             OAuth2AccessToken accessToken = globalService.getAccessToken(code);
-            accessToken = globalService.refreshAccessToken(accessToken.getRefreshToken());
 
             // parse the token for the fields we want
             GoogleToken googleToken = gson.fromJson(accessToken.getRawResponse(), GoogleToken.class);
