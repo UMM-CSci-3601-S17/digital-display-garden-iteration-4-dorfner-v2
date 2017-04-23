@@ -253,7 +253,7 @@ public class Auth {
             GoogleToken googleToken = gson.fromJson(accessToken.getRawResponse(), GoogleToken.class);
 
             // Get the URL for Google's OpenID description
-            OpenIDConfiguration openIDConfiguration = getJwksUrl();
+            OpenIDConfiguration openIDConfiguration = getOpenIDConfiguration();
 
             // Confirm that the token is signed properly and extract the body as JSON
             String stringBody = parseAndValidate(googleToken.id_token, new URL(openIDConfiguration.jwks_uri));
@@ -296,16 +296,19 @@ public class Auth {
         }
     }
 
-    public OpenIDConfiguration getJwksUrl() throws IOException {
+    /**
+     * Fetches the Google's OpenID configuration and parses
+     * it the fields we care about (currently only one)
+     * @return a new OpenIDConfiguration object that contains the URL from which we can fetch Google's public keys
+     * @throws IOException when something goes wrong with with fetching the data
+     */
+    public OpenIDConfiguration getOpenIDConfiguration() throws IOException {
         try {
             InputStream in = new URL(googleOpenIDConfigurationEndpoint).openStream();
             return gson.fromJson(IOUtils.toString(in),OpenIDConfiguration.class);
         } catch (MalformedURLException e) {
             System.out.println("Your dev is an idiot. Authentication will fail because we could not verify Google's signatures.");
             return null;
-        } catch (IOException e) {
-            System.out.println("Failed fetching Google's OpenID configuration.");
-            throw e;
         }
     }
 
