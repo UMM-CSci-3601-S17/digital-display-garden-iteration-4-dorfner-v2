@@ -130,7 +130,7 @@ public class Server {
         });
 
         get("api/authorize", (req,res) -> {
-            String originatingURLs[] = req.queryMap().toMap().get("originating_url");
+            String originatingURLs[] = req.queryMap().toMap().get("originatingURL");
             String originatingURL;
             if (originatingURLs == null) {
                 originatingURL = API_URL; // todo: what should the default be?

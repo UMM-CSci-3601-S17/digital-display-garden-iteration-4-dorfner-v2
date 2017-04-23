@@ -174,7 +174,7 @@ public class Auth {
 
         JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
                 .issuer("digital-display-garden")
-                .claim("originating_url", originatingURL)
+                .claim("originatingURL", originatingURL)
                 .claim("exp", expDate.toString())
                 .build();
 
@@ -250,7 +250,7 @@ public class Auth {
             // Confirm that the user is on our whitelist
             boolean authorized = userIsAuthorized(body.email);
             if (authorized) {
-                return verifiedState.originating_url;
+                return verifiedState.originatingURL;
             } else {
                 return null;
             }

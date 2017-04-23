@@ -13,7 +13,7 @@ export class AuthGuard implements CanActivate {
         this.adminService.authorized().subscribe(authorized => {
             if (!authorized) {
                 // redirect to the backend for authorization
-                window.location.href = this.url + "authorize?originating_url="+window.location.href;
+                window.location.href = this.url + "authorize?originatingURL="+window.location.href;
             }
         });
         return this.adminService.authorized();
