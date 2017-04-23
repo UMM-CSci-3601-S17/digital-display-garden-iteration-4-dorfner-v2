@@ -23,6 +23,7 @@ import {NotFoundComponent} from "./app/not-found.component"
 
 import {ConfirmOptions, Position, ConfirmModule} from 'angular2-bootstrap-confirm';
 import {Positioning} from 'angular2-bootstrap-confirm/position';
+import {AuthGuard} from "./app/admin/AuthGuard";
 
 
 
@@ -52,7 +53,7 @@ import {Positioning} from 'angular2-bootstrap-confirm/position';
         NotFoundComponent,
 
     ],
-    providers: [ PlantListService, AdminService ],
+    providers: [ PlantListService, AdminService, {provide: 'CanAlwaysActivateGuard', useClass: AuthGuard}, AuthGuard ],
     bootstrap: [ AppComponent ]
 })
 

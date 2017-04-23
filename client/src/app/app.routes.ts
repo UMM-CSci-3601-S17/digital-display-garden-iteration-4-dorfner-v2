@@ -9,12 +9,13 @@ import {BedComponent} from "./plants/bed.component";
 import {HomepageComponent} from "./homepage/homepage.component";
 import {DeleteComponent} from "./admin/delete.component";
 import {NotFoundComponent} from "./not-found.component";
+import {AuthGuard} from "./admin/AuthGuard";
 
 // Route Configuration
 export const routes: Routes = [
     { path: '', component: HomepageComponent },
     { path: 'plants/:plantID', component: PlantComponent },
-    { path: 'admin', component: AdminComponent},
+    { path: 'admin', component: AdminComponent, canActivate: ['CanAlwaysActivateGuard', AuthGuard]},
     { path: 'admin/exportData', component: ExportComponent},
     { path: 'admin/importData', component: ImportComponent},
     { path: 'admin/deleteData', component: DeleteComponent },
