@@ -239,7 +239,7 @@ public class Auth {
         // parse the state and ensure its validity
         RedirectToken verifiedState = unpackSharedGoogleSecret(state);
         DateTime expTime = new DateTime(verifiedState.exp);
-        if(expTime.isAfterNow()) {
+        if(expTime.isBeforeNow()) {
             // the user took too long to complete the authentication
             return null;
         }
