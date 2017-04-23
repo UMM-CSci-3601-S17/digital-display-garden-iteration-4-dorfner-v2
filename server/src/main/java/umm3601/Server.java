@@ -118,6 +118,14 @@ public class Server {
            return res;
         });
 
+        get("api/check-authentication", (req, res) -> {
+            res.type("application/json");
+            String cookie = req.cookie("ddg");
+            Document returnDoc = new Document();
+            returnDoc.append("authorized", auth.checkAuthorization(cookie));
+            return JSON.serialize(returnDoc);
+        });
+
         // List plants
         get("api/plants", (req, res) -> {
             System.out.println(req.cookie("garbage"));
