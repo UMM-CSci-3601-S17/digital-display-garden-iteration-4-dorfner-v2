@@ -23,7 +23,7 @@ import {NotFoundComponent} from "./app/not-found.component"
 
 import {ConfirmOptions, Position, ConfirmModule} from 'angular2-bootstrap-confirm';
 import {Positioning} from 'angular2-bootstrap-confirm/position';
-import {AuthGuard} from "./app/admin/AuthGuard";
+import {AuthGuard} from "./app/admin/auth-guard";
 
 
 

@@ -9,7 +9,7 @@ import {BedComponent} from "./plants/bed.component";
 import {HomepageComponent} from "./homepage/homepage.component";
 import {DeleteComponent} from "./admin/delete.component";
 import {NotFoundComponent} from "./not-found.component";
-import {AuthGuard} from "./admin/AuthGuard";
+import {AuthGuard} from "./admin/auth-guard";
 
 // Route Configuration
 export const routes: Routes = [
