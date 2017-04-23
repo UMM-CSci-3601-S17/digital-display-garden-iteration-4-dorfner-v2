@@ -59,9 +59,6 @@ public class Auth {
     // hard-coded list of users that we will accept
     private List<String> authUsers;
 
-    // list of cookies currently issues to accepted users
-    private List<Cookie> authCookies;
-
     // Public/Private Keypair for signing our own JSON Web Tokens
     private KeyPair keyPair;
 
@@ -72,7 +69,6 @@ public class Auth {
         this.authUsers = new ArrayList<>();
         authUsers.add("gordo580@morris.umn.edu");
         authUsers.add("schr1230@morris.umn.edu");
-        this.authCookies = new LinkedList<>();
         this.globalService = new ServiceBuilder()
                 .apiKey(clientId)
                 .apiSecret(clientSecret)
@@ -139,12 +135,11 @@ public class Auth {
         }
     }
 
-    String generateCookieBody() {
+    String generateCookieBody(int secondsToLive) {
         RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
         JWSSigner signer = new RSASSASigner(privateKey);
 
-        // Expire in 24 hours
-        DateTime expDate = new DateTime((new Date()).getTime() + 24 * 60 * 60 * 1000);
+        DateTime expDate = new DateTime((new Date()).getTime() + secondsToLive * 1000);
 
         JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
                 .issuer("digital-display-garden")
@@ -301,9 +296,10 @@ public class Auth {
     }
 
     public Cookie getCookie(){
-        String cookieBody = generateCookieBody();
-        Cookie c = new Cookie("ddg", cookieBody, 86400);
-        authCookies.add(c);
+        // 24 hours/day * 60 minutes/hour * 60 seconds/minute = 86400 seconds/day
+        int timeToLive = 86400;
+        String cookieBody = generateCookieBody(timeToLive);
+        Cookie c = new Cookie("ddg", cookieBody, timeToLive);
 
         return c;
     }
