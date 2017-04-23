@@ -110,6 +110,10 @@ public class Auth {
      * @return true if this is a JWT token, that we signed, that is not expired, else return false
      */
     public boolean checkAuthorization(String jwt) {
+        if (null == jwt) {
+            // null JWTs are obviously invalid
+            return false;
+        }
         try {
 
             SignedJWT parsedState = SignedJWT.parse(jwt);
