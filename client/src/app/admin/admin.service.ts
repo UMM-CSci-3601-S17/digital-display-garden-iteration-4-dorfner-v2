@@ -18,4 +18,8 @@ export class AdminService {
     deleteUploadId(uploadId : string) : Observable<any> {
         return this.http.delete(this.url + "deleteData/" + uploadId).map(res => res.json());
     }
+
+    authorized() : Observable<boolean> {
+        return this.http.get(this.url + "check-authorization", {withCredentials: true}).map(res => res.json().authorized);
+    }
 }
