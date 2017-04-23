@@ -73,7 +73,10 @@ public class Server {
             return "OK";
         });
 
-        before((request, response) -> response.header("Access-Control-Allow-Origin", "*"));
+        before((request, response) -> {
+            response.header("Access-Control-Allow-Credentials", "true");
+            response.header("Access-Control-Allow-Origin", "http://localhost:9000");
+        });
 
         // Redirects for the "home" page
         redirect.get("", "/");
@@ -155,6 +158,11 @@ public class Server {
 
         // List all uploadIds
         get("api/uploadIds", (req, res) -> {
+            // todo: this is a test of authorization status
+            String cookie = req.cookie("ddg");
+            if(!auth.checkAuthorization(cookie)) {
+                halt(403);
+            }
             res.type("application/json");
             return JSON.serialize(plantController.listUploadIds());
         });

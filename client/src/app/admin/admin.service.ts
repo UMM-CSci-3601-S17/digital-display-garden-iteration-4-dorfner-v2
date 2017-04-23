@@ -8,7 +8,7 @@ export class AdminService {
     constructor(private http:Http) { }
 
     getUploadIds(): Observable<string[]> {
-        return this.http.request(this.url + "uploadIds").map(res => res.json());
+        return this.http.request(this.url + "uploadIds", {withCredentials: true}).map(res => res.json());
     }
 
     getLiveUploadId(): Observable<string> {
