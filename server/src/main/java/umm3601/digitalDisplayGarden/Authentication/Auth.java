@@ -221,12 +221,26 @@ public class Auth {
     }
 
 
+    /**
+     * Consumes the state and the code that Google gives to visitors, so
+     * that they can in turn give them to us. This method confirms that
+     * the state is one we issued and is non-expired. It then fetches
+     * tokens from Google, confirms the signature (even though Google
+     * says we don't need to work about it since we are fetching via
+     * HTTPS), and user's email from the token.
+     * @param state should be a JWT signed by us
+     * @param code should be a "code" (whatever that means) from Google
+     * @return a string with URL that the visitor was originally trying
+     *         to load. Null if the state or code are invalid in any way
+     *         or if we cannot contact Google to verify them.
+     */
     public String verifyCallBack(String state, String code) {
         // parse the state and ensure its validity
         RedirectToken verifiedState = unpackSharedGoogleSecret(state);
         DateTime expTime = new DateTime(verifiedState.exp);
         if(expTime.isAfterNow()) {
-            // error
+            // the user took too long to complete the authentication
+            return null;
         }
 
         try {
@@ -256,8 +270,8 @@ public class Auth {
             }
 
         } catch (IOException|InterruptedException|ExecutionException e) {
-            // unknown errors
-            // todo: add handling
+            // these just generally mean that something went wrong
+            // with interacting with Google's API
             e.printStackTrace();
             return null;
         }
