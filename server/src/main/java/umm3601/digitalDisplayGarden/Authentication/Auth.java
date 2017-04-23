@@ -309,10 +309,23 @@ public class Auth {
         }
     }
 
+    /**
+     * Checks to see if the email is in our list of
+     * addresses that have access to the system.
+     * @param email A string containing an email address
+     * @return True iff the email is in our list
+     */
     public boolean userIsAuthorized(String email){
         return authUsers.contains(email);
     }
 
+    /**
+     * Returns a cookie object with a time-to-live
+     * of 24 hours. The body of the cookie is simply
+     * a signed JWT that has an expiration date baked
+     * into it.
+     * @return the new Cookie
+     */
     public Cookie getCookie(){
         // 24 hours/day * 60 minutes/hour * 60 seconds/minute = 86400 seconds/day
         int timeToLive = 86400;
