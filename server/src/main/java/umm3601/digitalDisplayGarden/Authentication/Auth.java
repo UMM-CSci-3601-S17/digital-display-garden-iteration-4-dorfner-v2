@@ -12,6 +12,7 @@ import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.nimbusds.jose.jwk.source.RemoteJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
+import com.nimbusds.jose.proc.BadJOSEException;
 import com.nimbusds.jose.proc.JWSKeySelector;
 import com.nimbusds.jose.proc.JWSVerificationKeySelector;
 import com.nimbusds.jose.proc.SecurityContext;
@@ -277,6 +278,14 @@ public class Auth {
         }
     }
 
+    /**
+     * Consumes a JWT signed by Google and a URL to the location
+     * where Google publishes their public keys. Verifies the signature
+     * on the JWT and returns the payload decoded into normal JSON
+     * @param jwt A JTW signed by Google
+     * @param keyOptions The URL to where Google publishes its public keys
+     * @return the payload of the JWT as normal JSON or null if some sort of error occurred
+     */
      private String parseAndValidate(String jwt, URL keyOptions) {
 
         try {
@@ -290,8 +299,17 @@ public class Auth {
             JWTClaimsSet claimsSet = jwtProcessor.process(jwt, null);
 
             return claimsSet.toJSONObject().toString();
-        } catch (Exception e) {
-            System.err.println("Nooooo\n\nooooooooooo");
+        } catch (ParseException e) {
+            // the string couldn't be parsed to to a syntactically valid JWT
+            e.printStackTrace();
+            return null;
+        } catch (BadJOSEException e) {
+            // the (signature on the) JWT is rejected?
+            e.printStackTrace();
+            return null;
+        } catch (JOSEException e) {
+            // generic exception that the library throws seemingly everywhere
+            e.printStackTrace();
             return null;
         }
     }
