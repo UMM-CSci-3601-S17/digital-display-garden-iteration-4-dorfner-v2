@@ -3,11 +3,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
 
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -17,7 +15,7 @@ public class CollectedDataWriter {
     XSSFWorkbook workbook;
     XSSFSheet commentsSheet;
     XSSFSheet ratingsSheet;
-    XSSFSheet timesSheet;
+    XSSFSheet hourlyTimesSheet;
     int commentCount;
     int ratingCount;
 
@@ -27,7 +25,7 @@ public class CollectedDataWriter {
         this.workbook = new XSSFWorkbook();
         this.commentsSheet = workbook.createSheet("Comments");
         this.ratingsSheet = workbook.createSheet("Counts");
-        this.timesSheet = workbook.createSheet("TimeStamps");
+        this.hourlyTimesSheet = workbook.createSheet("HourlyTimeStamps");
 
         Row commentRow = commentsSheet.createRow(0);
         Cell cell = commentRow.createCell(0);
@@ -77,7 +75,7 @@ public class CollectedDataWriter {
 
         ratingCount = 1;
 
-        Row timeRow = timesSheet.createRow(0);
+        Row timeRow = hourlyTimesSheet.createRow(0);
         cell = timeRow.createCell(0);
         cell.setCellValue("Hour");
 
@@ -160,14 +158,14 @@ public class CollectedDataWriter {
         ratingCount++;
     }
 
-    public void writeTimes(int[] timeCounts) {
-        for (int i = 0; i < timeCounts.length; i++) {
-            Row row = timesSheet.createRow(i + 1);
+    public void writeHourlyVisits(int[] hourlyVisitCounts) {
+        for (int i = 0; i < hourlyVisitCounts.length; i++) {
+            Row row = hourlyTimesSheet.createRow(i + 1);
             Cell cell = row.createCell(0);
             cell.setCellValue(i + " - " + (i + 1));
 
             cell = row.createCell(1);
-            cell.setCellValue(timeCounts[i]);
+            cell.setCellValue(hourlyVisitCounts[i]);
         }
     }
 
@@ -190,7 +188,7 @@ public class CollectedDataWriter {
         }
 
         for(int i=0; i<2; i++){
-            timesSheet.autoSizeColumn(i);
+            hourlyTimesSheet.autoSizeColumn(i);
         }
 
         workbook.write(outputStream);

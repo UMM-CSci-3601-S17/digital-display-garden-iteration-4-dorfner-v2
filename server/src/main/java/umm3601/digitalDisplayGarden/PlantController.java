@@ -1,9 +1,7 @@
 package umm3601.digitalDisplayGarden;
 
-import com.google.gson.Gson;
 import com.mongodb.MongoClient;
 import com.mongodb.client.*;
-import com.mongodb.client.model.Accumulators;
 import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Sorts;
 import com.mongodb.util.JSON;
@@ -23,7 +21,6 @@ import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.exists;
 import static com.mongodb.client.model.Projections.include;
-import static com.mongodb.client.model.Updates.*;
 import static com.mongodb.client.model.Projections.fields;
 
 import java.io.IOException;
@@ -321,7 +318,7 @@ public class PlantController {
         Iterator<Document> plantIterator = plantFindIterable.iterator();
 
         // [0-1, 1-2, ..., 23-24]
-        int[] timeCounts = new int[24];
+        int[] hourlyVisitCounts = new int[24];
 
         //for each plant, get a list of comments and write each comment to the excel
         while(plantIterator.hasNext()) {
@@ -374,10 +371,10 @@ public class PlantController {
                 int epochSecs = visit.getObjectId("visit").getTimestamp();
                 ZoneId zoneId = ZoneId.of( "America/Chicago");
                 ZonedDateTime currentVisitTime = ZonedDateTime.ofInstant(Instant.ofEpochSecond((long) epochSecs), zoneId);
-                timeCounts[currentVisitTime.getHour()]++;
+                hourlyVisitCounts[currentVisitTime.getHour()]++;
             }
 
-            collectedDataWriter.writeTimes(timeCounts);
+            collectedDataWriter.writeHourlyVisits(hourlyVisitCounts);
 
         }
         collectedDataWriter.complete();
