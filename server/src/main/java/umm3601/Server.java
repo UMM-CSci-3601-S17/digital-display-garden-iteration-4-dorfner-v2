@@ -268,6 +268,12 @@ public class Server {
 
         get("/*", clientRoute);
 
+        exception(Exception.class, (exception, request, response) -> {
+            System.err.println("Unhandled Exception Occurred");
+            exception.printStackTrace();
+            halt(500);
+        });
+
         // Handle "404" file not found requests:
         notFound(notFoundRoute);
     }
