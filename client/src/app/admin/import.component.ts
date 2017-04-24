@@ -11,8 +11,12 @@ export class ImportComponent implements OnInit {
 
     @ViewChild('fu') fu;
 
+    authorized: boolean;
     filename:string;
     uploadAttempted:boolean = false;
+
+    constructor(private adminService: AdminService){
+    }
 
     handleUpload(){
         this.fu.upload().subscribe(
@@ -28,6 +32,7 @@ export class ImportComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.adminService.authorized().subscribe(authorized => this.authorized = authorized);
 
     }
 }

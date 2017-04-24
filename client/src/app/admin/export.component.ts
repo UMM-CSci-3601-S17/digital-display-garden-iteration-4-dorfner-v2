@@ -13,6 +13,7 @@ export class ExportComponent implements OnInit {
 
     private uploadIds: string[];
     private liveUploadId: string;
+    authorized: boolean;
 
     constructor(private adminService: AdminService) {
 
@@ -23,5 +24,7 @@ export class ExportComponent implements OnInit {
             .subscribe(result => this.uploadIds = result, err => console.log(err));
         this.adminService.getLiveUploadId()
             .subscribe(result => this.liveUploadId = result, err => console.log(err));
+        this.adminService.authorized().subscribe(authorized => this.authorized = authorized);
+
     }
 }

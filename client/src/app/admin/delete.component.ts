@@ -15,7 +15,7 @@ import {ConfirmOptions, Position} from 'angular2-bootstrap-confirm';
 export class DeleteComponent implements OnInit {
 
     // private url: string = API_URL + "deleteData/";
-
+    authorized: boolean;
     uploadIds: string[];
     private liveUploadId: string;
 
@@ -38,6 +38,8 @@ export class DeleteComponent implements OnInit {
             .subscribe(result => this.uploadIds = result, err => console.log(err));
         this.adminService.getLiveUploadId()
             .subscribe(result => this.liveUploadId = result, err => console.log(err));
+        this.adminService.authorized().subscribe(authorized => this.authorized = authorized);
+
 
     }
 }
