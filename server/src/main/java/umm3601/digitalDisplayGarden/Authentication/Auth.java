@@ -63,7 +63,11 @@ public class Auth {
     // Public/Private Keypair for signing our own JSON Web Tokens
     private KeyPair keyPair;
 
-    public Auth(String clientId, String clientSecret) throws NoSuchAlgorithmException {
+    // the endpoint that Google will send users to after
+    // authenticating them
+    private final String callbackURL;
+
+    public Auth(String clientId, String clientSecret, String callbackURL) throws NoSuchAlgorithmException {
         this.clientId = clientId;
         this.clientSecret = clientSecret;
         this.gson = new Gson();
@@ -79,12 +83,13 @@ public class Auth {
                 .apiKey(clientId)
                 .apiSecret(clientSecret)
                 .scope("email") // replace with desired scope
-                .callback("http://localhost:2538/callback")
+                .callback()
                 .build(GoogleApi20.instance());
 
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
         keyPairGenerator.initialize(2048);
         this.keyPair = keyPairGenerator.genKeyPair();
+        this.callbackURL = callbackURL;
     }
 
     /**
@@ -98,7 +103,7 @@ public class Auth {
                 .apiSecret(clientSecret)
                 .scope("email") // replace with desired scope
                 .state(generateSharedGoogleSecret(originatingURL))
-                .callback("http://localhost:2538/callback")
+                .callback(callbackURL)
                 .build(GoogleApi20.instance());
 
         final Map<String, String> additionalParams = new HashMap<>();

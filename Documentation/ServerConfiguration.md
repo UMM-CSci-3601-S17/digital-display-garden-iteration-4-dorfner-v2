@@ -10,7 +10,6 @@ file. If no arguments are passed it simply tries to read from a file called
 you should create a file by that name in `server/`. Note that this file is
 in `.gitignore` and thus won't be committed.
 
-There are currently three settings that should be configured.
 
 #### clientID
 
@@ -33,6 +32,12 @@ vistors. During development on your local machine, this would be
 something like `http://localhost:9000`, but in production, it would
 look something like `https://a.real.website.com`.
 
+#### callbackURL
+
+This is the URL to which Google sends users after we have authenticated
+them. During development, it should look like `http://localhost:2538/callback`.
+During production, it should be the same domain port as `publicURL`, but
+with `/callback` on the end.
 ## Example file
 
 Here is an example of what such a file would look like:
@@ -43,4 +48,6 @@ clientID=verylongstringofrandomnumbersandletters.apps.googleusercontent.com
 clientSecret=notquitesuchalongrandomstring
 # The public URL of the website
 publicURL=http://localhost:9000
+# The public URL of the website
+publicURL=http://localhost:2538/callback
 ```

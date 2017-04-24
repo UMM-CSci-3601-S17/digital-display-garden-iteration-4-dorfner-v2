@@ -37,6 +37,7 @@ public class Server {
     private static String clientId;
     private static String clientSecret;
     private static  String publicURL;
+    private static String callbackURL;
 
     public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
 
@@ -58,7 +59,7 @@ public class Server {
 
         PlantController plantController = new PlantController(databaseName);
         Photos photos = new Photos(databaseName);
-        Auth auth = new Auth(clientId, clientSecret);
+        Auth auth = new Auth(clientId, clientSecret, callbackURL);
 
         options("/*", (request, response) -> {
 
@@ -345,6 +346,10 @@ public class Server {
             publicURL = props.getProperty("publicURL");
             if (null == publicURL) {
                 System.err.println("Could not read what url visitors access us at from the properties file");
+            }
+            callbackURL = props.getProperty("callbackURL");
+            if (null == publicURL) {
+                System.err.println("Could not read what url to use for callback from the properties file");
             }
 
         } catch (FileNotFoundException e) {
