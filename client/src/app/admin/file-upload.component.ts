@@ -23,10 +23,9 @@ export class FileUploadComponent {
             }
             return this.http.post(API_URL + "import", formData, {withCredentials: true});
         }
-            return this.http.post(API_URL + "import", formData);
-        }}
+    }
 
-        uploadPhoto(id) {
+    uploadPhoto(id) {
             let inputEl: HTMLInputElement = this.inputEl.nativeElement;
             let fileCount: number = inputEl.files.length;
             let formData = new FormData();
