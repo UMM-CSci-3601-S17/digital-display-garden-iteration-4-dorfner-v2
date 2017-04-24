@@ -83,7 +83,7 @@ public class Auth {
                 .apiKey(clientId)
                 .apiSecret(clientSecret)
                 .scope("email") // replace with desired scope
-                .callback()
+                .callback(callbackURL)
                 .build(GoogleApi20.instance());
 
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
