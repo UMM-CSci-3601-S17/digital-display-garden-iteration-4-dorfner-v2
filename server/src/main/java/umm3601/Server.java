@@ -99,16 +99,6 @@ public class Server {
 
         get("/", clientRoute);
 
-        get("api/helloWorld", (req, res) ->{
-            String cookie = req.cookie("ddg");
-            if (!auth.authorized(cookie)) {
-                res.redirect(auth.getAuthURL("api/helloWorld"));
-            }
-            res.type("text/plain");
-
-           return "Hello World!";
-        });
-
         get("callback", (req, res) ->{
            Map<String, String[]> params = req.queryMap().toMap();
            String state = params.get("state")[0];
@@ -155,7 +145,6 @@ public class Server {
 
         // List plants
         get("api/plants", (req, res) -> {
-            System.out.println(req.cookie("garbage"));
             res.type("application/json");
             return plantController.listPlants(req.queryMap().toMap(), plantController.getLiveUploadId());
         });
