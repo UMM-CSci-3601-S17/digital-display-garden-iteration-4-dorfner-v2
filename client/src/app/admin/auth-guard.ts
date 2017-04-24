@@ -16,6 +16,6 @@ export class AuthGuard implements CanActivate {
                 window.location.href = this.url + "authorize?originatingURL="+window.location.href;
             }
         });
-        return this.adminService.authorized();
+        return true;
     }
 }
