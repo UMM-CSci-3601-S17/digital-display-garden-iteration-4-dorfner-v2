@@ -70,6 +70,11 @@ public class Auth {
         this.authUsers = new ArrayList<>();
         authUsers.add("gordo580@morris.umn.edu");
         authUsers.add("schr1230@morris.umn.edu");
+        authUsers.add("songx823@morris.umn.edu");
+        authUsers.add("ferri082@morris.umn.edu");
+        authUsers.add("hoff0899@morris.umn.edu");
+        authUsers.add("lopez477@morris.umn.edu");
+        authUsers.add("chen4709@morris.umn.edu");
         this.globalService = new ServiceBuilder()
                 .apiKey(clientId)
                 .apiSecret(clientSecret)
