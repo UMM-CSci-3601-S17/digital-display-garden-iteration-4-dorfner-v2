@@ -1,6 +1,5 @@
 package umm3601;
 
-import org.apache.xmlbeans.impl.common.ReaderInputStream;
 import org.bson.Document;
 import spark.Route;
 import spark.utils.IOUtils;
@@ -33,14 +32,13 @@ public class Server {
 
     public static final String API_URL = "https://dorfner.congrue.xyz:2538";
 
-    public static final String clientBaseURL = "http://localhost:9000/";
-
     public static String databaseName = "test";
 
     private static String excelTempDir = "/tmp/digital-display-garden";
 
     private static String clientId;
     private static String clientSecret;
+    private static  String publicURL;
 
     public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
 
@@ -187,7 +185,7 @@ public class Server {
         get("api/export", (req, res) -> {
             String cookie = req.cookie("ddg");
             if(!auth.authorized(cookie)) {
-                res.redirect(auth.getAuthURL(clientBaseURL + "admin/exportData"));
+                res.redirect(auth.getAuthURL(publicURL + "admin/exportData"));
                 return res; // not reached
             } else {
                 res.type("application/vnd.ms-excel");
@@ -223,7 +221,7 @@ public class Server {
         get("api/qrcodes", (req, res) -> {
             String cookie = req.cookie("ddg");
             if(!auth.authorized(cookie)) {
-                res.redirect(auth.getAuthURL(clientBaseURL + "admin"));
+                res.redirect(auth.getAuthURL(publicURL + "admin"));
             }
             res.type("application/zip");
 
@@ -345,6 +343,10 @@ public class Server {
             clientSecret = props.getProperty("clientSecret");
             if (null == clientSecret) {
                 System.err.println("Could not read Google OAuth Client secret (clientSecretz) from properties file");
+            }
+            publicURL = props.getProperty("publicURL");
+            if (null == publicURL) {
+                System.err.println("Could not read what url visitors access us at from the properties file");
             }
 
         } catch (FileNotFoundException e) {
