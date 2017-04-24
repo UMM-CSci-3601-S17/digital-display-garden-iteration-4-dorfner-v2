@@ -235,7 +235,7 @@ public class Auth {
      *         to load. Null if the state or code are invalid in any way
      *         or if we cannot contact Google to verify them.
      */
-    public String verifyCallBack(String state, String code) {
+    public String verifyCallBack(String state, String code) throws UnauthorizedUserException {
         // parse the state and ensure its validity
         RedirectToken verifiedState = unpackSharedGoogleSecret(state);
         DateTime expTime = new DateTime(verifiedState.exp);
@@ -273,7 +273,7 @@ public class Auth {
             if (authorized) {
                 return verifiedState.originatingURL;
             } else {
-                return null;
+                throw new UnauthorizedUserException();
             }
 
         } catch (IOException|InterruptedException|ExecutionException e) {

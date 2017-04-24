@@ -6,6 +6,7 @@ import spark.utils.IOUtils;
 import com.mongodb.util.JSON;
 import umm3601.digitalDisplayGarden.Authentication.Auth;
 import umm3601.digitalDisplayGarden.Authentication.Cookie;
+import umm3601.digitalDisplayGarden.Authentication.UnauthorizedUserException;
 import umm3601.digitalDisplayGarden.PlantController;
 
 import java.io.*;
@@ -107,18 +108,23 @@ public class Server {
            Map<String, String[]> params = req.queryMap().toMap();
            String state = params.get("state")[0];
            String code = params.get("code")[0];
-
-           String originatingURL = auth.verifyCallBack(state, code);
-           if (null != originatingURL) {
-               Cookie c = auth.getCookie();
-               res.cookie(c.name, c.value, c.max_age);
-               res.redirect(originatingURL);
-               System.out.println("good");
-           } else {
-               System.out.println("bad");
-               res.status(403);
-           }
-           return res;
+            try {
+                String originatingURL = auth.verifyCallBack(state, code);
+                if (null != originatingURL) {
+                    Cookie c = auth.getCookie();
+                    res.cookie(c.name, c.value, c.max_age);
+                    res.redirect(originatingURL);
+                    System.out.println("good");
+                    return ""; // not reached
+                } else {
+                    System.out.println("bad");
+                    res.status(403);
+                    return "?????"; // todo: return a reasonable message
+                }
+            } catch (UnauthorizedUserException e) {
+                res.redirect("http://localhost:9000/admin/incorrectAccount");
+                return ""; // not reached
+            }
         });
 
         get("api/check-authorization", (req, res) -> {
