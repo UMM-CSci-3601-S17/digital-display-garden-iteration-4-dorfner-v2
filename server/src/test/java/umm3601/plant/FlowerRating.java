@@ -53,22 +53,19 @@ public class FlowerRating {
     }
 
     @Test
-    //failed
     public void AddFlowerRatingReturnsFalseWithInvalidInput() throws IOException {
 
-        assertFalse(plantController.addFlowerRating("jfd;laj;asjfoisaf", true, "anything") instanceof ObjectId);
-        //Todo check back later adding random letter 'K' makes this work
-        assertFalse(plantController.addFlowerRating("58d1c36efb0cac4e15afd201K", true, "anything") instanceof ObjectId);
+        assertNull(plantController.addFlowerRating("jfd;laj;asjfoisaf", true, "anything"));
+        assertNull(plantController.addFlowerRating("58d1c36efb0cac4e15afd201", true, "anything"));
     }
-
-//    @Test
-    //failed
-//    public void AddFlowerRatingReturnsFalseWithInvalidUploadID() throws IOException {
-//        assertNull(plantController.addFlowerRating("58d1c36efb0cac4e15afd202", true, "anything") instanceof ObjectId);
-//    }
 
     @Test
     //failed
+    public void AddFlowerRatingReturnsFalseWithInvalidUploadID() throws IOException {
+        assertNull(plantController.addFlowerRating("58d1c36efb0cac4e15afd202", true, "anything"));
+    }
+
+    @Test
     public void AddFlowerRatingReturnsTrueWithValidJsonInput() throws IOException{
 
         String json = "{like: true, id: \"58d1c36efb0cac4e15afd202\"}";
