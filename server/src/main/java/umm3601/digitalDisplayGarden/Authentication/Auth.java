@@ -354,8 +354,8 @@ public class Auth {
      * @return the new Cookie
      */
     public Cookie getCookie(){
-        // 24 hours/day * 60 minutes/hour * 60 seconds/minute = 86400 seconds/day
-        int timeToLive = 30;
+        // 12 hours * 60 minutes/hour * 60 seconds/minute = 43200 seconds
+        int timeToLive = 43200;
         String cookieBody = generateCookieBody(timeToLive);
         Cookie c = new Cookie("ddg", cookieBody, timeToLive);
 
