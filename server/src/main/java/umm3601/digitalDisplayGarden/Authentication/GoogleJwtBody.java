@@ -9,7 +9,7 @@ public class GoogleJwtBody {
     // maybe useful
     public String iss;
     public String hd;
-    public String exp;
+    public long exp;
     public String iat;
 
     // ??

@@ -259,6 +259,12 @@ public class Auth {
             // Parse the JSON for the fields we care about
             GoogleJwtBody body = gson.fromJson(stringBody, GoogleJwtBody.class);
 
+            // Confirm that the token is not expired
+            if (new DateTime(body.exp * 1000).isBeforeNow()) {
+                // Google is sending us bad tokens!!!
+                return null;
+            }
+
             // Confirm that the user is on our whitelist
             boolean authorized = userIsAuthorized(body.email);
             if (authorized) {
