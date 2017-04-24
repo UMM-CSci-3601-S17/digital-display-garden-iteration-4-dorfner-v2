@@ -114,7 +114,7 @@ public class Server {
                     return "?????"; // todo: return a reasonable message
                 }
             } catch (UnauthorizedUserException e) {
-                res.redirect("http://localhost:9000/admin/incorrectAccount");
+                res.redirect(publicURL + "/admin/incorrectAccount");
                 return ""; // not reached
             }
         });
