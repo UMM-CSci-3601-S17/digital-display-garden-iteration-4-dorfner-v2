@@ -4,7 +4,7 @@
     <file-upload #fu (change)="filename = undefined; uploadAttempted = false" [multiple]="false">-</file-upload>
 
 
-    <button *ngIf="filename === undefined" class="btn btn-primary" (click)="this.handleUpload()" style="margin-top: 10px">
+    <button *ngIf="filename === undefined && !uploadStarted" class="btn btn-primary" (click)="this.handleUpload()" style="margin-top: 10px">
         <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
         Import
     </button>

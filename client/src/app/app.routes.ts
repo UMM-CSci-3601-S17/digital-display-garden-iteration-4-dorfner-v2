@@ -9,6 +9,7 @@ import {BedComponent} from "./plants/bed.component";
 import {HomepageComponent} from "./homepage/homepage.component";
 import {DeleteComponent} from "./admin/delete.component";
 import {NotFoundComponent} from "./not-found.component";
+import {PhotoComponent} from "./admin/photo.component";
 
 // Route Configuration
 export const routes: Routes = [
@@ -19,6 +20,7 @@ export const routes: Routes = [
     { path: 'admin/importData', component: ImportComponent},
     { path: 'admin/deleteData', component: DeleteComponent },
     { path: 'bed/:gardenLocation', component: BedComponent },
+    { path: 'admin/PhotoComponent', component: PhotoComponent },
     { path: '**', component: NotFoundComponent},
 ];
 

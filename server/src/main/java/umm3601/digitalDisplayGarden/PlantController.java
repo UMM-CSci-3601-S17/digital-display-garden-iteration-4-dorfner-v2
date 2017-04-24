@@ -13,8 +13,13 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
+import org.bson.conversions.Bson;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.OutputStream;
+import java.nio.Buffer;
 import java.util.Iterator;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -50,9 +55,9 @@ public class PlantController {
     }
 
     /**
-     * Returns a string representation of uploadId in the config collection.
+     * Returns a string representation of uploadID in the config collection.
      * Assumes there is only one liveUploadId in the config collection for any given time.
-     * @return a string representation of uploadId in the config collection
+     * @return a string representation of uploadID in the config collection
      */
     public String getLiveUploadId() {
         try
@@ -72,9 +77,9 @@ public class PlantController {
     }
 
     // List plants
-    public String listPlants(Map<String, String[]> queryParams, String uploadId) {
+    public String listPlants(Map<String, String[]> queryParams, String uploadID) {
         Document filterDoc = new Document();
-        filterDoc.append("uploadId", uploadId);
+        filterDoc.append("uploadId", uploadID);
 
         if (queryParams.containsKey("gardenLocation")) {
             String location =(queryParams.get("gardenLocation")[0]);
@@ -88,8 +93,12 @@ public class PlantController {
         }
 
         FindIterable<Document> matchingPlants = plantCollection.find(filterDoc);
-
-        return JSON.serialize(matchingPlants);
+        List<Document> sortedPlants = new ArrayList<>();
+        for (Document doc : matchingPlants) {
+            sortedPlants.add(doc);
+        }
+        sortedPlants.sort(new PlantComparator());
+        return JSON.serialize(sortedPlants);
     }
 
     /**
@@ -124,7 +133,7 @@ public class PlantController {
 
             jsonPlant = plantCollection.find(and(eq("id", plantID),
                     eq("uploadId", uploadID)))
-                    .projection(fields(include("commonName", "cultivar")));
+                    .projection(fields(include("commonName", "cultivar", "photoLocation")));
 
             Iterator<Document> iterator = jsonPlant.iterator();
 
@@ -207,7 +216,14 @@ public class PlantController {
                         Aggregates.group("$gardenLocation"),
                         Aggregates.sort(Sorts.ascending("_id"))
                 ));
-        return JSON.serialize(documents);
+
+        List<Document> listDoc = new ArrayList<>();
+        for (Document doc : documents) {
+            listDoc.add(doc);
+        }
+        listDoc.sort(new BedComparator());
+
+        return JSON.serialize(listDoc);
     }
 
     // Used in the QR code generation
@@ -297,7 +313,7 @@ public class PlantController {
             return false;
         }
 
-    return addComment(id, comment, uploadID);
+        return addComment(id, comment, uploadID);
 
     }
 
@@ -308,13 +324,13 @@ public class PlantController {
      * outputStream is closed when this method exits
      *
      * @param outputStream stream to which the excel file is written
-     * @param uploadId Dataset to find a plant
+     * @param uploadID Dataset to find a plant
      */
-    public void exportCollectedData(OutputStream outputStream, String uploadId) throws IOException {
+    public void exportCollectedData(OutputStream outputStream, String uploadID) throws IOException {
 
         CollectedDataWriter collectedDataWriter = new CollectedDataWriter(outputStream);
 
-        FindIterable<Document> plantFindIterable = plantCollection.find(new Document().append("uploadId", uploadId));
+        FindIterable<Document> plantFindIterable = plantCollection.find(new Document().append("uploadId", uploadID));
         Iterator<Document> plantIterator = plantFindIterable.iterator();
 
         // [0-1, 1-2, ..., 23-24]
@@ -391,6 +407,29 @@ public class PlantController {
         collectedDataWriter.complete();
     }
 
+    public void getImage(OutputStream outputStream, String plantId, String uploadID) {
+        try {
+            Document filterDoc = new Document();
+
+            filterDoc.append("id", plantId);
+            filterDoc.append("uploadId", uploadID);
+
+            Iterator<Document> iter = plantCollection.find(filterDoc).iterator();
+
+            Document plant = iter.next();
+            String filePath = plant.getString("photoLocation");
+
+//            String filePath = ".photos" + '/' + plantId + ".png";
+            File file = new File(filePath);
+            BufferedImage photo = ImageIO.read(file);
+            ImageIO.write(photo,"JPEG",outputStream);
+
+        }
+        catch (IOException ioe) {
+            ioe.printStackTrace();
+            System.err.println("Could not write some Images to disk, exiting.");
+        }
+    }
     /**
      * Deletes all data associated with the specified uploadID
      * in the database.
@@ -398,12 +437,12 @@ public class PlantController {
      * <code>
      *     {
      *         success: boolean,
-     *         uploadIds: [ String, ... ]
+     *         uploadIDs: [ String, ... ]
      *     }
      * </code>
      * Success will be true if the uploadID was found and false if it wasn't.
      * <br/>
-     * uploadIDs contains a list of the remaining uploadIds in the database
+     * uploadIDs contains a list of the remaining uploadIDs in the database
      * @param uploadID the uploadID to delete
      * @return A Document specifying the status of the operation
      * @throws IllegalStateException if the specified uploadID is currently the liveUploadID
@@ -501,7 +540,7 @@ public class PlantController {
 
     /**
      *
-     * @return a sorted JSON array of all the distinct uploadIds in plant collection of the DB
+     * @return a sorted JSON array of all the distinct uploadIDs in plant collection of the DB
      */
     public List<String> listUploadIds() {
         AggregateIterable<Document> documents
@@ -515,7 +554,7 @@ public class PlantController {
             lst.add(d.getString("_id"));
         }
         return lst;
-//        return JSON.serialize(plantCollection.distinct("uploadId","".getClass()));
+//        return JSON.serialize(plantCollection.distinct("uploadID","".getClass()));
     }
 
     public boolean addVisit(String plantID, String uploadID) {
@@ -530,4 +569,61 @@ public class PlantController {
         return null != plantCollection.findOneAndUpdate(filterDoc, push("metadata.visits", visit));
     }
 
+    // Credits: Shawn Saliyev and Nathan Beneke
+    public int numericPrefix(String bed) {
+        int n = 0;
+        for (int i = 0; i < bed.length(); i++) {
+            char character = bed.charAt(i);
+            if (Character.isDigit(character)) {
+                n *= 10;
+                n += (character - '0');
+            } else if (i == 0) {
+                // Assume there is only one non-digit bed
+                n = 100;
+                break;
+            } else {
+                break;
+            }
+        }
+
+        return n;
+    }
+
+    class BedComparator implements Comparator<Document> {
+        @Override
+        public int compare(Document bedDoc1, Document bedDoc2) {
+            String bed1 = bedDoc1.getString("_id");
+            String bed2 = bedDoc2.getString("_id");
+            if (numericPrefix(bed1) == numericPrefix(bed2)) {
+                return bed1.compareTo(bed2);
+            } else {
+                return numericPrefix(bed1) - numericPrefix(bed2);
+            }
+        }
+
+    }
+
+    class PlantComparator implements Comparator<Document> {
+        @Override
+        public int compare(Document plantDoc1, Document plantDoc2) {
+            String bed1 = plantDoc1.getString("gardenLocation");
+            String bed2 = plantDoc2.getString("gardenLocation");
+            String name1 = plantDoc1.getString("commonName");
+            String name2 = plantDoc2.getString("commonName");
+            String cultivar1 = plantDoc1.getString("cultivar");
+            String cultivar2 = plantDoc2.getString("cultivar");
+
+            if (!bed1.equals(bed2)) {
+                if (numericPrefix(bed1) == numericPrefix(bed2)) {
+                    return bed1.compareTo(bed2);
+                } else {
+                    return numericPrefix(bed1) - numericPrefix(bed2);
+                }
+            } else if (!name1.equals(name2)) {
+                return name1.compareTo(name2);
+            } else {
+                return cultivar1.compareTo(cultivar2);
+            }
+        }
+    }
 }

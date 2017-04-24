@@ -1,11 +1,14 @@
 package umm3601;
 
+import org.apache.xmlbeans.impl.common.ReaderInputStream;
 import org.bson.Document;
 import spark.Route;
 import spark.utils.IOUtils;
 import com.mongodb.util.JSON;
+import umm3601.digitalDisplayGarden.Photos;
 import umm3601.digitalDisplayGarden.PlantController;
 
+import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -18,13 +21,14 @@ import static spark.Spark.*;
 import umm3601.digitalDisplayGarden.ExcelParser;
 import umm3601.digitalDisplayGarden.QRCodes;
 
+import javax.imageio.ImageIO;
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.http.Part;
 
 
 public class Server {
 
-    public static final String API_URL = "http://dorfner.congrue.xyz:2538";
+    public static final String API_URL = "https://dorfner.congrue.xyz:2538";
 
     public static String databaseName = "test";
 
@@ -44,6 +48,7 @@ public class Server {
         staticFiles.location("/public");
 
         PlantController plantController = new PlantController(databaseName);
+        Photos photos = new Photos(databaseName);
 
         options("/*", (request, response) -> {
 
@@ -125,6 +130,14 @@ public class Server {
             return res;
         });
 
+        get("api/plants/:plantID/getImage", (req,res) ->{
+           res.type("application/png");
+           plantController.getImage(res.raw().getOutputStream(),
+                                    req.params("plantID"),
+                                   plantController.getLiveUploadId());
+           return res;
+        });
+
         get("api/liveUploadId", (req, res) -> {
             res.type("application/json");
             return JSON.serialize(plantController.getLiveUploadId());
@@ -137,7 +150,7 @@ public class Server {
 
             String liveUploadID = plantController.getLiveUploadId();
             System.err.println("liveUploadID=" + liveUploadID);
-            String zipPath = QRCodes.CreateQRCodesFromAllBeds(
+            String zipPath = QRCodes.CreateQRCodes(
                     liveUploadID,
                     plantController.getGardenLocations(liveUploadID),
                     API_URL + "/bed/");
@@ -187,6 +200,20 @@ public class Server {
                 throw e;
             }
 
+        });
+
+        post("api/plants/:plantID/importImage",(req,res) ->{
+
+            res.type("application/json");
+
+            MultipartConfigElement multipartConfigElement = new MultipartConfigElement(excelTempDir);
+            req.raw().setAttribute("org.eclipse.jetty.multipartConfig", multipartConfigElement);
+            Part part = req.raw().getPart("file[]");
+            RenderedImage photo = ImageIO.read(part.getInputStream());
+
+            String id = req.params("plantID");
+
+            return photos.saveImage(id, photo, plantController.getLiveUploadId());
         });
 
         delete("api/deleteData/:uploadId", (req, res) -> {
