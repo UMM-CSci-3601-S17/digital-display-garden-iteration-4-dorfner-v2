@@ -3,11 +3,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
 
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -17,6 +15,8 @@ public class CollectedDataWriter {
     XSSFWorkbook workbook;
     XSSFSheet commentsSheet;
     XSSFSheet ratingsSheet;
+    XSSFSheet hourlyTimesSheet;
+    XSSFSheet dailyTimesSheet;
     int commentCount;
     int ratingCount;
 
@@ -26,6 +26,8 @@ public class CollectedDataWriter {
         this.workbook = new XSSFWorkbook();
         this.commentsSheet = workbook.createSheet("Comments");
         this.ratingsSheet = workbook.createSheet("Counts");
+        this.hourlyTimesSheet = workbook.createSheet("HourlyTimeStamps");
+        this.dailyTimesSheet = workbook.createSheet("DailyTimeStamps");
 
         Row commentRow = commentsSheet.createRow(0);
         Cell cell = commentRow.createCell(0);
@@ -74,6 +76,22 @@ public class CollectedDataWriter {
         cell.setCellValue("comments");
 
         ratingCount = 1;
+
+        Row timeRow = hourlyTimesSheet.createRow(0);
+        cell = timeRow.createCell(0);
+        cell.setCellValue("Hour");
+
+        cell = timeRow.createCell(1);
+        cell.setCellValue("Visits");
+
+        Row dailyRow = dailyTimesSheet.createRow(0);
+        cell = dailyRow.createCell(0);
+        cell.setCellValue("Day\\Month");
+        String[] months = {"Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"};
+        for (int i = 1; i < (months.length + 1); i++) {
+            cell = dailyRow.createCell(i);
+            cell.setCellValue(months[i-1]);
+        }
     }
 
     /**
@@ -151,6 +169,40 @@ public class CollectedDataWriter {
     }
 
     /**
+     * Takes an array of visit counts whose indices represent hours.
+     * Writes visits to corresponding columns
+     * @param hourlyVisitCounts - an int array of visits of size 24
+     */
+    public void writeHourlyVisits(int[] hourlyVisitCounts) {
+        for (int i = 0; i < hourlyVisitCounts.length; i++) {
+            Row row = hourlyTimesSheet.createRow(i + 1);
+            Cell cell = row.createCell(0);
+            cell.setCellValue(i + " - " + (i + 1));
+
+            cell = row.createCell(1);
+            cell.setCellValue(hourlyVisitCounts[i]);
+        }
+    }
+
+    /**
+     * Takes a two-dimensional array of visits. The first indices represent
+     * months and the second indices represent days. It writes visits to
+     * corresponding columns.
+     * @param dailyVisitCounts - a two dimensional array of visits of size [12][31]
+     */
+    public void writeDailyVisits(int[][] dailyVisitCounts) {
+        for (int i = 1; i < 32; i++) {
+            Row row = dailyTimesSheet.createRow(i);
+            Cell cell = row.createCell(0);
+            cell.setCellValue(i);
+            for (int j=0; j < dailyVisitCounts.length; j++) {
+                cell = row.createCell(j+1);
+                cell.setCellValue(dailyVisitCounts[j][i-1]);
+            }
+        }
+    }
+
+    /**
      * Writes the spreadsheet to the outputstream, then closes it.
      * @throws IOException
      */
@@ -166,6 +218,14 @@ public class CollectedDataWriter {
         }
         for(int i=0; i<8; i++){
             ratingsSheet.autoSizeColumn(i);
+        }
+
+        for(int i=0; i<2; i++){
+            hourlyTimesSheet.autoSizeColumn(i);
+        }
+
+        for(int i=0; i<13; i++){
+            dailyTimesSheet.setColumnWidth(i,10*256);
         }
 
         workbook.write(outputStream);

@@ -9,6 +9,10 @@ import org.bson.BsonInvalidOperationException;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+
 import org.bson.conversions.Bson;
 
 import javax.imageio.ImageIO;
@@ -23,7 +27,6 @@ import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.exists;
 import static com.mongodb.client.model.Projections.include;
 import static com.mongodb.client.model.Projections.fields;
-
 
 import java.io.IOException;
 import java.util.*;
@@ -330,6 +333,17 @@ public class PlantController {
         FindIterable<Document> plantFindIterable = plantCollection.find(new Document().append("uploadId", uploadID));
         Iterator<Document> plantIterator = plantFindIterable.iterator();
 
+        // [0-1, 1-2, ..., 23-24]
+        int[] hourlyVisitCounts = new int[24];
+
+        //   | Jan | Feb | Mar |... | Dec |
+        // 1 | 100   200   ...
+        // 2 |
+        // 3 |
+        // ..|
+        // 31|
+        int[][] dailyVisitCounts = new int[12][31];
+
         //for each plant, get a list of comments and write each comment to the excel
         while(plantIterator.hasNext()) {
             Document plant = plantIterator.next();
@@ -374,6 +388,21 @@ public class PlantController {
                     (int) dislikes,
                     (int) numVisits,
                     (int) comments);
+
+            // Get timestamps of visits for this plant
+            for (Document visit: visits) {
+                // number of seconds since the Unix epoch
+                int epochSecs = visit.getObjectId("visit").getTimestamp();
+                ZoneId zoneId = ZoneId.of( "America/Chicago");
+                ZonedDateTime currentVisitTime = ZonedDateTime.ofInstant(Instant.ofEpochSecond((long) epochSecs), zoneId);
+
+                hourlyVisitCounts[currentVisitTime.getHour()]++;
+                dailyVisitCounts[currentVisitTime.getMonthValue() - 1][currentVisitTime.getDayOfMonth() - 1]++;
+            }
+
+            collectedDataWriter.writeHourlyVisits(hourlyVisitCounts);
+            collectedDataWriter.writeDailyVisits(dailyVisitCounts);
+
         }
         collectedDataWriter.complete();
     }
