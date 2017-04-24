@@ -10,6 +10,7 @@ import {HomepageComponent} from "./homepage/homepage.component";
 import {DeleteComponent} from "./admin/delete.component";
 import {NotFoundComponent} from "./not-found.component";
 import {AuthGuard} from "./admin/auth-guard";
+import {IncorrectAccountComponent} from "./admin/incorrect-account.component";
 
 // Route Configuration
 export const routes: Routes = [
@@ -19,6 +20,7 @@ export const routes: Routes = [
     { path: 'admin/exportData', component: ExportComponent},
     { path: 'admin/importData', component: ImportComponent},
     { path: 'admin/deleteData', component: DeleteComponent },
+    { path: 'admin/incorrectAccount', component: IncorrectAccountComponent},
     { path: 'bed/:gardenLocation', component: BedComponent },
     { path: '**', component: NotFoundComponent},
 ];

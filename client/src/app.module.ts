@@ -24,6 +24,7 @@ import {NotFoundComponent} from "./app/not-found.component"
 import {ConfirmOptions, Position, ConfirmModule} from 'angular2-bootstrap-confirm';
 import {Positioning} from 'angular2-bootstrap-confirm/position';
 import {AuthGuard} from "./app/admin/auth-guard";
+import {IncorrectAccountComponent} from "./app/admin/incorrect-account.component";
 
 
 
@@ -51,7 +52,7 @@ import {AuthGuard} from "./app/admin/auth-guard";
         BedComponent,
         HomepageComponent,
         NotFoundComponent,
-
+        IncorrectAccountComponent,
     ],
     providers: [ PlantListService, AdminService, {provide: 'CanAlwaysActivateGuard', useClass: AuthGuard}, AuthGuard ],
     bootstrap: [ AppComponent ]
