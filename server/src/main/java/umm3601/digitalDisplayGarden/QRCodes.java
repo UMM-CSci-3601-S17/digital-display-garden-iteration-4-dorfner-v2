@@ -27,7 +27,7 @@ public class QRCodes {
 
     private static String qrTempPath = ".qrcode";
 
-    public static BufferedImage createQRFromBedURL(String url) throws IOException,WriterException{
+    public static BufferedImage createQRFromURL(String url) throws IOException,WriterException{
 
         Map hintMap = new HashMap();
         hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
@@ -44,7 +44,7 @@ public class QRCodes {
      * @return the path to the new .zip file or null if there was a disk IO issue
      */
 
-    public static String CreateQRCodesFromAllBeds(String uploadId, String bedNames[], String urlPrefix){
+    public static String CreateQRCodes(String uploadId, String bedNames[], String urlPrefix){
         //Get all unique beds from Database
         //Create URLs for all unique beds
         //Create QRCode BufferedImages for all URLs
@@ -73,20 +73,7 @@ public class QRCodes {
         for(int i = 0; i < numBeds; i++) {
             bedURLs[i] = urlPrefix + bedNames[i];
             try {
-                BufferedImage QRImage = createQRFromBedURL(bedURLs[i]);
-
-                Graphics g = QRImage.getGraphics();
-                int width = QRImage.getWidth();
-
-                FontMetrics fmForURL = g.getFontMetrics();
-                int x = (width - fmForURL.stringWidth(bedURLs[i]))/2;
-
-                g.setColor(Color.black);
-                g.setFont(g.getFont().deriveFont(Font.CENTER_BASELINE, 11));
-                g.drawString(bedURLs[i], x, 285);
-                g.dispose();
-
-                qrCodeImages.add(QRImage);
+                qrCodeImages.add(createQRFromURL(bedURLs[i]));
             }
             catch(IOException ioe)
             {
@@ -100,16 +87,32 @@ public class QRCodes {
             }
         }
 
+        try {
+            qrCodeImages.add(createQRFromURL(urlPrefix.substring(0, urlPrefix.length() - 4)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (WriterException we) {
+            we.printStackTrace();
+        }
+
+
+
         //WRITE IMAGES TO FILE
 
-        if(numBeds != qrCodeImages.size()) {
-            System.err.println("a QR code could not be made for each Bed.");
+        if((numBeds + 1) != qrCodeImages.size()) {
+            System.err.println("a QR code could not be made for homepage and each Bed.");
             return null;
         }
 
         try {
             for (int i = 0; i < qrCodeImages.size(); i++) {
-                File outputFile = new File(qrTempPath + '/' + bedNames[i] + ".png");
+                String pathName = "";
+                if (i < 12) {
+                    pathName = qrTempPath + '/' + bedNames[i] + ".png";
+                } else {
+                    pathName = qrTempPath + "/homepage.png";
+                }
+                File outputFile = new File(pathName);
                 ImageIO.write(qrCodeImages.get(i), "png", outputFile);
             }
         }

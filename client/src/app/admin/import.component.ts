@@ -13,12 +13,14 @@ export class ImportComponent implements OnInit {
 
     authorized: boolean;
     filename:string;
+    uploadStarted:boolean = false;
     uploadAttempted:boolean = false;
 
     constructor(private adminService: AdminService){
     }
 
     handleUpload(){
+        this.uploadStarted = true;
         this.fu.upload().subscribe(
             response => {
                 this.filename = response.json();

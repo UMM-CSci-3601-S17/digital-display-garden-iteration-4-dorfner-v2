@@ -11,6 +11,7 @@ import {DeleteComponent} from "./admin/delete.component";
 import {NotFoundComponent} from "./not-found.component";
 import {AuthGuard} from "./admin/auth-guard";
 import {IncorrectAccountComponent} from "./admin/incorrect-account.component";
+import {PhotoComponent} from "./admin/photo.component";
 
 // Route Configuration
 export const routes: Routes = [
@@ -22,6 +23,7 @@ export const routes: Routes = [
     { path: 'admin/deleteData', component: DeleteComponent, canActivate: ['CanAlwaysActivateGuard', AuthGuard]},
     { path: 'admin/incorrectAccount', component: IncorrectAccountComponent},
     { path: 'bed/:gardenLocation', component: BedComponent },
+    { path: 'admin/PhotoComponent', component: PhotoComponent },
     { path: '**', component: NotFoundComponent},
 ];
 
