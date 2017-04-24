@@ -177,7 +177,6 @@ public class Server {
 
         // List all uploadIds
         get("api/uploadIds", (req, res) -> {
-            // todo: this is a test of authorization status
             String cookie = req.cookie("ddg");
             if(!auth.authorized(cookie)) {
                 halt(403);
@@ -192,6 +191,10 @@ public class Server {
         });
 
         get("api/export", (req, res) -> {
+            String cookie = req.cookie("ddg");
+            if(!auth.authorized(cookie)) {
+                halt(403);
+            }
             res.type("application/vnd.ms-excel");
             res.header("Content-Disposition", "attachment; filename=\"plant-comments.xlsx\"");
             // Note that after flush() or close() is called on
@@ -203,6 +206,10 @@ public class Server {
         });
 
         get("api/liveUploadId", (req, res) -> {
+            String cookie = req.cookie("ddg");
+            if(!auth.authorized(cookie)) {
+                halt(403);
+            }
             res.type("application/json");
             return JSON.serialize(plantController.getLiveUploadId());
         });
@@ -210,6 +217,10 @@ public class Server {
 
 
         get("api/qrcodes", (req, res) -> {
+            String cookie = req.cookie("ddg");
+            if(!auth.authorized(cookie)) {
+                halt(403);
+            }
             res.type("application/zip");
 
             String liveUploadID = plantController.getLiveUploadId();
@@ -242,7 +253,10 @@ public class Server {
 
         // Accept an xls file
         post("api/import", (req, res) -> {
-
+            String cookie = req.cookie("ddg");
+            if(!auth.authorized(cookie)) {
+                halt(403);
+            }
             res.type("application/json");
             try {
 
@@ -267,7 +281,10 @@ public class Server {
         });
 
         delete("api/deleteData/:uploadId", (req, res) -> {
-
+            String cookie = req.cookie("ddg");
+            if(!auth.authorized(cookie)) {
+                halt(403);
+            }
             res.type("application/json");
             String uploadID = req.params("uploadId");
             try {

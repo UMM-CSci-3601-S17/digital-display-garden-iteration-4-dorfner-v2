@@ -12,11 +12,11 @@ export class AdminService {
     }
 
     getLiveUploadId(): Observable<string> {
-        return this.http.request(this.url + "liveUploadId").map(res => res.json());
+        return this.http.request(this.url + "liveUploadId", {withCredentials: true}).map(res => res.json());
     }
 
     deleteUploadId(uploadId : string) : Observable<any> {
-        return this.http.delete(this.url + "deleteData/" + uploadId).map(res => res.json());
+        return this.http.delete(this.url + "deleteData/" + uploadId, {withCredentials: true}).map(res => res.json());
     }
 
     authorized() : Observable<boolean> {
