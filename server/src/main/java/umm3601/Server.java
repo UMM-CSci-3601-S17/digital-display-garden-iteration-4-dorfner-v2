@@ -30,8 +30,6 @@ import javax.servlet.http.Part;
 
 public class Server {
 
-    public static final String API_URL = "https://dorfner.congrue.xyz:2538";
-
     public static String databaseName = "test";
 
     private static String excelTempDir = "/tmp/digital-display-garden";
@@ -79,7 +77,7 @@ public class Server {
 
         before((request, response) -> {
             response.header("Access-Control-Allow-Credentials", "true");
-            response.header("Access-Control-Allow-Origin", "http://localhost:9000");
+            response.header("Access-Control-Allow-Origin", publicURL);
         });
 
         // Redirects for the "home" page
@@ -132,7 +130,7 @@ public class Server {
             String originatingURLs[] = req.queryMap().toMap().get("originatingURL");
             String originatingURL;
             if (originatingURLs == null) {
-                originatingURL = API_URL; // todo: what should the default be?
+                originatingURL = publicURL;
             } else {
                 originatingURL = originatingURLs[0];
             }
@@ -185,7 +183,7 @@ public class Server {
         get("api/export", (req, res) -> {
             String cookie = req.cookie("ddg");
             if(!auth.authorized(cookie)) {
-                res.redirect(auth.getAuthURL(publicURL + "admin/exportData"));
+                res.redirect(auth.getAuthURL(publicURL + "/admin/exportData"));
                 return res; // not reached
             } else {
                 res.type("application/vnd.ms-excel");
@@ -221,7 +219,7 @@ public class Server {
         get("api/qrcodes", (req, res) -> {
             String cookie = req.cookie("ddg");
             if(!auth.authorized(cookie)) {
-                res.redirect(auth.getAuthURL(publicURL + "admin"));
+                res.redirect(auth.getAuthURL(publicURL + "/admin"));
             }
             res.type("application/zip");
 
@@ -230,7 +228,7 @@ public class Server {
             String zipPath = QRCodes.CreateQRCodes(
                     liveUploadID,
                     plantController.getGardenLocations(liveUploadID),
-                    API_URL + "/bed/");
+                    publicURL + "/bed/");
             System.err.println(zipPath);
             if(zipPath == null)
                 return null;
