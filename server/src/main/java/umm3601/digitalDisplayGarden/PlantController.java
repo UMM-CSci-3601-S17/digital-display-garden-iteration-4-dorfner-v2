@@ -420,8 +420,21 @@ public class PlantController {
             return null;
         }
 
-        filterDoc.append("_id", new ObjectId(id));
+
+
+        filterDoc.append("_id", objectId);
         filterDoc.append("uploadId", uploadID);
+
+        // Check if the plant with the given 'id' and uploadID exist
+        // If not, return null
+        int size = 0;
+        FindIterable<Document> plantIterable = plantCollection.find(filterDoc);
+        for (Document each: plantIterable) {
+            size++;
+        }
+        if (size == 0) {
+            return null;
+        }
 
         Document rating = new Document();
         rating.append("like", like);
