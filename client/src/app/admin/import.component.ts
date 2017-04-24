@@ -26,6 +26,9 @@ export class ImportComponent implements OnInit {
             },
             err => {
                 this.uploadAttempted = true;
+                if (err.status === 403) {
+                    window.location.reload();
+                }
             }
 
         );

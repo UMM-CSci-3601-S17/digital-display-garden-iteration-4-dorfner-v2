@@ -29,6 +29,8 @@ public class Server {
 
     public static final String API_URL = "https://dorfner.congrue.xyz:2538";
 
+    public static final String clientBaseURL = "http://localhost:9000/";
+
     public static String databaseName = "test";
 
     private static String excelTempDir = "/tmp/digital-display-garden";
@@ -193,16 +195,18 @@ public class Server {
         get("api/export", (req, res) -> {
             String cookie = req.cookie("ddg");
             if(!auth.authorized(cookie)) {
-                halt(403);
+                res.redirect(auth.getAuthURL(clientBaseURL + "admin/exportData"));
+                return res; // not reached
+            } else {
+                res.type("application/vnd.ms-excel");
+                res.header("Content-Disposition", "attachment; filename=\"plant-comments.xlsx\"");
+                // Note that after flush() or close() is called on
+                // res.raw().getOutputStream(), the response can no longer be
+                // modified. Since exportCollectedData(..) closes the OutputStream
+                // when it is done, it needs to be the last line of this function.
+                plantController.exportCollectedData(res.raw().getOutputStream(), req.queryMap().toMap().get("uploadId")[0]);
+                return res;
             }
-            res.type("application/vnd.ms-excel");
-            res.header("Content-Disposition", "attachment; filename=\"plant-comments.xlsx\"");
-            // Note that after flush() or close() is called on
-            // res.raw().getOutputStream(), the response can no longer be
-            // modified. Since exportCollectedData(..) closes the OutputStream
-            // when it is done, it needs to be the last line of this function.
-            plantController.exportCollectedData(res.raw().getOutputStream(), req.queryMap().toMap().get("uploadId")[0]);
-            return res;
         });
 
         get("api/liveUploadId", (req, res) -> {
@@ -219,7 +223,7 @@ public class Server {
         get("api/qrcodes", (req, res) -> {
             String cookie = req.cookie("ddg");
             if(!auth.authorized(cookie)) {
-                halt(403);
+                res.redirect(auth.getAuthURL(clientBaseURL + "admin"));
             }
             res.type("application/zip");
 
