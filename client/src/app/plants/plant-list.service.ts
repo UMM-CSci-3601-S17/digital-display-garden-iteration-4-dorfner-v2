@@ -3,6 +3,7 @@ import { Http } from '@angular/http';
 import { Plant } from './plant';
 import { Observable } from "rxjs";
 import {PlantFeedback} from "./plant-feedback";
+import { ObjectID } from "./object-id";
 
 @Injectable()
 export class PlantListService {
@@ -27,7 +28,7 @@ export class PlantListService {
     }
     getFlowersByFilter(filterUrl: string): Observable<Plant[]> {
         return this.http.request(this.plantUrl + filterUrl).map(res => res.json());
-    }
+    } 
     getFlowersByBed(bed: string): Observable<Plant[]> {
         return this.http.request(this.plantUrl + "?gardenLocation=" + bed).map(res => res.json());
     }
@@ -40,11 +41,34 @@ export class PlantListService {
         };
         return this.http.post(this.plantUrl + "/" + "leaveComment", JSON.stringify(returnObject)).map(res => res.json());
     }
-    ratePlant(id: string, like: boolean): Observable<boolean> {
+    ratePlant(id: string, like: boolean): Observable<ObjectID> {
         let returnObject = {
             id: id,
             like: like
         };
         return this.http.post(this.plantUrl + "/" + "rate", JSON.stringify(returnObject)).map(res => res.json());
     }
+        // might not need if we do post request
+    // deleteRate(id: string): Observable<any> {
+    //     return this.http.delete(this.plantUrl + "/" + "rate/" + id).map(res => res.json());
+    // }
+
+    changeRate(id: string, ratingID: string, like: boolean): Observable<any> {
+        let returnObject = {
+            id: id,
+            ratingID: ratingID,
+            like: like
+        };
+        return this.http.post(this.plantUrl + "/" + "changeRate", JSON.stringify(returnObject)).map(res => res.json());
+    }
+
+    deleteRate(id: string, ratingID: string): Observable<any> {
+        let returnObject = {
+            id: id,
+            ratingID: ratingID,
+        };
+        return this.http.post(this.plantUrl + "/" + "deleteRate", JSON.stringify(returnObject)).map(res => res.json());
+    }
+
+
 }

@@ -179,7 +179,17 @@ public class Server {
 
         post("api/plants/rate", (req, res) -> {
             res.type("application/json");
-            return plantController.addFlowerRating(req.body(), plantController.getLiveUploadId());
+            return JSON.serialize(plantController.addFlowerRating(req.body(), plantController.getLiveUploadId()));
+        });
+
+        post("api/plants/changeRate", (req, res) -> {
+            res.type("application/json");
+            return plantController.changeRating(req.body(), plantController.getLiveUploadId());
+        });
+
+        post("api/plants/deleteRate", (req, res) -> {
+            res.type("application/json");
+            return plantController.deleteRating(req.body(), plantController.getLiveUploadId());
         });
 
         get("api/export", (req, res) -> {

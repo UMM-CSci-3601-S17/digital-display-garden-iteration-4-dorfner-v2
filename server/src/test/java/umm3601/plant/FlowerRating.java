@@ -13,6 +13,7 @@ import umm3601.digitalDisplayGarden.PlantController;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertNull;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -32,8 +33,7 @@ public class FlowerRating {
 
     @Test
     public void AddFlowerRatingReturnsTrueWithValidInput() throws IOException{
-
-        assertTrue(plantController.addFlowerRating("58d1c36efb0cac4e15afd202", true, "first uploadId"));
+        assertTrue(plantController.addFlowerRating("58d1c36efb0cac4e15afd202", true, "first uploadId") instanceof ObjectId);
 
         MongoClient mongoClient = new MongoClient();
         MongoDatabase db = mongoClient.getDatabase(databaseName);
@@ -48,29 +48,27 @@ public class FlowerRating {
 
         Document rating = ratings.get(0);
         assertTrue(rating.getBoolean("like"));
-        assertEquals(new ObjectId("58d1c36efb0cac4e15afd202"),rating.get("ratingOnObjectOfId"));
+        assertTrue(rating.get("id") instanceof ObjectId);
     }
 
     @Test
     public void AddFlowerRatingReturnsFalseWithInvalidInput() throws IOException {
 
-        assertFalse(plantController.addFlowerRating("jfd;laj;asjfoisaf", true, "anything"));
-        assertFalse(plantController.addFlowerRating("58d1c36efb0cac4e15afd201", true, "anything"));
+        assertNull(plantController.addFlowerRating("jfd;laj;asjfoisaf", true, "anything"));
+        assertNull(plantController.addFlowerRating("58d1c36efb0cac4e15afd201", true, "anything"));
     }
 
     @Test
     public void AddFlowerRatingReturnsFalseWithInvalidUploadID() throws IOException {
-
-        assertFalse(plantController.addFlowerRating("58d1c36efb0cac4e15afd202", true, "anything"));
+        assertNull(plantController.addFlowerRating("58d1c36efb0cac4e15afd202", true, "anything"));
     }
-
 
     @Test
     public void AddFlowerRatingReturnsTrueWithValidJsonInput() throws IOException{
 
         String json = "{like: true, id: \"58d1c36efb0cac4e15afd202\"}";
 
-        assertTrue(plantController.addFlowerRating(json, "first uploadId"));
+        assertTrue(plantController.addFlowerRating(json, "first uploadId") instanceof ObjectId);
 
         MongoClient mongoClient = new MongoClient();
         MongoDatabase db = mongoClient.getDatabase(databaseName);
@@ -85,7 +83,7 @@ public class FlowerRating {
 
         Document rating = ratings.get(0);
         assertTrue(rating.getBoolean("like"));
-        assertEquals(new ObjectId("58d1c36efb0cac4e15afd202"),rating.get("ratingOnObjectOfId"));
+        assertTrue(rating.get("id") instanceof ObjectId);
     }
 
     @Test
@@ -94,7 +92,7 @@ public class FlowerRating {
         String json1 = "{like: true, id: \"dkjahfjafhlkasjdf\"}";
         String json2 = "{like: true id: \"58d1c36efb0cac4e15afd201\"}";
 
-        assertFalse(plantController.addFlowerRating(json1, "anything"));
-        assertFalse(plantController.addFlowerRating(json2, "anything"));
+        assertFalse(plantController.addFlowerRating(json1, "anything") instanceof ObjectId);
+        assertFalse(plantController.addFlowerRating(json2, "anything") instanceof ObjectId);
     }
 }

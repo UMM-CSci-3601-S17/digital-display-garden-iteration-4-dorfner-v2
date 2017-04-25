@@ -1,7 +1,9 @@
 package umm3601.digitalDisplayGarden;
 
+import com.google.gson.Gson;
 import com.mongodb.MongoClient;
 import com.mongodb.client.*;
+import com.mongodb.client.model.Accumulators;
 import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Sorts;
 import com.mongodb.util.JSON;
@@ -26,6 +28,7 @@ import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.exists;
 import static com.mongodb.client.model.Projections.include;
+import static com.mongodb.client.model.Updates.*;
 import static com.mongodb.client.model.Projections.fields;
 
 import java.io.IOException;
@@ -494,7 +497,7 @@ public class PlantController {
      * @return true iff the operation succeeded.
      */
 
-    public boolean addFlowerRating(String id, boolean like, String uploadID) {
+    public ObjectId addFlowerRating(String id, boolean like, String uploadID) {
 
         Document filterDoc = new Document();
 
@@ -503,17 +506,32 @@ public class PlantController {
         try {
             objectId = new ObjectId(id);
         } catch (IllegalArgumentException e) {
-            return false;
+            return null;
         }
 
-        filterDoc.append("_id", new ObjectId(id));
+
+
+        filterDoc.append("_id", objectId);
         filterDoc.append("uploadId", uploadID);
+
+        // Check if the plant with the given 'id' and uploadID exist
+        // If not, return null
+        int size = 0;
+        FindIterable<Document> plantIterable = plantCollection.find(filterDoc);
+        for (Document each: plantIterable) {
+            size++;
+        }
+        if (size == 0) {
+            return null;
+        }
 
         Document rating = new Document();
         rating.append("like", like);
-        rating.append("ratingOnObjectOfId", objectId);
-
-        return null != plantCollection.findOneAndUpdate(filterDoc, push("metadata.ratings", rating));
+        ObjectId ratingId = new ObjectId();
+        rating.append("id", ratingId);
+//        rating.append("ratingOnObjectOfId", objectId);
+        plantCollection.findOneAndUpdate(filterDoc, push("metadata.ratings", rating));
+        return ratingId;
     }
 
     /**
@@ -526,14 +544,46 @@ public class PlantController {
      *     }
      * </code>
      *
+     * Returns an ObjectId.
+     *
      * @param json string representation of a JSON object
      * @param uploadID Dataset to find the plant
-     * @return true iff the operation succeeded.
+     * @return ObjectId of the rating, or null if the ObjectId was not added.
      */
 
-    public boolean addFlowerRating(String json, String uploadID){
+    public ObjectId addFlowerRating(String json, String uploadID){
+        boolean like; // gets overwritten in the try-block
+        String id;
+
+        try {
+
+            Document parsedDocument = Document.parse(json);
+
+            if(parsedDocument.containsKey("id") && parsedDocument.get("id") instanceof String){
+                id = parsedDocument.getString("id");
+            } else {
+                return null;
+            }
+
+            if(parsedDocument.containsKey("like") && parsedDocument.get("like") instanceof Boolean){
+                like = parsedDocument.getBoolean("like");
+            } else {
+                return null;
+            }
+
+        } catch (BsonInvalidOperationException e){
+            e.printStackTrace();
+            return null;
+        } catch (org.bson.json.JsonParseException e){
+            return null;
+        }
+        return addFlowerRating(id, like, uploadID);
+    }
+
+    public boolean changeRating(String json, String uploadID){
         boolean like;
         String id;
+        String ratingID;
 
         try {
 
@@ -551,6 +601,12 @@ public class PlantController {
                 return false;
             }
 
+            if(parsedDocument.containsKey("ratingID") && parsedDocument.get("ratingID") instanceof String){
+                ratingID = parsedDocument.getString("ratingID");
+            } else {
+                return false;
+            }
+
         } catch (BsonInvalidOperationException e){
             e.printStackTrace();
             return false;
@@ -558,7 +614,116 @@ public class PlantController {
             return false;
         }
 
-        return addFlowerRating(id, like, uploadID);
+        return changeRating(id, like, uploadID, ratingID);
+    }
+
+
+    public boolean changeRating(String id, boolean like, String uploadID, String ratingID) {
+
+        Document filterDoc = new Document();
+
+         ObjectId objectId;
+         ObjectId ratingObjectID;
+
+        try {
+            objectId = new ObjectId(id);
+            ratingObjectID = new ObjectId(ratingID);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+
+        filterDoc.append("_id", objectId);
+        filterDoc.append("uploadId", uploadID);
+
+        Document rating = new Document();
+        rating.append("like", like);
+        rating.append("id", new ObjectId(id));
+
+        FindIterable findObjectId = plantCollection.find(filterDoc);
+
+        Iterator iterator = findObjectId.iterator();
+        if (iterator.hasNext()) {
+            Document plant = (Document) iterator.next();
+
+            List<Document> ratings = (List<Document>) ((Document) plant.get("metadata")).get("ratings");
+
+
+            for(Document deleteDoc : ratings)
+            {
+                if(deleteDoc.get("id").equals(ratingObjectID))
+                {
+                    deleteDoc.put("like", like);
+                    return null != plantCollection.findOneAndUpdate(filterDoc, set("metadata.ratings", ratings));
+                }
+            }
+        }
+       return false;
+    }
+
+    public boolean deleteRating(String json, String uploadID){
+        String id;
+        String ratingID;
+
+        try {
+
+            Document parsedDocument = Document.parse(json);
+
+            if(parsedDocument.containsKey("id") && parsedDocument.get("id") instanceof String){
+                id = parsedDocument.getString("id");
+            } else {
+                return false;
+            }
+
+            if(parsedDocument.containsKey("ratingID") && parsedDocument.get("ratingID") instanceof String){
+                ratingID = parsedDocument.getString("ratingID");
+            } else {
+                return false;
+            }
+
+        } catch (BsonInvalidOperationException e){
+            e.printStackTrace();
+            return false;
+        } catch (org.bson.json.JsonParseException e){
+            return false;
+        }
+
+        return deleteRating(id, uploadID, ratingID);
+    }
+
+
+    public boolean deleteRating(String id, String uploadID, String ratingID) {
+
+        Document filterDoc = new Document();
+
+        ObjectId objectId;
+        ObjectId ratingObjectID;
+
+        try {
+            objectId = new ObjectId(id);
+            ratingObjectID = new ObjectId(ratingID);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+
+        filterDoc.append("_id", objectId);
+        filterDoc.append("uploadId", uploadID);
+
+        FindIterable findObjectId = plantCollection.find(filterDoc);
+
+        Iterator iterator = findObjectId.iterator();
+        if (iterator.hasNext()) {
+            Document plant = (Document) iterator.next();
+
+            List<Document> ratings = (List<Document>) ((Document) plant.get("metadata")).get("ratings");
+            for (Document deleteDoc : ratings) {
+                if (deleteDoc.get("id").equals(ratingObjectID)) {
+
+                    ratings.remove(deleteDoc);
+                    return null != plantCollection.findOneAndUpdate(filterDoc, set("metadata.ratings", ratings));
+                }
+            }
+        }
+        return false;
     }
 
     /**
