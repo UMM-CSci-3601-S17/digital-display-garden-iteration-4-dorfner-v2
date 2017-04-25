@@ -1,4 +1,4 @@
-<div class="import-page">
+<div *ngIf="this.authorized" class="import-page">
     <h2>Import Spreadsheet</h2>
 
     <file-upload #fu (change)="filename = undefined; uploadAttempted = false" [multiple]="false">-</file-upload>
