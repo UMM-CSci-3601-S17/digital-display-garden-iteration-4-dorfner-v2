@@ -15,6 +15,7 @@ import java.awt.image.RenderedImage;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 import java.util.Map;
 import java.util.Properties;
 
@@ -320,9 +321,17 @@ public class Server {
         get("/*", clientRoute);
 
         exception(Exception.class, (exception, request, response) -> {
-            System.err.println("Unhandled Exception Occurred");
+            System.err.println("(" + new Date() + ") Unhandled exception occurred while processing request:");
+            System.err.println(request.requestMethod() + " " + request.url() + request.queryString());
+            System.err.println("Full StackTrace:");
             exception.printStackTrace();
-            halt(500);
+
+            response.type("application/json");
+            response.status(500);
+            Document d = new Document();
+            d.append("exception", exception.getClass().toString());
+            d.append("message", exception.getMessage());
+            response.body(d.toJson());
         });
 
         // Handle "404" file not found requests:
