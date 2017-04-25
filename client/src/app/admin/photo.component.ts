@@ -39,6 +39,8 @@ export class PhotoComponent implements OnInit {
     }
 
     public getPlant(id: string): void {
+        this.uploadAttempted = false;
+        this.filename = undefined;
         this.clicked = true;
         this.id = id;
         this.fileLocation = ".plants/" + id + ".png";

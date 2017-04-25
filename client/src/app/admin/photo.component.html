@@ -15,7 +15,7 @@
         <br>
 
         <div *ngIf="plant.photoLocation">
-            <img [attr.src]="this.url + 'plants/' + this.id + '/getImage'">
+            <img [attr.src]="this.url + 'plants/' + this.id + '/getImage'" width = "100%">
             <br> Uploading new photo will replace this photo.
         </div><br>
 
@@ -36,6 +36,10 @@
         Invalid plant ID
 
 
+    </div>
+    <div>
+        <br>
+        <button  [routerLink]="['/admin']" class="btn btn-primary" style="float: right">Back to Admin Page</button>
     </div>
 
 </div>
