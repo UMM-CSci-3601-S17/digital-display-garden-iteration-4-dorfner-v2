@@ -79,6 +79,7 @@ public class Auth {
         authUsers.add("hoff0899@morris.umn.edu");
         authUsers.add("lopez477@morris.umn.edu");
         authUsers.add("chen4709@morris.umn.edu");
+        authUsers.add("mitch809@morris.umn.edu");
         this.globalService = new ServiceBuilder()
                 .apiKey(clientId)
                 .apiSecret(clientSecret)
