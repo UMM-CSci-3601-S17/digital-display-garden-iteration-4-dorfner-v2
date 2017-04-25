@@ -3,7 +3,7 @@
 
 <div>
     Plant ID#
-    <input #textbox type="text" [(ngModel)]="textValue">
+    <input #textbox (keyup)="onKey($event)" type="text" [(ngModel)]="textValue">
     <button (click)="getPlant(textbox.value)" value = "clicked" class="btn btn-primary">Find</button>
 </div>
 
@@ -15,13 +15,13 @@
         <br>
 
         <div *ngIf="plant.photoLocation">
-            <img [attr.src]="this.url + 'plants/' + this.id + '/getImage'">
+            <img [attr.src]="this.url + 'plants/' + this.id + '/getImage'" width = "100%">
             <br> Uploading new photo will replace this photo.
         </div><br>
 
         <file-upload #fu (change)="filename = undefined; uploadAttempted = false" [multiple]="false">-</file-upload>
 
-        <button *ngIf="filename === undefined" class="btn btn-primary" (click)="this.handleUpload()" style="margin-top: 10px">
+        <button *ngIf="filename === undefined" class="btn btn-primary" (click)="this.handleUpload(); this.refresh(this.id)" style="margin-top: 10px">
             <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
             Upload
         </button>
@@ -36,6 +36,10 @@
         Invalid plant ID
 
 
+    </div>
+    <div>
+        <br>
+        <button  [routerLink]="['/admin']" class="btn btn-primary" style="float: right">Back to Admin Page</button>
     </div>
 
 </div>

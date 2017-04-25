@@ -32,8 +32,12 @@ public class Photos {
         plantCollection = db.getCollection("plants");
     }
 
+
     public boolean saveImage(String plantId, RenderedImage photo, String uploadId){
         try {
+            if (Files.notExists(Paths.get(".photos/"))){
+                Files.createDirectory(Paths.get(".photos/"));
+            }
             if (Files.notExists(Paths.get(".photos/"+uploadId))) {
                 Files.createDirectory(Paths.get(".photos/"+uploadId));
             }
