@@ -32,7 +32,6 @@ public class FlowerRating {
     }
 
     @Test
-    //failed
     public void AddFlowerRatingReturnsTrueWithValidInput() throws IOException{
         assertTrue(plantController.addFlowerRating("58d1c36efb0cac4e15afd202", true, "first uploadId") instanceof ObjectId);
 
@@ -60,7 +59,6 @@ public class FlowerRating {
     }
 
     @Test
-    //failed
     public void AddFlowerRatingReturnsFalseWithInvalidUploadID() throws IOException {
         assertNull(plantController.addFlowerRating("58d1c36efb0cac4e15afd202", true, "anything"));
     }
@@ -89,11 +87,10 @@ public class FlowerRating {
     }
 
     @Test
-    //failed
     public void AddFlowerRatingReturnsFalseWithInvalidJsonInput() throws IOException {
 
         String json1 = "{like: true, id: \"dkjahfjafhlkasjdf\"}";
-        String json2 = "{like: true id: \"58d1c36efb0cac4e15afd201K\"}"; //Why does adding a random letter like 'K' make this work
+        String json2 = "{like: true id: \"58d1c36efb0cac4e15afd201\"}";
 
         assertFalse(plantController.addFlowerRating(json1, "anything") instanceof ObjectId);
         assertFalse(plantController.addFlowerRating(json2, "anything") instanceof ObjectId);
