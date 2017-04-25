@@ -71,6 +71,20 @@ public class TestCollectedDataWriter {
                     115
             );
 
+            int[] hourlyVisits = new int[] {4, 5, 6, 7, 8, 9, 1, 2, 3, 10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+            collectedDataWriter.writeHourlyVisits(
+                    hourlyVisits
+            );
+
+            int[][] dailyVisits = new int[12][31];
+            for (int i = 0; i < 12; i++) {
+                for (int j = 0; j < 31; j++) {
+                    dailyVisits[i][j] = i + j;
+                }
+            }
+
+            collectedDataWriter.writeDailyVisits( dailyVisits );
+
             collectedDataWriter.complete();
 
             InputStream inputStream = new FileInputStream(fileName);
@@ -78,6 +92,8 @@ public class TestCollectedDataWriter {
             Workbook workbook = new XSSFWorkbook(inputStream);
             Sheet commentsSheet = workbook.getSheetAt(0);
             Sheet ratingsSheet = workbook.getSheetAt(1);
+            Sheet hourlyVisitSheet = workbook.getSheetAt(2);
+            Sheet dailyVisitSheet = workbook.getSheetAt(3);
 //
 //        assertEquals("#", commentsSheet.getRow(0).getCell(0));
 //        assertEquals("common name", commentsSheet.getRow(0).getCell(1))
@@ -278,6 +294,45 @@ public class TestCollectedDataWriter {
 
             Row ratingRow3 = ratingsSheet.getRow(3);
             assertNull(ratingRow3);
+
+            // Test hourly data
+            Row hourlyVisitHeadRow = hourlyVisitSheet.getRow(0);
+            for (int j = 0; j < 2; j++) {
+                Cell cell = hourlyVisitHeadRow.getCell(j);
+                switch (j) {
+                    case 0:
+                        assertEquals("Hour", cell.getStringCellValue());
+                        break;
+                    case 1:
+                        assertEquals("Visits", cell.getStringCellValue());
+                        break;
+                    case 2:
+                        assertNull(cell);
+                        break;
+                }
+            }
+
+            for (int i = 0; i < hourlyVisits.length; i++) {
+                Row currentRow = hourlyVisitSheet.getRow(i + 1);
+                Cell cell = currentRow.getCell(1);
+                assertEquals(hourlyVisits[i], (int) cell.getNumericCellValue());
+            }
+
+            // Test daily data
+            Row dailyVisitHeadRow = dailyVisitSheet.getRow(0);
+            String[] months = new String[]{"Jan","Feb","Mar","Apr","May","June","July","Aug","Sep","Oct","Nov","Dec"};
+            for (int i = 0; i < 12; i++) {
+                Cell cell = dailyVisitHeadRow.getCell(i + 1);
+                assertEquals(months[i], cell.getStringCellValue());
+            }
+
+            for (int day = 0; day < 31; day++) {
+                Row currentRow = dailyVisitSheet.getRow(day + 1);
+                for (int month = 0; month < 12; month++) {
+                    Cell cell = currentRow.getCell(month + 1);
+                    assertEquals(dailyVisits[month][day], (int) cell.getNumericCellValue());
+                }
+            }
     }
 
     @AfterClass

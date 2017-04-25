@@ -1,4 +1,4 @@
-<div class="menu">
+<div *ngIf="this.authorized" class="menu">
     <h2>Administrator Tasks</h2>
 
     <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/admin/exportData']"  >
@@ -18,9 +18,14 @@
         </button>
     </a>
 
-    <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/admin/deleteData']">
+    <br><br><button type="button" class="btn btn-primary btn-lg" [routerLink]="['/admin/deleteData']">
         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
         Delete Old Data
+    </button>
+
+    <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/admin/PhotoComponent']">
+        <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
+        Upload Photos
     </button>
 
 </div>

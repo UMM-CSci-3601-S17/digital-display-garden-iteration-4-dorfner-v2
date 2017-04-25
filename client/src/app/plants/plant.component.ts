@@ -2,7 +2,7 @@
 import { PlantListService } from "./plant-list.service";
 import { Plant } from "./plant";
 import { Component, OnInit} from '@angular/core';
-import { Params,  ActivatedRoute} from '@angular/router';
+import {Params, ActivatedRoute, Router} from '@angular/router';
 import {PlantFeedback} from "./plant-feedback";
 import {Location} from '@angular/common';
 import { ObjectID } from './object-id';
@@ -24,13 +24,16 @@ export class PlantComponent implements OnInit {
     private ratingID: ObjectID;
 
     //public plant: Plant = null;
-    private id: string;
+    // private id: string;
     private plantID: string;
     private srcBed : string;
+    private url: string = API_URL;
 
-    constructor(private plantListService: PlantListService, private route: ActivatedRoute, private _location: Location) {
+    constructor(private plantListService: PlantListService, private route: ActivatedRoute, private _location: Location, private router: Router) {
         this.srcBed = this.route.snapshot.params["srcBed"];
     }
+
+    id = this.route.snapshot.params["plantID"];
 
     public comment(comment: string): void {
         if(!this.commented){
@@ -100,6 +103,5 @@ export class PlantComponent implements OnInit {
         this.route.params
             .switchMap((params: Params) => this.plantListService.getFeedbackForPlantByPlantID(params['plantID']))
             .subscribe((plantFeedback: PlantFeedback) => this.plantFeedback = plantFeedback);
-
     }
 }

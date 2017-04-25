@@ -13,6 +13,9 @@ describe("Import Component", () => {
     let importComponent: ImportComponent;
     let fixture: ComponentFixture<ImportComponent>;
     let mockHttp: {post: (string, any) => Observable<any>};
+    let adminServiceStub: {
+        authorized: () => Observable<boolean>
+    };
 
     beforeEach(() => {
         mockHttp = {
@@ -20,11 +23,16 @@ describe("Import Component", () => {
                 return Observable.of({json:() => "mockFileName"});
             }
         };
+        adminServiceStub = {
+            authorized: () => {
+                return Observable.of(true);
+            }
+        }
 
         TestBed.configureTestingModule({
             imports: [FormsModule, RouterTestingModule],
             declarations: [ImportComponent, NavbarComponent, FileUploadComponent],
-            providers: [{provide: Http, useValue: mockHttp}]
+            providers: [{provide: Http, useValue: mockHttp}, {provide: AdminService, useValue: adminServiceStub}]
         });
 
     });
@@ -40,6 +48,10 @@ describe("Import Component", () => {
 
     it("can be initialized", () => {
         expect(importComponent).toBeDefined();
+    });
+
+    it("initializes the authorized field", () => {
+        expect(importComponent.authorized).toEqual(true);
     });
 
     it("can import a file", () => {

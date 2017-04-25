@@ -11,11 +11,17 @@ import org.bson.BsonInvalidOperationException;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
-import org.bson.conversions.Bson;
-import org.joda.time.DateTime;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
-import javax.print.Doc;
+import org.bson.conversions.Bson;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.OutputStream;
+import java.nio.Buffer;
 import java.util.Iterator;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -52,9 +58,9 @@ public class PlantController {
     }
 
     /**
-     * Returns a string representation of uploadId in the config collection.
+     * Returns a string representation of uploadID in the config collection.
      * Assumes there is only one liveUploadId in the config collection for any given time.
-     * @return a string representation of uploadId in the config collection
+     * @return a string representation of uploadID in the config collection
      */
     public String getLiveUploadId() {
         try
@@ -74,9 +80,9 @@ public class PlantController {
     }
 
     // List plants
-    public String listPlants(Map<String, String[]> queryParams, String uploadId) {
+    public String listPlants(Map<String, String[]> queryParams, String uploadID) {
         Document filterDoc = new Document();
-        filterDoc.append("uploadId", uploadId);
+        filterDoc.append("uploadId", uploadID);
 
         if (queryParams.containsKey("gardenLocation")) {
             String location =(queryParams.get("gardenLocation")[0]);
@@ -90,8 +96,12 @@ public class PlantController {
         }
 
         FindIterable<Document> matchingPlants = plantCollection.find(filterDoc);
-
-        return JSON.serialize(matchingPlants);
+        List<Document> sortedPlants = new ArrayList<>();
+        for (Document doc : matchingPlants) {
+            sortedPlants.add(doc);
+        }
+        sortedPlants.sort(new PlantComparator());
+        return JSON.serialize(sortedPlants);
     }
 
     /**
@@ -126,7 +136,7 @@ public class PlantController {
 
             jsonPlant = plantCollection.find(and(eq("id", plantID),
                     eq("uploadId", uploadID)))
-                    .projection(fields(include("commonName", "cultivar")));
+                    .projection(fields(include("commonName", "cultivar", "photoLocation")));
 
             Iterator<Document> iterator = jsonPlant.iterator();
 
@@ -168,7 +178,7 @@ public class PlantController {
         FindIterable document = plantCollection.find(new Document().append("id", plantID).append("uploadId", uploadID));
 
         Iterator iterator = document.iterator();
-        if (iterator.hasNext()) {
+        if(iterator.hasNext()){
             Document result = (Document) iterator.next();
 
             //Get metadat.comments array
@@ -180,10 +190,11 @@ public class PlantController {
             List<Document> ratings = (List<Document>) ((Document) result.get("metadata")).get("ratings");
 
             //Loop through all of the entries within the array, counting like=true(like) and like=false(dislike)
-            for (Document rating : ratings) {
-                if (rating.get("like").equals(true))
+            for(Document rating : ratings)
+            {
+                if(rating.get("like").equals(true))
                     likes++;
-                else if (rating.get("like").equals(false))
+                else if(rating.get("like").equals(false))
                     dislikes++;
             }
         }
@@ -192,7 +203,6 @@ public class PlantController {
 
         out.put("interactionCount", interactions);
         return JSON.serialize(out);
-
     }
 
     // Used in the garden website
@@ -209,7 +219,14 @@ public class PlantController {
                         Aggregates.group("$gardenLocation"),
                         Aggregates.sort(Sorts.ascending("_id"))
                 ));
-        return JSON.serialize(documents);
+
+        List<Document> listDoc = new ArrayList<>();
+        for (Document doc : documents) {
+            listDoc.add(doc);
+        }
+        listDoc.sort(new BedComparator());
+
+        return JSON.serialize(listDoc);
     }
 
     // Used in the QR code generation
@@ -299,7 +316,7 @@ public class PlantController {
             return false;
         }
 
-    return addComment(id, comment, uploadID);
+        return addComment(id, comment, uploadID);
 
     }
 
@@ -310,14 +327,25 @@ public class PlantController {
      * outputStream is closed when this method exits
      *
      * @param outputStream stream to which the excel file is written
-     * @param uploadId Dataset to find a plant
+     * @param uploadID Dataset to find a plant
      */
-    public void exportCollectedData(OutputStream outputStream, String uploadId) throws IOException {
+    public void exportCollectedData(OutputStream outputStream, String uploadID) throws IOException {
 
         CollectedDataWriter collectedDataWriter = new CollectedDataWriter(outputStream);
 
-        FindIterable<Document> plantFindIterable = plantCollection.find(new Document().append("uploadId", uploadId));
+        FindIterable<Document> plantFindIterable = plantCollection.find(new Document().append("uploadId", uploadID));
         Iterator<Document> plantIterator = plantFindIterable.iterator();
+
+        // [0-1, 1-2, ..., 23-24]
+        int[] hourlyVisitCounts = new int[24];
+
+        //   | Jan | Feb | Mar |... | Dec |
+        // 1 | 100   200   ...
+        // 2 |
+        // 3 |
+        // ..|
+        // 31|
+        int[][] dailyVisitCounts = new int[12][31];
 
         //for each plant, get a list of comments and write each comment to the excel
         while(plantIterator.hasNext()) {
@@ -363,10 +391,48 @@ public class PlantController {
                     (int) dislikes,
                     (int) numVisits,
                     (int) comments);
+
+            // Get timestamps of visits for this plant
+            for (Document visit: visits) {
+                // number of seconds since the Unix epoch
+                int epochSecs = visit.getObjectId("visit").getTimestamp();
+                ZoneId zoneId = ZoneId.of( "America/Chicago");
+                ZonedDateTime currentVisitTime = ZonedDateTime.ofInstant(Instant.ofEpochSecond((long) epochSecs), zoneId);
+
+                hourlyVisitCounts[currentVisitTime.getHour()]++;
+                dailyVisitCounts[currentVisitTime.getMonthValue() - 1][currentVisitTime.getDayOfMonth() - 1]++;
+            }
+
+            collectedDataWriter.writeHourlyVisits(hourlyVisitCounts);
+            collectedDataWriter.writeDailyVisits(dailyVisitCounts);
+
         }
         collectedDataWriter.complete();
     }
 
+    public void getImage(OutputStream outputStream, String plantId, String uploadID) {
+        try {
+            Document filterDoc = new Document();
+
+            filterDoc.append("id", plantId);
+            filterDoc.append("uploadId", uploadID);
+
+            Iterator<Document> iter = plantCollection.find(filterDoc).iterator();
+
+            Document plant = iter.next();
+            String filePath = plant.getString("photoLocation");
+
+//            String filePath = ".photos" + '/' + plantId + ".png";
+            File file = new File(filePath);
+            BufferedImage photo = ImageIO.read(file);
+            ImageIO.write(photo,"JPEG",outputStream);
+
+        }
+        catch (IOException ioe) {
+            ioe.printStackTrace();
+            System.err.println("Could not write some Images to disk, exiting.");
+        }
+    }
     /**
      * Deletes all data associated with the specified uploadID
      * in the database.
@@ -374,12 +440,12 @@ public class PlantController {
      * <code>
      *     {
      *         success: boolean,
-     *         uploadIds: [ String, ... ]
+     *         uploadIDs: [ String, ... ]
      *     }
      * </code>
      * Success will be true if the uploadID was found and false if it wasn't.
      * <br/>
-     * uploadIDs contains a list of the remaining uploadIds in the database
+     * uploadIDs contains a list of the remaining uploadIDs in the database
      * @param uploadID the uploadID to delete
      * @return A Document specifying the status of the operation
      * @throws IllegalStateException if the specified uploadID is currently the liveUploadID
@@ -396,7 +462,30 @@ public class PlantController {
         long deleted = plantCollection.deleteMany(filterDoc).getDeletedCount();
         returnDoc.append("success", deleted != 0);
         returnDoc.append("uploadIds", listUploadIds());
+
+        deleteDirectory(new File(".photos/" + uploadID));
         return returnDoc;
+    }
+
+    /** This method is from oyo & hicris1213 from a stackoverflow post.
+     * @param directory
+     * @return
+     */
+    public static boolean deleteDirectory(File directory) {
+        if(directory.exists()){
+            File[] files = directory.listFiles();
+            if(null!=files){
+                for(int i=0; i<files.length; i++) {
+                    if(files[i].isDirectory()) {
+                        deleteDirectory(files[i]);
+                    }
+                    else {
+                        files[i].delete();
+                    }
+                }
+            }
+        }
+        return(directory.delete());
     }
 
     /**
@@ -639,7 +728,7 @@ public class PlantController {
 
     /**
      *
-     * @return a sorted JSON array of all the distinct uploadIds in plant collection of the DB
+     * @return a sorted JSON array of all the distinct uploadIDs in plant collection of the DB
      */
     public List<String> listUploadIds() {
         AggregateIterable<Document> documents
@@ -653,7 +742,7 @@ public class PlantController {
             lst.add(d.getString("_id"));
         }
         return lst;
-//        return JSON.serialize(plantCollection.distinct("uploadId","".getClass()));
+//        return JSON.serialize(plantCollection.distinct("uploadID","".getClass()));
     }
 
     public boolean addVisit(String plantID, String uploadID) {
@@ -668,4 +757,61 @@ public class PlantController {
         return null != plantCollection.findOneAndUpdate(filterDoc, push("metadata.visits", visit));
     }
 
+    // Credits: Shawn Saliyev and Nathan Beneke
+    public int numericPrefix(String bed) {
+        int n = 0;
+        for (int i = 0; i < bed.length(); i++) {
+            char character = bed.charAt(i);
+            if (Character.isDigit(character)) {
+                n *= 10;
+                n += (character - '0');
+            } else if (i == 0) {
+                // Assume there is only one non-digit bed
+                n = 100;
+                break;
+            } else {
+                break;
+            }
+        }
+
+        return n;
+    }
+
+    class BedComparator implements Comparator<Document> {
+        @Override
+        public int compare(Document bedDoc1, Document bedDoc2) {
+            String bed1 = bedDoc1.getString("_id");
+            String bed2 = bedDoc2.getString("_id");
+            if (numericPrefix(bed1) == numericPrefix(bed2)) {
+                return bed1.compareTo(bed2);
+            } else {
+                return numericPrefix(bed1) - numericPrefix(bed2);
+            }
+        }
+
+    }
+
+    class PlantComparator implements Comparator<Document> {
+        @Override
+        public int compare(Document plantDoc1, Document plantDoc2) {
+            String bed1 = plantDoc1.getString("gardenLocation");
+            String bed2 = plantDoc2.getString("gardenLocation");
+            String name1 = plantDoc1.getString("commonName");
+            String name2 = plantDoc2.getString("commonName");
+            String cultivar1 = plantDoc1.getString("cultivar");
+            String cultivar2 = plantDoc2.getString("cultivar");
+
+            if (!bed1.equals(bed2)) {
+                if (numericPrefix(bed1) == numericPrefix(bed2)) {
+                    return bed1.compareTo(bed2);
+                } else {
+                    return numericPrefix(bed1) - numericPrefix(bed2);
+                }
+            } else if (!name1.equals(name2)) {
+                return name1.compareTo(name2);
+            } else {
+                return cultivar1.compareTo(cultivar2);
+            }
+        }
+    }
 }

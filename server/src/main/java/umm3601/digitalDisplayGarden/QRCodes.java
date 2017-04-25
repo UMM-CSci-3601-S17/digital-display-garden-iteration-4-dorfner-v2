@@ -27,7 +27,7 @@ public class QRCodes {
 
     private static String qrTempPath = ".qrcode";
 
-    public static BufferedImage createQRFromBedURL(String url) throws IOException,WriterException{
+    public static BufferedImage createQRFromURL(String url) throws IOException,WriterException{
 
         Map hintMap = new HashMap();
         hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
@@ -44,7 +44,7 @@ public class QRCodes {
      * @return the path to the new .zip file or null if there was a disk IO issue
      */
 
-    public static String CreateQRCodesFromAllBeds(String uploadId, String bedNames[], String urlPrefix){
+    public static String CreateQRCodes(String uploadId, String bedNames[], String urlPrefix){
         //Get all unique beds from Database
         //Create URLs for all unique beds
         //Create QRCode BufferedImages for all URLs
@@ -73,20 +73,7 @@ public class QRCodes {
         for(int i = 0; i < numBeds; i++) {
             bedURLs[i] = urlPrefix + bedNames[i];
             try {
-                BufferedImage QRImage = createQRFromBedURL(bedURLs[i]);
-
-                Graphics g = QRImage.getGraphics();
-                int width = QRImage.getWidth();
-
-                FontMetrics fmForURL = g.getFontMetrics();
-                int x = (width - fmForURL.stringWidth(bedURLs[i]))/2;
-
-                g.setColor(Color.black);
-                g.setFont(g.getFont().deriveFont(Font.CENTER_BASELINE, 11));
-                g.drawString(bedURLs[i], x, 285);
-                g.dispose();
-
-                qrCodeImages.add(QRImage);
+                qrCodeImages.add(createQRFromURL(bedURLs[i]));
             }
             catch(IOException ioe)
             {
@@ -100,16 +87,34 @@ public class QRCodes {
             }
         }
 
+        String homeURL = urlPrefix.substring(0, urlPrefix.length() - 4);
+
+        try {
+            qrCodeImages.add(createQRFromURL(homeURL));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (WriterException we) {
+            we.printStackTrace();
+        }
+
+
+
         //WRITE IMAGES TO FILE
 
-        if(numBeds != qrCodeImages.size()) {
-            System.err.println("a QR code could not be made for each Bed.");
+        if((numBeds + 1) != qrCodeImages.size()) {
+            System.err.println("a QR code could not be made for homepage and each Bed.");
             return null;
         }
 
         try {
             for (int i = 0; i < qrCodeImages.size(); i++) {
-                File outputFile = new File(qrTempPath + '/' + bedNames[i] + ".png");
+                String pathName = "";
+                if (i < 12) {
+                    pathName = qrTempPath + '/' + bedNames[i] + ".png";
+                } else {
+                    pathName = qrTempPath + "/homepage.png";
+                }
+                File outputFile = new File(pathName);
                 ImageIO.write(qrCodeImages.get(i), "png", outputFile);
             }
         }
@@ -117,6 +122,22 @@ public class QRCodes {
         {
             ioe.printStackTrace();
             System.err.println("Could not write some Images to disk, exiting.");
+            return null;
+        }
+
+        // Write urls to a text file
+        try {
+            File outputFile = new File(qrTempPath + "/urls.txt");
+            FileWriter fWriter = new FileWriter (outputFile);
+            PrintWriter pWriter = new PrintWriter (fWriter);
+            for (int i = 0; i < bedURLs.length; i++) {
+                pWriter.println("URL for bed '" + bedNames[i] +"': " + bedURLs[i]);
+            }
+            pWriter.println("URL for homepage: " + homeURL);
+            pWriter.close();
+        } catch(IOException ioe) {
+            ioe.printStackTrace();
+            System.err.println("Could not write a text file with urls to disk, exiting.");
             return null;
         }
 
@@ -145,8 +166,7 @@ public class QRCodes {
             //Add all .png files to Zip archive
             //Delete the image
             for (int i=0; i<files.length; i++) {
-                if(files[i].endsWith(".png")) {
-
+                if(files[i].endsWith(".png") || files[i].endsWith("urls.txt")) {
                     FileInputStream fi = new FileInputStream(qrTempPath + '/' + files[i]);
                     origin = new BufferedInputStream(fi, BUFFER_SIZE);
                     ZipEntry entry = new ZipEntry(files[i]);
@@ -162,7 +182,7 @@ public class QRCodes {
                     catch(IOException ioe)
                     {
                         ioe.printStackTrace();
-                        System.err.println("Failed to delete QRCode image file (permissions or doesn't exist)");
+                        System.err.println("Failed to delete temp QRCode file (permissions or doesn't exist)");
                     }
                 }
             }

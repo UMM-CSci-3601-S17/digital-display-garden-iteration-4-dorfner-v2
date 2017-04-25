@@ -3,6 +3,11 @@
     <h3>{{plant.commonName}}</h3>
 
     <br/>
+    <div  *ngIf="plant.photoLocation" style="resize: vertical; width: 100%">
+        <img [attr.src]="this.url + 'plants/' + this.id + '/getImage'" width = "100%">
+        <br>
+    </div>
+
 
     <h3>Leave Feedback for Flower</h3>
     <div *ngIf="rating === null" style="text-align:center; padding-bottom: 0.3em">

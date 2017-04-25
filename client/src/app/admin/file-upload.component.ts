@@ -21,7 +21,19 @@ export class FileUploadComponent {
             for (let i = 0; i < fileCount; i++) {
                 formData.append('file[]', inputEl.files.item(i));
             }
-            return this.http.post(API_URL + "import", formData);
+            return this.http.post(API_URL + "import", formData, {withCredentials: true});
         }
+    }
+
+    uploadPhoto(id) {
+            let inputEl: HTMLInputElement = this.inputEl.nativeElement;
+            let fileCount: number = inputEl.files.length;
+            let formData = new FormData();
+            if (fileCount > 0) { // a file was selected
+                for (let i = 0; i < fileCount; i++) {
+                    formData.append('file[]', inputEl.files.item(i));
+                }
+                return this.http.post(API_URL + "plants/" + id + "/importImage", formData);
+            }
     }
 }

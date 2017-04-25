@@ -14,6 +14,7 @@ describe("Delete Component", () => {
         getUploadIds: () => Observable<string[]>,
         getLiveUploadId: () => Observable<string>,
         deleteUploadId: (string) => Observable<any>,
+        authorized: () => Observable<boolean>
     };
 
     beforeEach(() => {
@@ -30,6 +31,9 @@ describe("Delete Component", () => {
                     success: ["upload id 1", "upload id 2"].filter(str => str !== uploadID).length === 1,
                     uploadIds: ["upload id 1", "upload id 2"].filter(str => str !== uploadID)
                 });
+            },
+            authorized: () => {
+                return Observable.of(true);
             }
         };
 
@@ -52,6 +56,10 @@ describe("Delete Component", () => {
 
     it("can be initialized", () => {
         expect(deleteComponent).toBeDefined();
+    });
+
+    it("initializes the authorized field", () => {
+        expect(deleteComponent.authorized).toEqual(true);
     });
 
     it("can delete an uploadID", () => {

@@ -214,6 +214,7 @@ public class ExcelParser {
 
             doc.append("metadata", metadataDoc);
             doc.append("uploadId", uploadId);
+            doc.append("photoLocation","");
 
             plants.insertOne(doc);
         }
