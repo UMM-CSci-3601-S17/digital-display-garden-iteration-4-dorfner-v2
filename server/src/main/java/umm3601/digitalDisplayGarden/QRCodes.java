@@ -87,8 +87,10 @@ public class QRCodes {
             }
         }
 
+        String homeURL = urlPrefix.substring(0, urlPrefix.length() - 4);
+
         try {
-            qrCodeImages.add(createQRFromURL(urlPrefix.substring(0, urlPrefix.length() - 4)));
+            qrCodeImages.add(createQRFromURL(homeURL));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (WriterException we) {
@@ -123,6 +125,22 @@ public class QRCodes {
             return null;
         }
 
+        // Write urls to a text file
+        try {
+            File outputFile = new File(qrTempPath + "/urls.txt");
+            FileWriter fWriter = new FileWriter (outputFile);
+            PrintWriter pWriter = new PrintWriter (fWriter);
+            for (int i = 0; i < bedURLs.length; i++) {
+                pWriter.println("URL for bed '" + bedNames[i] +"': " + bedURLs[i]);
+            }
+            pWriter.println("URL for homepage: " + homeURL);
+            pWriter.close();
+        } catch(IOException ioe) {
+            ioe.printStackTrace();
+            System.err.println("Could not write a text file with urls to disk, exiting.");
+            return null;
+        }
+
 
         //We have the images, now Zip them up!
         //ARCHIVE AND COMPRESS TO ZIP
@@ -148,8 +166,7 @@ public class QRCodes {
             //Add all .png files to Zip archive
             //Delete the image
             for (int i=0; i<files.length; i++) {
-                if(files[i].endsWith(".png")) {
-
+                if(files[i].endsWith(".png") || files[i].endsWith("urls.txt")) {
                     FileInputStream fi = new FileInputStream(qrTempPath + '/' + files[i]);
                     origin = new BufferedInputStream(fi, BUFFER_SIZE);
                     ZipEntry entry = new ZipEntry(files[i]);
@@ -165,7 +182,7 @@ public class QRCodes {
                     catch(IOException ioe)
                     {
                         ioe.printStackTrace();
-                        System.err.println("Failed to delete QRCode image file (permissions or doesn't exist)");
+                        System.err.println("Failed to delete temp QRCode file (permissions or doesn't exist)");
                     }
                 }
             }
