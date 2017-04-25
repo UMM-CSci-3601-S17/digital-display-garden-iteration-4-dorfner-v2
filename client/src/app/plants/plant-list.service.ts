@@ -17,6 +17,10 @@ export class PlantListService {
         return this.http.request(this.plantUrl + "/" + id).map(res => res.json());
     }
 
+    getPlantByIdA(id: string): Observable<Plant> {
+        return this.http.request(this.plantUrl + "/a/" + id).map(res => res.json());
+    }
+
     getFeedbackForPlantByPlantID(id: string): Observable<PlantFeedback> {
         return this.http.request(this.plantUrl + "/" + id + "/counts").map(res => res.json());
     }

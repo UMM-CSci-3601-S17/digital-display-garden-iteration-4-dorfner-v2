@@ -152,6 +152,53 @@ public class PlantController {
 
     }
 
+    /**EXACTLY LIKE getPlantByPlantID EXCEPT DOES NOT CALL "addVisit()"
+     *
+     * Takes a String representing an ID number of a plant
+     * and when the ID is found in the database returns a JSON document
+     * as a String of the following form
+     *
+     * <code>
+     * {
+     *  "_id"        : ObjectId,
+     *  "commonName" : String,
+     *  "cultivar"   : String
+     * }
+     * </code>
+     *
+     * If the ID is invalid or not found, the following JSON value is
+     * returned
+     *
+     * <code>
+     *  null
+     * </code>
+     *
+     * @param plantID an ID number of a plant in the DB
+     * @param uploadID Dataset to find the plant
+     * @return a string representation of a JSON value
+     */
+    public String getPlantByPlantIDforAdmin(String plantID, String uploadID) {
+
+        FindIterable<Document> jsonPlant;
+        String returnVal = "null";
+        try {
+
+            jsonPlant = plantCollection.find(and(eq("id", plantID),
+                    eq("uploadId", uploadID)))
+                    .projection(fields(include("commonName", "cultivar", "photoLocation")));
+
+            Iterator<Document> iterator = jsonPlant.iterator();
+
+            if (iterator.hasNext()) {
+                returnVal = iterator.next().toJson();
+            }
+
+        } catch (IllegalArgumentException e) {}
+
+        return returnVal;
+
+    }
+
     /**
      *
      * @param plantID The plant to get feedback of

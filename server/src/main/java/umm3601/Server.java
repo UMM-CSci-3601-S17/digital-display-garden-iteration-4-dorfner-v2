@@ -95,6 +95,13 @@ public class Server {
             return plantController.getPlantByPlantID(id, plantController.getLiveUploadId());
         });
 
+        //Get a plant, WITHOUT leaving a visit count.
+        get("api/plants/a/:plantID", (req, res) -> {
+            res.type("application/json");
+            String id = req.params("plantID");
+            return plantController.getPlantByPlantIDforAdmin(id, plantController.getLiveUploadId());
+        });
+
         //Get feedback counts for a plant
         get("api/plants/:plantID/counts", (req, res) -> {
             res.type("application/json");

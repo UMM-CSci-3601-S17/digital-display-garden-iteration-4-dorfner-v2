@@ -48,7 +48,7 @@ export class PhotoComponent implements OnInit {
         this.clicked = true;
         this.id = id;
         this.fileLocation = ".plants/" + id + ".png";
-        this.plantListService.getPlantById(id).subscribe(
+        this.plantListService.getPlantByIdA(id).subscribe(
             plant => this.plant = plant,
             err => {
                 console.log(err);
