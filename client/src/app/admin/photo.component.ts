@@ -2,6 +2,8 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import { AdminService } from './admin.service';
 import { PlantListService } from '../plants/plant-list.service';
 import {Plant} from "../plants/plant";
+import {Params, ActivatedRoute, Router} from "@angular/router";
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -17,7 +19,7 @@ export class PhotoComponent implements OnInit {
 
     private url: string = API_URL;
 
-    constructor(private adminService: AdminService, private plantListService: PlantListService) {
+    constructor(private adminService: AdminService, private plantListService: PlantListService, private router: Router, private route: ActivatedRoute, private location: Location) {
 
     }
 
@@ -31,12 +33,13 @@ export class PhotoComponent implements OnInit {
             response => {
                 this.filename = response.json();
                 this.uploadAttempted = true;
+                location.reload();
             },
             err => {
                 this.uploadAttempted = true;
             }
-
         );
+
     }
 
     public getPlant(id: string): void {
@@ -59,6 +62,15 @@ export class PhotoComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.route.queryParams.subscribe((params: Params) => {this.textValue = params['query'];
+        if(this.textValue !== ""){
+            this.getPlant(this.textValue);
+        }
+        });
 
+    }
+
+    refresh(id: string) {
+        this.router.navigate(['/admin/PhotoComponent'], { queryParams: { query: this.id} });
     }
 }
