@@ -459,7 +459,30 @@ public class PlantController {
         long deleted = plantCollection.deleteMany(filterDoc).getDeletedCount();
         returnDoc.append("success", deleted != 0);
         returnDoc.append("uploadIds", listUploadIds());
+
+        deleteDirectory(new File(".photos/" + uploadID));
         return returnDoc;
+    }
+
+    /** This method is from oyo & hicris1213 from a stackoverflow post.
+     * @param directory
+     * @return
+     */
+    public static boolean deleteDirectory(File directory) {
+        if(directory.exists()){
+            File[] files = directory.listFiles();
+            if(null!=files){
+                for(int i=0; i<files.length; i++) {
+                    if(files[i].isDirectory()) {
+                        deleteDirectory(files[i]);
+                    }
+                    else {
+                        files[i].delete();
+                    }
+                }
+            }
+        }
+        return(directory.delete());
     }
 
     /**
