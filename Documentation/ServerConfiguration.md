@@ -42,12 +42,13 @@ with `/callback` on the end.
 
 Here is an example of what such a file would look like:
 ```
+# Make sure there is no trailing white space at the end of any lines
 # Google OAuth2.0 Client ID
 clientID=verylongstringofrandomnumbersandletters.apps.googleusercontent.com
 # Google OAuth2.0 Client Secret
 clientSecret=notquitesuchalongrandomstring
 # The public URL of the website
 publicURL=http://localhost:9000
-# The public URL of the website
-publicURL=http://localhost:2538/callback
+# The callback URL of the website
+callbackURL=http://localhost:2538/callback
 ```
