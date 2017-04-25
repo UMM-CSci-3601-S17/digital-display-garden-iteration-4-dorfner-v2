@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { PlantListService } from "./plant-list.service";
 import { Plant } from "./plant";
 import { FilterBy } from "../plants/filter.pipe";
@@ -13,6 +13,7 @@ import {Params, ActivatedRoute, Router} from "@angular/router";
 export class BedComponent implements OnInit {
     public bed : string;
     public plants: Plant[] = [];
+    @ViewChild('nav') nav;
 
     constructor(private plantListService: PlantListService, public route: ActivatedRoute, private router: Router) {
         // this.plants = this.plantListService.getPlants()
@@ -39,5 +40,7 @@ export class BedComponent implements OnInit {
 
     }
 
-
+    emptySearch() {
+        this.nav.currentCN = "";
+    }
 }
