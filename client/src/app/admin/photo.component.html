@@ -3,7 +3,7 @@
 
 <div>
     Plant ID#
-    <input #textbox type="text" [(ngModel)]="textValue">
+    <input #textbox (keyup)="onKey($event)" type="text" [(ngModel)]="textValue">
     <button (click)="getPlant(textbox.value)" value = "clicked" class="btn btn-primary">Find</button>
 </div>
 

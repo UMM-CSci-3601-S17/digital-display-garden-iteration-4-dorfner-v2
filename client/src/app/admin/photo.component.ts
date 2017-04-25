@@ -13,6 +13,7 @@ export class PhotoComponent implements OnInit {
     public plant: Plant;
     public clicked: boolean;
     public fileLocation: string;
+    public textValue: string;
 
     private url: string = API_URL;
 
@@ -49,6 +50,12 @@ export class PhotoComponent implements OnInit {
             err => {
                 console.log(err);
             })
+    }
+
+    private onKey(event: any) {
+        if (event.key === "Enter") {
+            this.getPlant(this.textValue);
+        }
     }
 
     ngOnInit(): void {
