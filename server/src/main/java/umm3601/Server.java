@@ -293,6 +293,10 @@ public class Server {
         });
 
         post("api/plants/:plantID/importImage",(req,res) ->{
+            String cookie = req.cookie("ddg");
+            if(!auth.authorized(cookie)) {
+                halt(403);
+            }
 
             res.type("application/json");
 
