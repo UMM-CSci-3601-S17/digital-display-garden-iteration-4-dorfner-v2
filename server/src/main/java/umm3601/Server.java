@@ -6,6 +6,7 @@ import spark.utils.IOUtils;
 import com.mongodb.util.JSON;
 import umm3601.digitalDisplayGarden.Authentication.Auth;
 import umm3601.digitalDisplayGarden.Authentication.Cookie;
+import umm3601.digitalDisplayGarden.Authentication.ExpiredTokenException;
 import umm3601.digitalDisplayGarden.Authentication.UnauthorizedUserException;
 import umm3601.digitalDisplayGarden.Photos;
 import umm3601.digitalDisplayGarden.PlantController;
@@ -99,8 +100,33 @@ public class Server {
 
         get("callback", (req, res) ->{
            Map<String, String[]> params = req.queryMap().toMap();
-           String state = params.get("state")[0];
-           String code = params.get("code")[0];
+           String[] states = params.get("state");
+           String[] codes = params.get("code");
+           String[] errors = params.get("error");
+           if (null == states) {
+               // we REQUIRE that we be passed a state
+               halt(400);
+               return ""; // never reached
+           }
+           if (null == codes ) {
+               if (null == errors) {
+                   // we don't have codes, but we don't have an error either, so this a garbage request
+                   halt(400);
+                   return ""; // never reached
+               }
+               else if ("access_denied".equals(errors[0])) {
+                   // the user clicked "deny", so send them to the visitor page
+                   res.redirect(publicURL);
+                   return ""; // send an empty body back on redirect
+               }
+               else {
+                   // an unknown error was passed to us, so we halt
+                   halt(400);
+                   return ""; // not reached
+               }
+           }
+           String state = states[0];
+           String code = codes[0];
             try {
                 String originatingURL = auth.verifyCallBack(state, code);
                 if (null != originatingURL) {
@@ -117,6 +143,10 @@ public class Server {
             } catch (UnauthorizedUserException e) {
                 res.redirect(publicURL + "/admin/incorrectAccount");
                 return ""; // not reached
+            } catch (ExpiredTokenException e) {
+                // send the user to a page to tell them to login faster
+                res.redirect(publicURL + "/admin/slowLogin");
+                return ""; // send empty body on redirect
             }
         });
 

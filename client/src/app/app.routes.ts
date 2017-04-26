@@ -12,6 +12,7 @@ import {NotFoundComponent} from "./not-found.component";
 import {AuthGuard} from "./admin/auth-guard";
 import {IncorrectAccountComponent} from "./admin/incorrect-account.component";
 import {PhotoComponent} from "./admin/photo.component";
+import {SlowLoginComponent} from "./admin/slow-login.component";
 
 // Route Configuration
 export const routes: Routes = [
@@ -22,6 +23,7 @@ export const routes: Routes = [
     { path: 'admin/importData', component: ImportComponent, canActivate: ['CanAlwaysActivateGuard', AuthGuard]},
     { path: 'admin/deleteData', component: DeleteComponent, canActivate: ['CanAlwaysActivateGuard', AuthGuard]},
     { path: 'admin/incorrectAccount', component: IncorrectAccountComponent},
+    { path: 'admin/slowLogin', component: SlowLoginComponent},
     { path: 'bed/:gardenLocation', component: BedComponent },
     { path: 'admin/PhotoComponent', component: PhotoComponent },
     { path: '**', component: NotFoundComponent},
