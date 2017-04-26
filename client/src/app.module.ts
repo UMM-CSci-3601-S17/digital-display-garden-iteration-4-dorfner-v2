@@ -26,6 +26,7 @@ import {ConfirmOptions, Position, ConfirmModule} from 'angular2-bootstrap-confir
 import {Positioning} from 'angular2-bootstrap-confirm/position';
 import {AuthGuard} from "./app/admin/auth-guard";
 import {IncorrectAccountComponent} from "./app/admin/incorrect-account.component";
+import {SlowLoginComponent} from "./app/admin/slow-login.component";
 
 
 
@@ -55,7 +56,7 @@ import {IncorrectAccountComponent} from "./app/admin/incorrect-account.component
         NotFoundComponent,
         IncorrectAccountComponent,
         PhotoComponent,
-
+        SlowLoginComponent,
     ],
     providers: [ PlantListService, AdminService, {provide: 'CanAlwaysActivateGuard', useClass: AuthGuard}, AuthGuard ],
     bootstrap: [ AppComponent ]
