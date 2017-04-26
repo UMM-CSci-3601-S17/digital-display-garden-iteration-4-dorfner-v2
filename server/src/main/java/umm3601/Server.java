@@ -122,6 +122,7 @@ public class Server {
 
         get("api/check-authorization", (req, res) -> {
             res.type("application/json");
+            res.header("Cache-Control","no-cache, no-store, must-revalidate");
             String cookie = req.cookie("ddg");
             Document returnDoc = new Document();
             returnDoc.append("authorized", auth.authorized(cookie));
