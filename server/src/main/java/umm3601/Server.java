@@ -339,7 +339,11 @@ public class Server {
 
         exception(Exception.class, (exception, request, response) -> {
             System.err.println("(" + new Date() + ") Unhandled exception occurred while processing request:");
-            System.err.println(request.requestMethod() + " " + request.url() + request.queryString());
+            String queryString = request.queryString();
+            if (null == queryString) {
+                queryString = "";
+            }
+            System.err.println(request.requestMethod() + " " + request.url() + queryString);
             System.err.println("Full StackTrace:");
             exception.printStackTrace();
 
