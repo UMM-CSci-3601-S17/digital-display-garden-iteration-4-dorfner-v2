@@ -15,6 +15,7 @@ import java.time.ZonedDateTime;
 
 import org.bson.conversions.Bson;
 
+import javax.imageio.IIOException;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -123,61 +124,10 @@ public class PlantController {
      *
      * @param plantID an ID number of a plant in the DB
      * @param uploadID Dataset to find the plant
+     * @param adminRequest if true, no visit count is recorded, if false, visit count is recorded
      * @return a string representation of a JSON value
      */
-    public String getPlantByPlantID(String plantID, String uploadID) {
-
-        FindIterable<Document> jsonPlant;
-        String returnVal;
-        try {
-
-            jsonPlant = plantCollection.find(and(eq("id", plantID),
-                    eq("uploadId", uploadID)))
-                    .projection(fields(include("commonName", "cultivar", "photoLocation")));
-
-            Iterator<Document> iterator = jsonPlant.iterator();
-
-            if (iterator.hasNext()) {
-                addVisit(plantID, uploadID);
-                returnVal = iterator.next().toJson();
-            } else {
-                returnVal = "null";
-            }
-
-        } catch (IllegalArgumentException e) {
-            returnVal = "null";
-        }
-
-        return returnVal;
-
-    }
-
-    /**EXACTLY LIKE getPlantByPlantID EXCEPT DOES NOT CALL "addVisit()"
-     *
-     * Takes a String representing an ID number of a plant
-     * and when the ID is found in the database returns a JSON document
-     * as a String of the following form
-     *
-     * <code>
-     * {
-     *  "_id"        : ObjectId,
-     *  "commonName" : String,
-     *  "cultivar"   : String
-     * }
-     * </code>
-     *
-     * If the ID is invalid or not found, the following JSON value is
-     * returned
-     *
-     * <code>
-     *  null
-     * </code>
-     *
-     * @param plantID an ID number of a plant in the DB
-     * @param uploadID Dataset to find the plant
-     * @return a string representation of a JSON value
-     */
-    public String getPlantByPlantIDforAdmin(String plantID, String uploadID) {
+    public String getPlantByPlantID(String plantID, String uploadID, boolean adminRequest) {
 
         FindIterable<Document> jsonPlant;
         String returnVal = "null";
@@ -190,10 +140,17 @@ public class PlantController {
             Iterator<Document> iterator = jsonPlant.iterator();
 
             if (iterator.hasNext()) {
+                if (!adminRequest) {
+                    addVisit(plantID, uploadID);
+                }
                 returnVal = iterator.next().toJson();
+            } else {
+                returnVal = "null";
             }
 
-        } catch (IllegalArgumentException e) {}
+        } catch (IllegalArgumentException e) {
+            returnVal = "null";
+        }
 
         return returnVal;
 
@@ -468,8 +425,10 @@ public class PlantController {
 
 //            String filePath = ".photos" + '/' + plantId + ".png";
             File file = new File(filePath);
-            BufferedImage photo = ImageIO.read(file);
-            ImageIO.write(photo,"JPEG",outputStream);
+            try {
+                BufferedImage photo = ImageIO.read(file);
+                ImageIO.write(photo,"JPEG",outputStream);
+            } catch (IIOException e) {}
 
         }
         catch (IOException ioe) {
