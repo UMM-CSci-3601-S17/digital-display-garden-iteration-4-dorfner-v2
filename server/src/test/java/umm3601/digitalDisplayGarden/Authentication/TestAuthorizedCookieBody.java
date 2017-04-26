@@ -41,4 +41,19 @@ public class TestAuthorizedCookieBody {
         assertFalse(authorized);
     }
 
+    @Test
+    public void testGenerateAndUnpackSecretSuccess(){
+        String secret = auth.generateSharedGoogleSecret("someURL");
+        RedirectToken redToken = auth.unpackSharedGoogleSecret(secret);
+        assertEquals("someURL", redToken.originatingURL);
+    }
+
+    @Test
+    public void testGenerateAndUnpackSecretFailure(){
+        String secret = auth.generateSharedGoogleSecret("someURL");
+        secret = secret + "fasd";
+        RedirectToken redToken = auth.unpackSharedGoogleSecret(secret);
+        assertNull(redToken);
+
+    }
 }
