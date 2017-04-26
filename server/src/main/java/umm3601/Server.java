@@ -6,6 +6,7 @@ import spark.utils.IOUtils;
 import com.mongodb.util.JSON;
 import umm3601.digitalDisplayGarden.Authentication.Auth;
 import umm3601.digitalDisplayGarden.Authentication.Cookie;
+import umm3601.digitalDisplayGarden.Authentication.ExpiredTokenException;
 import umm3601.digitalDisplayGarden.Authentication.UnauthorizedUserException;
 import umm3601.digitalDisplayGarden.Photos;
 import umm3601.digitalDisplayGarden.PlantController;
@@ -142,6 +143,10 @@ public class Server {
             } catch (UnauthorizedUserException e) {
                 res.redirect(publicURL + "/admin/incorrectAccount");
                 return ""; // not reached
+            } catch (ExpiredTokenException e) {
+                // send the user to a page to tell them to login faster
+                res.redirect(publicURL + "/admin/slowLogin");
+                return ""; // send empty body on redirect
             }
         });
 

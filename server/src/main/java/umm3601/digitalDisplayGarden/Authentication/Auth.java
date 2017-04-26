@@ -246,13 +246,13 @@ public class Auth {
      *         to load. Null if the state or code are invalid in any way
      *         or if we cannot contact Google to verify them.
      */
-    public String verifyCallBack(String state, String code) throws UnauthorizedUserException {
+    public String verifyCallBack(String state, String code) throws UnauthorizedUserException, ExpiredTokenException{
         // parse the state and ensure its validity
         RedirectToken verifiedState = unpackSharedGoogleSecret(state);
         DateTime expTime = new DateTime(verifiedState.exp);
         if(expTime.isBeforeNow()) {
             // the user took too long to complete the authentication
-            return null;
+            throw new ExpiredTokenException("The DDG token is expired");
         }
 
         try {
