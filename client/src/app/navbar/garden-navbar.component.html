@@ -1,6 +1,6 @@
 <header class="navbar-fixed-top top-navbar">
     <div class="row">
-        <a class="col-xs-12 text-center" [routerLink]="['/']"><h2 class="title">Digital Display Garden
+        <a class="col-xs-12 text-center" [routerLink]="['/']"><h2 class="title">Horticulture Display Garden
             <i class="fa fa-sun-o" aria-hidden="true"></i></h2>
         </a>
     </div>
@@ -22,7 +22,7 @@
     .title {
         color: gold;
         font-family: 'Comfortaa', cursive;
-        font-size: 20px;
+        font-size: 22px;
         font-weight: bold;
     }
     .top-navbar {
@@ -51,5 +51,12 @@
     .search-field {
         border-radius: 20px;
     }
+
+    @media only screen and (max-width: 360px) {
+        .title {
+            font-size: 19px;
+        }
+    }
+
 
 </style>
