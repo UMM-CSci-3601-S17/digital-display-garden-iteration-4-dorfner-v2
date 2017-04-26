@@ -48,7 +48,7 @@ export class PhotoComponent implements OnInit {
         this.clicked = true;
         this.id = id;
         this.fileLocation = ".plants/" + id + ".png";
-        this.plantListService.getPlantById(id).subscribe(
+        this.plantListService.getPlantByIDforAdmin(id).subscribe(
             plant => this.plant = plant,
             err => {
                 console.log(err);
@@ -65,6 +65,7 @@ export class PhotoComponent implements OnInit {
         this.route.queryParams.subscribe((params: Params) => {this.textValue = params['query'];
         if(this.textValue !== ""){
             this.getPlant(this.textValue);
+            this.clicked = false;
         }
         });
 

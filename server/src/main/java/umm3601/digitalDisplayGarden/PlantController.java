@@ -17,6 +17,7 @@ import java.time.ZonedDateTime;
 
 import org.bson.conversions.Bson;
 
+import javax.imageio.IIOException;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -126,12 +127,13 @@ public class PlantController {
      *
      * @param plantID an ID number of a plant in the DB
      * @param uploadID Dataset to find the plant
+     * @param adminRequest if true, no visit count is recorded, if false, visit count is recorded
      * @return a string representation of a JSON value
      */
-    public String getPlantByPlantID(String plantID, String uploadID) {
+    public String getPlantByPlantID(String plantID, String uploadID, boolean adminRequest) {
 
         FindIterable<Document> jsonPlant;
-        String returnVal;
+        String returnVal = "null";
         try {
 
             jsonPlant = plantCollection.find(and(eq("id", plantID),
@@ -141,7 +143,9 @@ public class PlantController {
             Iterator<Document> iterator = jsonPlant.iterator();
 
             if (iterator.hasNext()) {
-                addVisit(plantID, uploadID);
+                if (!adminRequest) {
+                    addVisit(plantID, uploadID);
+                }
                 returnVal = iterator.next().toJson();
             } else {
                 returnVal = "null";
@@ -424,8 +428,10 @@ public class PlantController {
 
 //            String filePath = ".photos" + '/' + plantId + ".png";
             File file = new File(filePath);
-            BufferedImage photo = ImageIO.read(file);
-            ImageIO.write(photo,"JPEG",outputStream);
+            try {
+                BufferedImage photo = ImageIO.read(file);
+                ImageIO.write(photo,"JPEG",outputStream);
+            } catch (IIOException e) {}
 
         }
         catch (IOException ioe) {

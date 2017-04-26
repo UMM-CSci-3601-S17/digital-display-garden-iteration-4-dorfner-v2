@@ -151,7 +151,14 @@ public class Server {
         get("api/plants/:plantID", (req, res) -> {
             res.type("application/json");
             String id = req.params("plantID");
-            return plantController.getPlantByPlantID(id, plantController.getLiveUploadId());
+            return plantController.getPlantByPlantID(id, plantController.getLiveUploadId(), false);
+        });
+
+        //Get a plant, WITHOUT leaving a visit count.
+        get("api/plants/a/:plantID", (req, res) -> {
+            res.type("application/json");
+            String id = req.params("plantID");
+            return plantController.getPlantByPlantID(id, plantController.getLiveUploadId(), true);
         });
 
         //Get feedback counts for a plant
