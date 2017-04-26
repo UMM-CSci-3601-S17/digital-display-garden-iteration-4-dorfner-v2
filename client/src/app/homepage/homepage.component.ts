@@ -57,4 +57,8 @@ export class HomepageComponent implements OnInit {
             }
         );
     }
+
+    emptySearch() {
+        this.nav.currentCN = "";
+    }
 }

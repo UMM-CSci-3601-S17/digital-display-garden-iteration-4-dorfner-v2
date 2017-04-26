@@ -6,7 +6,9 @@
     </li>
     <li class="text-center list-group-item flower-header list-group-item-success row" *ngIf="(plants | filterBy: {commonName: nav.currentCN}).length === 0">
         <strong class="col-xs-9">No flowers found for <br>"{{nav.currentCN}}"</strong>
-        <span class="x-icon"><i class="fa fa-window-close" aria-hidden="true"></i></span>
+        <span class="x-icon" (click)="this.emptySearch()">
+            <i class="fa fa-window-close" aria-hidden="true"></i>
+        </span>
     </li>
     <li *ngFor="let plant of plants | filterBy: {commonName: nav.currentCN}"  class="list-group-item text-center">
         <!--Button is a hyperlink to a plant page "/plants/:plantID"-->
