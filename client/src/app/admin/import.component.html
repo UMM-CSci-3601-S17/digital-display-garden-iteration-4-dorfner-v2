@@ -1,7 +1,7 @@
 <div *ngIf="this.authorized" class="import-page">
     <h2>Import Spreadsheet</h2>
 
-    <file-upload #fu (change)="filename = undefined; uploadAttempted = false" [multiple]="false">-</file-upload>
+    <file-upload #fu (change)="filename = undefined; uploadAttempted = false; uploadStarted = false" [multiple]="false">-</file-upload>
 
 
     <button *ngIf="filename === undefined && !uploadStarted" class="btn btn-primary" (click)="this.handleUpload()" style="margin-top: 10px">
