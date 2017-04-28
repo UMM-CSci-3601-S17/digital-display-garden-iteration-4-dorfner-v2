@@ -36,6 +36,12 @@ export class ImportComponent implements OnInit {
         );
     }
 
+    fileSelected(): void {
+        this.filename = undefined;
+        this.uploadAttempted = false;
+        this.uploadStarted = false
+    }
+
     ngOnInit(): void {
         this.adminService.authorized().subscribe(authorized => this.authorized = authorized);
 
