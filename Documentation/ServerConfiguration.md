@@ -15,13 +15,15 @@ in `.gitignore` and thus won't be committed.
 
 This is the Google OAuth2.0 Client ID. It is essentially
 a "username" for their API, but should be kept secret I believe.
-(TODO: document how to get one of these.)
+See [GoogleAuthCredentials](./GoogleAuthCredentials.md) for how to 
+create a client ID.
 
 #### clientSecret
 
 This is the Google OAuth2.0 Client Secret. This is essentially
 a "password" for their API, and MUST be kept secret.
-(TODO: document how to get one of these.)
+See [GoogleAuthCredentials](./GoogleAuthCredentials.md) for how to 
+create a client secret.
 
 #### publicURL
 
