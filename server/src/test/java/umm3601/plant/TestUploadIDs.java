@@ -12,7 +12,7 @@ import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class TestUploadIds {
+public class TestUploadIDs {
 
     private final static String databaseName = "data-for-testing-only";
     private PlantController plantController;
