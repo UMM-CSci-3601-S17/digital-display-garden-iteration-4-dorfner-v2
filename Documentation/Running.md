@@ -13,14 +13,14 @@ $ mongo
 > exit
 ```
 
-There are two different places in the code where you must specify the
+There are two different places in the project where you must specify the
 domain name for your installation. 
 
-- `API_URL` in `client/webpack.prod.js`
-- `API_URL` in  `server/src/main/java/umm3601/Server.java`
+The first is in `client/webpack.prod.js` and is only relevant when
+doing a production build.
 
-Note that the first is only relevant when doing a production build, 
-and the second is only relevant for generating QR codes.
+The second place is in your `config.properties` file. See
+[ServerConfiguration.md](./ServerConfiguration.md) for details.
 
 Before attempting to browse the visitor website, be sure to visit 
 `http://yourdomain.com:YOURPORT/admin` and populate the database via 
