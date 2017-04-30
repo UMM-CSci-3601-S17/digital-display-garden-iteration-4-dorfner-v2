@@ -35,12 +35,12 @@ public class PopulateMockDatabase {
         MongoCollection config = db.getCollection("config");
         db.drop();
 
-        config.insertOne(new Document().append("liveUploadId", "second uploadId"));
+        config.insertOne(new Document().append("liveUploadID", "second uploadId"));
 
         //First Plant Alternanthera
         Document alternanthera = new Document();
         alternanthera.append("_id", new ObjectId("58d1c36efb0cac4e15afd202"));
-        alternanthera.append("uploadId", "first uploadId");
+        alternanthera.append("uploadID", "first uploadId");
 
         alternanthera.append("commonName", "Alternanthera");
         alternanthera.append("cultivar", "Experimental");
@@ -63,7 +63,7 @@ public class PopulateMockDatabase {
         //Second Plant Begonia
         Document begonia = new Document();
         begonia.append("_id", new ObjectId("58d1c36efb0cac4e15afd203"));
-        begonia.append("uploadId", "first uploadId");
+        begonia.append("uploadID", "first uploadId");
 
         begonia.append("commonName", "Begonia");
         begonia.append("cultivar", "Megawatt Rose Green Leaf");
@@ -85,7 +85,7 @@ public class PopulateMockDatabase {
         //Third Plant Dianthus
         Document dianthus = new Document();
         dianthus.append("_id", new ObjectId("58d1c36efb0cac4e15afd204"));
-        dianthus.append("uploadId", "second uploadId");
+        dianthus.append("uploadID", "second uploadId");
 
         dianthus.append("commonName", "Dianthus");
         dianthus.append("cultivar", "Jolt™ Pink F1");
@@ -107,7 +107,7 @@ public class PopulateMockDatabase {
         //Fourth Plant PlantFour
         Document plantFour = new Document();
         plantFour.append("_id", new ObjectId("58d1c36efb0cac4e15afd278"));
-        plantFour.append("uploadId", "second uploadId");
+        plantFour.append("uploadID", "second uploadId");
 
         plantFour.append("commonName", "PlantFour");
         plantFour.append("cultivar", "Some Plant");

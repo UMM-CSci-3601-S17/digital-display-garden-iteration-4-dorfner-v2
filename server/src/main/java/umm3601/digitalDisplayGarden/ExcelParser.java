@@ -213,7 +213,7 @@ public class ExcelParser {
             metadataDoc.append("comments", new BsonArray());
 
             doc.append("metadata", metadataDoc);
-            doc.append("uploadId", uploadID);
+            doc.append("uploadID", uploadID);
             doc.append("photoLocation","");
 
             plants.insertOne(doc);
@@ -266,8 +266,8 @@ public class ExcelParser {
         MongoDatabase test = mongoClient.getDatabase(databaseName);
         MongoCollection configCollection = test.getCollection("config");
 
-        configCollection.deleteMany(exists("liveUploadId"));
-        configCollection.insertOne(new Document().append("liveUploadId", uploadID));
+        configCollection.deleteMany(exists("liveUploadID"));
+        configCollection.insertOne(new Document().append("liveUploadID", uploadID));
     }
 
     public static String getAvailableUploadID(){

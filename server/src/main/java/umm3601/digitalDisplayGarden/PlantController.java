@@ -66,11 +66,11 @@ public class PlantController {
     public String getLiveUploadID() {
         try
         {
-            FindIterable<Document> findIterable = configCollection.find(exists("liveUploadId"));
+            FindIterable<Document> findIterable = configCollection.find(exists("liveUploadID"));
             Iterator<Document> iterator = findIterable.iterator();
             Document doc = iterator.next();
 
-            return doc.getString("liveUploadId");
+            return doc.getString("liveUploadID");
         }
         catch(Exception e)
         {
@@ -83,7 +83,7 @@ public class PlantController {
     // List plants
     public String listPlants(Map<String, String[]> queryParams, String uploadID) {
         Document filterDoc = new Document();
-        filterDoc.append("uploadId", uploadID);
+        filterDoc.append("uploadID", uploadID);
 
         if (queryParams.containsKey("gardenLocation")) {
             String location =(queryParams.get("gardenLocation")[0]);
@@ -137,7 +137,7 @@ public class PlantController {
         try {
 
             jsonPlant = plantCollection.find(and(eq("id", plantID),
-                    eq("uploadId", uploadID)))
+                    eq("uploadID", uploadID)))
                     .projection(fields(include("commonName", "cultivar", "photoLocation")));
 
             Iterator<Document> iterator = jsonPlant.iterator();
@@ -179,7 +179,7 @@ public class PlantController {
 
         Document out = new Document();
 
-        FindIterable document = plantCollection.find(new Document().append("id", plantID).append("uploadId", uploadID));
+        FindIterable document = plantCollection.find(new Document().append("id", plantID).append("uploadID", uploadID));
 
         Iterator iterator = document.iterator();
         if(iterator.hasNext()){
@@ -219,7 +219,7 @@ public class PlantController {
         AggregateIterable<Document> documents
                 = plantCollection.aggregate(
                 Arrays.asList(
-                        Aggregates.match(eq("uploadId", uploadID)), //!! Order is important here
+                        Aggregates.match(eq("uploadID", uploadID)), //!! Order is important here
                         Aggregates.group("$gardenLocation"),
                         Aggregates.sort(Sorts.ascending("_id"))
                 ));
@@ -241,7 +241,7 @@ public class PlantController {
      */
     public String[] getGardenLocations(String uploadID){
         Document filter = new Document();
-        filter.append("uploadId", uploadID);
+        filter.append("uploadID", uploadID);
         DistinctIterable<String>  bedIterator = plantCollection.distinct("gardenLocation", filter, String.class);
         List<String> beds = new ArrayList<String>();
         for(String s : bedIterator)
@@ -270,7 +270,7 @@ public class PlantController {
         }
 
         filterDoc.append("_id", new ObjectId(id));
-        filterDoc.append("uploadId", uploadID);
+        filterDoc.append("uploadID", uploadID);
 
         Document comments = new Document();
         comments.append("comment", comment);
@@ -337,7 +337,7 @@ public class PlantController {
 
         CollectedDataWriter collectedDataWriter = new CollectedDataWriter(outputStream);
 
-        FindIterable<Document> plantFindIterable = plantCollection.find(new Document().append("uploadId", uploadID));
+        FindIterable<Document> plantFindIterable = plantCollection.find(new Document().append("uploadID", uploadID));
         Iterator<Document> plantIterator = plantFindIterable.iterator();
 
         // [0-1, 1-2, ..., 23-24]
@@ -419,7 +419,7 @@ public class PlantController {
             Document filterDoc = new Document();
 
             filterDoc.append("id", plantId);
-            filterDoc.append("uploadId", uploadID);
+            filterDoc.append("uploadID", uploadID);
 
             Iterator<Document> iter = plantCollection.find(filterDoc).iterator();
 
@@ -464,7 +464,7 @@ public class PlantController {
         Document filterDoc = new Document();
         Document returnDoc = new Document();
 
-        filterDoc.append("uploadId", uploadID);
+        filterDoc.append("uploadID", uploadID);
         long deleted = plantCollection.deleteMany(filterDoc).getDeletedCount();
         returnDoc.append("success", deleted != 0);
         returnDoc.append("uploadIds", listUploadIDs());
@@ -518,7 +518,7 @@ public class PlantController {
 
 
         filterDoc.append("_id", objectId);
-        filterDoc.append("uploadId", uploadID);
+        filterDoc.append("uploadID", uploadID);
 
         // Check if the plant with the given 'id' and uploadID exist
         // If not, return null
@@ -639,7 +639,7 @@ public class PlantController {
         }
 
         filterDoc.append("_id", objectId);
-        filterDoc.append("uploadId", uploadID);
+        filterDoc.append("uploadID", uploadID);
 
         Document rating = new Document();
         rating.append("like", like);
@@ -712,7 +712,7 @@ public class PlantController {
         }
 
         filterDoc.append("_id", objectId);
-        filterDoc.append("uploadId", uploadID);
+        filterDoc.append("uploadID", uploadID);
 
         FindIterable findObjectId = plantCollection.find(filterDoc);
 
@@ -740,7 +740,7 @@ public class PlantController {
         AggregateIterable<Document> documents
                 = plantCollection.aggregate(
                 Arrays.asList(
-                        Aggregates.group("$uploadId"),
+                        Aggregates.group("$uploadID"),
                         Aggregates.sort(Sorts.ascending("_id"))
                 ));
         List<String> lst = new LinkedList<>();
@@ -755,7 +755,7 @@ public class PlantController {
 
         Document filterDoc = new Document();
         filterDoc.append("id", plantID);
-        filterDoc.append("uploadId", uploadID);
+        filterDoc.append("uploadID", uploadID);
 
         Document visit = new Document();
         visit.append("visit", new ObjectId());

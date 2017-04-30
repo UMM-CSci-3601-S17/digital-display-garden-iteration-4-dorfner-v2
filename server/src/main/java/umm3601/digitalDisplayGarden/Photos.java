@@ -55,7 +55,7 @@ public class Photos {
 
             Document filterDoc = new Document();
             filterDoc.append("id", plantId);
-            filterDoc.append("uploadId", uploadID);
+            filterDoc.append("uploadID", uploadID);
 
             Document photoLocation = new Document();
             photoLocation.append("photoLocation", relPath);
