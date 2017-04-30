@@ -30,7 +30,7 @@ create a client secret.
 This is the URL that the server thinks visitors will be accessing
 it from. It is important for this to be correct for security reasons,
 and for a couple other things that assume we can create URLs for
-vistors. During development on your local machine, this would be
+visitors. During development on your local machine, this would be
 something like `http://localhost:9000`, but in production, it would
 look something like `https://a.real.website.com`.
 
