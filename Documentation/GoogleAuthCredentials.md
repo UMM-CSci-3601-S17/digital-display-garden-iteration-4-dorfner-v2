@@ -18,8 +18,7 @@ with all your projects. In the upper left of that window, you can associate the 
 with any organizations. Then on the right you can click the "+" button.
 
 This takes you to yet another screen. You will be prompted for your "Project name".
-Administrators of your Digital Display Garden deployment will see this fairly often,
-so make it a reasonable name. (e.g. "Digital Display Garden"). For the Location, leave
+This is an internal name, so use whatever. For the Location, leave
 it at whatever it defaults to. Click "Create". You'll probably land on something that
 _looks_ like an error page. Go ahead and select your newly created project from the
 drop menu in the upper left.
@@ -33,7 +32,8 @@ because we need to be able to ask users for their account information.
 You'll then be prompted to configure the consent screen. Click the button to do so.
 
 Nothing on the consent screen is particularily important from a technical perspective,
-but again make the product name "nice".
+the product name is what administrators of the Digital Display Garden will see during
+authentication, so make it a reasonable name (e.g. "Digital Display Garden").
 
 You'll then be asked to choose an application type. Choose "Web Application".
 
