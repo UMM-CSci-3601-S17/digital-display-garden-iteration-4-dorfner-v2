@@ -25,15 +25,15 @@ public class TestUploadIds {
     }
 
     @Test
-    public void testListingOfUploadIds() throws IOException {
-        String uploadid = plantController.getLiveUploadId();
-        assertEquals("Incorrect uploadID in config", "second uploadId", uploadid);
+    public void testListingOfUploadIDs() throws IOException {
+        String uploadID = plantController.getLiveUploadID();
+        assertEquals("Incorrect uploadID in config", "second uploadId", uploadID);
     }
 
     @Test
-    public void testGetLiveUploadId() throws IOException {
+    public void testGetLiveUploadID() throws IOException {
         String expect = "[ \"first uploadId\" , \"second uploadId\"]";
-        String uploadArr = JSON.serialize(plantController.listUploadIds());
+        String uploadArr = JSON.serialize(plantController.listUploadIDs());
 
         assertEquals("Incorrect distinct uploadIDs", expect, uploadArr);
     }
@@ -47,13 +47,13 @@ public class TestUploadIds {
     }
 
     @Test(expected = IllegalStateException.class)
-    public void testDeleteUploadPreventsRemovalOfLiveUploadId() {
+    public void testDeleteUploadPreventsRemovalOfLiveUploadID() {
         plantController.deleteUploadID("second uploadId");
         assertTrue(false); // this line shouldn't be reached
     }
 
     @Test
-    public void testDeleteUploadIdSucceedsProperly() {
+    public void testDeleteUploadIDSucceedsProperly() {
         Document result = plantController.deleteUploadID("first uploadId");
         assertTrue(result.getBoolean("success"));
         String expectedIDs = "[ \"second uploadId\"]";

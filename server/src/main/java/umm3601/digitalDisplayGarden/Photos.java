@@ -33,13 +33,13 @@ public class Photos {
     }
 
 
-    public boolean saveImage(String plantId, RenderedImage photo, String uploadId){
+    public boolean saveImage(String plantId, RenderedImage photo, String uploadID){
         try {
             if (Files.notExists(Paths.get(".photos/"))){
                 Files.createDirectory(Paths.get(".photos/"));
             }
-            if (Files.notExists(Paths.get(".photos/"+uploadId))) {
-                Files.createDirectory(Paths.get(".photos/"+uploadId));
+            if (Files.notExists(Paths.get(".photos/"+uploadID))) {
+                Files.createDirectory(Paths.get(".photos/"+uploadID));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -47,7 +47,7 @@ public class Photos {
         }
 
         try {
-            String filePath = ".photos/" + uploadId + '/' + plantId + ".jpeg";
+            String filePath = ".photos/" + uploadID + '/' + plantId + ".jpeg";
             File outputFile = new File(filePath);
             String relPath = outputFile.getPath();
             ImageIO.write(photo, "jpeg", outputFile);
@@ -55,7 +55,7 @@ public class Photos {
 
             Document filterDoc = new Document();
             filterDoc.append("id", plantId);
-            filterDoc.append("uploadId", uploadId);
+            filterDoc.append("uploadId", uploadID);
 
             Document photoLocation = new Document();
             photoLocation.append("photoLocation", relPath);

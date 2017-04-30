@@ -63,7 +63,7 @@ public class PlantController {
      * Assumes there is only one liveUploadId in the config collection for any given time.
      * @return a string representation of uploadID in the config collection
      */
-    public String getLiveUploadId() {
+    public String getLiveUploadID() {
         try
         {
             FindIterable<Document> findIterable = configCollection.find(exists("liveUploadId"));
@@ -75,7 +75,7 @@ public class PlantController {
         catch(Exception e)
         {
             e.printStackTrace();
-            System.err.println(" [hint] Database might be empty? Couldn't getLiveUploadId");
+            System.err.println(" [hint] Database might be empty? Couldn't getLiveUploadID");
             throw e;
         }
     }
@@ -458,7 +458,7 @@ public class PlantController {
      */
     public Document deleteUploadID (String uploadID) {
 
-        if (getLiveUploadId().equals(uploadID)) {
+        if (getLiveUploadID().equals(uploadID)) {
             throw new IllegalStateException("The uploadID cannot be deleted because it is the liveUploadID");
         }
         Document filterDoc = new Document();
@@ -467,7 +467,7 @@ public class PlantController {
         filterDoc.append("uploadId", uploadID);
         long deleted = plantCollection.deleteMany(filterDoc).getDeletedCount();
         returnDoc.append("success", deleted != 0);
-        returnDoc.append("uploadIds", listUploadIds());
+        returnDoc.append("uploadIds", listUploadIDs());
 
         deleteDirectory(new File(".photos/" + uploadID));
         return returnDoc;
@@ -736,7 +736,7 @@ public class PlantController {
      *
      * @return a sorted JSON array of all the distinct uploadIDs in plant collection of the DB
      */
-    public List<String> listUploadIds() {
+    public List<String> listUploadIDs() {
         AggregateIterable<Document> documents
                 = plantCollection.aggregate(
                 Arrays.asList(
