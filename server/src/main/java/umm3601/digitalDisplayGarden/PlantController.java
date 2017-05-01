@@ -60,7 +60,7 @@ public class PlantController {
 
     /**
      * Returns a string representation of uploadID in the config collection.
-     * Assumes there is only one liveUploadId in the config collection for any given time.
+     * Assumes there is only one liveUploadID in the config collection for any given time.
      * @return a string representation of uploadID in the config collection
      */
     public String getLiveUploadID() {

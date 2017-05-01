@@ -205,7 +205,7 @@ public class Server {
             return plantController.getGardenLocationsAsJson(plantController.getLiveUploadID());
         });
 
-        // List all uploadIds
+        // List all uploadIDs
         get("api/uploadIDs", (req, res) -> {
             String cookie = req.cookie("ddg");
             if(!auth.authorized(cookie)) {
