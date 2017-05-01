@@ -206,7 +206,7 @@ public class Server {
         });
 
         // List all uploadIds
-        get("api/uploadIds", (req, res) -> {
+        get("api/uploadIDs", (req, res) -> {
             String cookie = req.cookie("ddg");
             if(!auth.authorized(cookie)) {
                 halt(403);
@@ -242,7 +242,7 @@ public class Server {
                 // res.raw().getOutputStream(), the response can no longer be
                 // modified. Since exportCollectedData(..) closes the OutputStream
                 // when it is done, it needs to be the last line of this function.
-                plantController.exportCollectedData(res.raw().getOutputStream(), req.queryMap().toMap().get("uploadId")[0]);
+                plantController.exportCollectedData(res.raw().getOutputStream(), req.queryMap().toMap().get("uploadID")[0]);
                 return res;
             }
         });
@@ -255,7 +255,7 @@ public class Server {
            return res;
         });
 
-        get("api/liveUploadId", (req, res) -> {
+        get("api/liveUploadID", (req, res) -> {
             String cookie = req.cookie("ddg");
             if(!auth.authorized(cookie)) {
                 halt(403);
@@ -348,13 +348,13 @@ public class Server {
             return photos.saveImage(id, photo, plantController.getLiveUploadID());
         });
 
-        delete("api/deleteData/:uploadId", (req, res) -> {
+        delete("api/deleteData/:uploadID", (req, res) -> {
             String cookie = req.cookie("ddg");
             if(!auth.authorized(cookie)) {
                 halt(403);
             }
             res.type("application/json");
-            String uploadID = req.params("uploadId");
+            String uploadID = req.params("uploadID");
             try {
                 return JSON.serialize(plantController.deleteUploadID(uploadID));
             } catch (IllegalStateException e) {

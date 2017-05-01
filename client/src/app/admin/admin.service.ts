@@ -8,11 +8,11 @@ export class AdminService {
     constructor(private http:Http) { }
 
     getUploadIds(): Observable<string[]> {
-        return this.http.request(this.url + "uploadIds", {withCredentials: true}).map(res => res.json());
+        return this.http.request(this.url + "uploadIDs", {withCredentials: true}).map(res => res.json());
     }
 
     getLiveUploadId(): Observable<string> {
-        return this.http.request(this.url + "liveUploadId", {withCredentials: true}).map(res => res.json());
+        return this.http.request(this.url + "liveUploadID", {withCredentials: true}).map(res => res.json());
     }
 
     deleteUploadId(uploadId : string) : Observable<any> {
