@@ -43,7 +43,7 @@ public class TestUploadIDs {
         Document result = plantController.deleteUploadID("foobar doesn't exist");
         assertFalse(result.getBoolean("success"));
         String expectedIDs = "[ \"first uploadId\" , \"second uploadId\"]";
-        assertEquals(expectedIDs, JSON.serialize(result.get("uploadIds")));
+        assertEquals(expectedIDs, JSON.serialize(result.get("uploadIDs")));
     }
 
     @Test(expected = IllegalStateException.class)
@@ -57,6 +57,6 @@ public class TestUploadIDs {
         Document result = plantController.deleteUploadID("first uploadId");
         assertTrue(result.getBoolean("success"));
         String expectedIDs = "[ \"second uploadId\"]";
-        assertEquals(expectedIDs, JSON.serialize(result.get("uploadIds")));
+        assertEquals(expectedIDs, JSON.serialize(result.get("uploadIDs")));
     }
 }
