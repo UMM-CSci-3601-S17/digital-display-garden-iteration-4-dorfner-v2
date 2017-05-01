@@ -7,14 +7,14 @@
                 Data Set
             </div>
         </li>
-        <li *ngFor="let uploadId of uploadIds" class="row list-group-item">
+        <li *ngFor="let uploadID of uploadIDs" class="row list-group-item">
 
             <div class="col-sm-2">
-                {{ uploadId }}
+                {{ uploadID }}
             </div>
             <div class="col-sm-10">
                 <button
-                        *ngIf="uploadId !== this.liveUploadId"
+                        *ngIf="uploadID !== this.liveUploadID"
                         class="btn btn-link"
                         mwlConfirm
                         title="Warning!"
@@ -22,11 +22,11 @@
                         placement="right"
                         confirmText="Proceed"
                         confirmButtonType="danger"
-                        (confirm)="this.delete(uploadId)">
+                        (confirm)="this.delete(uploadID)">
                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                     Delete this data set
                 </button>
-                <button *ngIf="uploadId === this.liveUploadId"
+                <button *ngIf="uploadID === this.liveUploadID"
                         class="btn btn-link disabled"
                         mwlConfirm
                         title="Notice"
