@@ -29,7 +29,7 @@ export class DeleteComponent implements OnInit {
             .subscribe(
                 response => {
                     if (response.success === true) {
-                        this.uploadIds = response.uploadIds;
+                        this.uploadIds = response.uploadIDs;
                     }
                 },
                 err => {

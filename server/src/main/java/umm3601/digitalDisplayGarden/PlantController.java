@@ -467,7 +467,7 @@ public class PlantController {
         filterDoc.append("uploadID", uploadID);
         long deleted = plantCollection.deleteMany(filterDoc).getDeletedCount();
         returnDoc.append("success", deleted != 0);
-        returnDoc.append("uploadIds", listUploadIDs());
+        returnDoc.append("uploadIDs", listUploadIDs());
 
         deleteDirectory(new File(".photos/" + uploadID));
         return returnDoc;

@@ -29,7 +29,7 @@ describe("Delete Component", () => {
 
                 return Observable.of({
                     success: ["upload id 1", "upload id 2"].filter(str => str !== uploadID).length === 1,
-                    uploadIds: ["upload id 1", "upload id 2"].filter(str => str !== uploadID)
+                    uploadIDs: ["upload id 1", "upload id 2"].filter(str => str !== uploadID)
                 });
             },
             authorized: () => {
