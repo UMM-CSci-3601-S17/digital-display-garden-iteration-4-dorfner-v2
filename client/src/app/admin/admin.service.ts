@@ -7,15 +7,15 @@ export class AdminService {
     private url: string = API_URL;
     constructor(private http:Http) { }
 
-    getUploadIds(): Observable<string[]> {
+    getUploadIDs(): Observable<string[]> {
         return this.http.request(this.url + "uploadIDs", {withCredentials: true}).map(res => res.json());
     }
 
-    getLiveUploadId(): Observable<string> {
+    getLiveUploadID(): Observable<string> {
         return this.http.request(this.url + "liveUploadID", {withCredentials: true}).map(res => res.json());
     }
 
-    deleteUploadId(uploadId : string) : Observable<any> {
+    deleteUploadID(uploadId : string) : Observable<any> {
         return this.http.delete(this.url + "deleteData/" + uploadId, {withCredentials: true}).map(res => res.json());
     }
 
