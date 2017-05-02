@@ -4,63 +4,79 @@ Software Design S2017, Iteration 4, Team _dorfner-v2_
 
 This repository is a fork from [Iteration 3 , Team _dorfner_](https://github.com/UMM-CSci-3601-S17/digital-display-garden-iteration-3-dorfner).
 
+
+## Introduction
+This project's main goal is to develop a web application that provides visitors 
+the ability to leave feedback for a local horticulture garden, the West Central Research Outreach Center (WCROC).
+The application includes an administration side that allows certain garden employees to manage the website, and a visitor side
+that allows visitors to view all the beds in the garden, view the plants in those beds, and leave feedback about these plants.
+It is designed in a way that would make it fairly easy to be used by other interested gardens. 
+
+## Key features
+### Administration
+* Upload a spreadsheet of plants and populate a database
+* Delete an existing spreadsheet from the database
+* Export collected visitor feedback to a spreadsheet
+    * Comments
+    * Counts
+        * Visits
+        * Likes/Dislikes
+        * Comments
+    * Visit Timestamps
+        * Hourly
+        * Daily
+* Download QR codes for each bed, and the homepage
+* Upload photos to specific plant pages
+
+### Visitor experience
+* Homepage 
+    * Searchbar 
+    * Bed-list dropdown
+    * Brief overview of the garden
+    * Instructions on how to use the application
+* Bed Pages
+    * List of plants in the current bed
+* Plant Pages
+    * Name of plant
+    * Ability to leave feedback on the plant
+        * Like/Dislike
+        * Leave a comment
+    * Total number of interactions on this plant (Ratings + Comments)
+* Footer
+    * Name and address of the garden
+    * Links to website and social media
+
+
 ## Running your project
 
 See [Documentation/Running.md](./Documentation/Running.md).
 
-## Attempted or Completed Stories
-
-### Stories/Features inherited from previous iterations
-* Leave Comments About a Flower
-* Allow a visitor to rate a flower
-* Display counts of likes and dislikes on visitor website
-* Display counts of comments on visitor website
-* Generate QR Codes
-* Export Feedback to a File (Only plant comments are done)
-* Track the number of times a flower page is visited (Client-side not done)
-* Import Excel Spreadsheet to Database
-* Update comment data to include:
-    * Common name
-    * Cultivar
-    * Bed location
-* Add an URL beneath QR-code
-* Export plant rating
-    * Counts of likes, dislikes, comments, and page views are all exported
-* Change like/dislike counter to a single number
-* Ability to delete old data
-* Add a footer to pages
-* (Epic) Create a homepage that consits of:
-    * A general welcome message 
-    * Ability to search by common name
-    * Bed navigation
-
-### Stories for Iteration 4
-- [] Generate QR-code link for the homepage (_1 jellybean_)
-- [] In the search results, group flowers by bed name then by cultivar (_2 jellybeans_)
-- [] On the bed page, sort flowers by common name, then sort by cultivar (_2 jellybeans_)
-- [] Export of visit timestamps of plants (_2 jellybean_)
-- [] Add feature to cancel like/dislike (_3 jellybeans_)
-- [] Ability for admin to selectively upload pictures for plants (_**8** jellybean_)
-- [] Limit Admin page to authorized WCROC employees (_**10** jellybeans_)
 
 ## Documentation
 * [Excel File Requirements](Documentation/ExcelFileRequirements.md)  
 * [Excel Parser Documentation](Documentation/ExcelParser.md) 
 
-
+## Languages used
+* **Typescript**
+* **Javascript**
+* **Java**
 
 ## Libraries used
 ### Client-Side
 * **Angular 2**
 * **Jasmine** and **Karma** 
+* **Gradle**
 
 ### Server-Side
-* **Java** 
 * **Spark** is used for the server operations
 * **JUnit** is used for testing
 * **Apache POI** is used for importing and exporting data in .xlsx format
 * **zxing** is used for generating QR codes (supports reading them if we want) 
 * **joda** is used for making an unique LiveUploadID
+* **Nimbus** is used for OAuth
+* **scribejava** is used for OAuth
+* **MongoDB** is used as our Database
+* **Gradle**
 
 ## Resources
 
