@@ -15,22 +15,25 @@ in `.gitignore` and thus won't be committed.
 
 This is the Google OAuth2.0 Client ID. It is essentially
 a "username" for their API, but should be kept secret I believe.
-(TODO: document how to get one of these.)
+See [GoogleAuthCredentials](./GoogleAuthCredentials.md) for how to 
+create a client ID.
 
 #### clientSecret
 
 This is the Google OAuth2.0 Client Secret. This is essentially
 a "password" for their API, and MUST be kept secret.
-(TODO: document how to get one of these.)
+See [GoogleAuthCredentials](./GoogleAuthCredentials.md) for how to 
+create a client secret.
 
 #### publicURL
 
 This is the URL that the server thinks visitors will be accessing
 it from. It is important for this to be correct for security reasons,
 and for a couple other things that assume we can create URLs for
-vistors. During development on your local machine, this would be
+visitors. During development on your local machine, this would be
 something like `http://localhost:9000`, but in production, it would
-look something like `https://a.real.website.com`.
+look something like `https://a.real.website.com`. This must _not_
+end in a slash.
 
 #### callbackURL
 

@@ -98,7 +98,7 @@ server {
         listen [::]:443 ssl default_server;
 
         ssl on;
-        ssl_certificate /etc/letsencrypt/live/yourdomainname/cert.pem;
+        ssl_certificate /etc/letsencrypt/live/yourdomainname/fullchain.pem;
         ssl_certificate_key /etc/letsencrypt/live/yourdomainname/privkey.pem;
         
         # create location for certbot to use for 
