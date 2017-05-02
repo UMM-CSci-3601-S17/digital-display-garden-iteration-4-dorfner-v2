@@ -53,14 +53,6 @@ public class TestPhotos {
         assertTrue(foo.exists());
     }
 
-    @Test(expected=IllegalArgumentException.class)
-    public void imageTooLargeTest() throws IOException {
-
-        BufferedImage test1 = new BufferedImage(50000,50000,BufferedImage.TYPE_BYTE_BINARY);
-
-        photos.saveImage("two",test1,"second uploadId");
-    }
-
     @Test
     public void giantLargeTest() throws IOException {
 
