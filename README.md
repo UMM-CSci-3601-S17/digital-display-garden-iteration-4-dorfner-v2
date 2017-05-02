@@ -76,6 +76,7 @@ See [Documentation/Running.md](./Documentation/Running.md).
 * **Nimbus** is used for OAuth
 * **scribejava** is used for OAuth
 * **MongoDB** is used as our Database
+* **Gradle**
 
 ## Resources
 
