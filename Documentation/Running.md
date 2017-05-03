@@ -21,7 +21,7 @@ you will need the following external dependencies
   get a copy of your repository.
 - Use `cd ddg` to move into the directory you just cloned.
 - In `client/webpack.prod.js` a variable `API_URL` is defined. The value should be the URL to your website
-  followed by `/api/`. For example `https://ddg.mygarden.com/api`. (Note the trailing slash!)
+  followed by `/api/`. For example `https://ddg.mygarden.com/api/`. (Note the trailing slash!)
 - This project uses Google OAuth services to authenticate users. Currently, the list of administrators is
    hardcoded in the constructor for 
    `server/src/main/java/umm3601/digitalDisplayGarden/Authentication/Auth.java`. 
