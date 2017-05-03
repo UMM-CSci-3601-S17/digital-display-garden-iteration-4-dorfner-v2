@@ -32,7 +32,7 @@ import javax.servlet.http.Part;
 
 public class Server {
 
-    public static String databaseName = "test";
+    public static String databaseName;
 
     private static String excelTempDir = "/tmp/digital-display-garden";
 
@@ -415,6 +415,10 @@ public class Server {
             callbackURL = props.getProperty("callbackURL");
             if (null == publicURL) {
                 System.err.println("Could not read what url to use for callback from the properties file");
+            }
+            databaseName = props.getProperty("databaseName");
+            if (null == databaseName) {
+                System.err.println("Could not read the Mongo database name properties file");
             }
 
         } catch (FileNotFoundException e) {
