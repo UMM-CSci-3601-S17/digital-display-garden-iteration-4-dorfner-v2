@@ -41,6 +41,12 @@ This is the URL to which Google sends users after we have authenticated
 them. During development, it should look like `http://localhost:2538/callback`.
 During production, it should be the same domain port as `publicURL`, but
 with `/callback` on the end.
+
+#### databaseName
+
+This is the name of the local MongoDB database that the program uses for
+storing all its data.
+
 ## Example file
 
 Here is an example of what such a file would look like:
@@ -54,4 +60,6 @@ clientSecret=notquitesuchalongrandomstring
 publicURL=http://localhost:9000
 # The callback URL of the website
 callbackURL=http://localhost:2538/callback
+# The Mongo database name
+databaseName=test
 ```

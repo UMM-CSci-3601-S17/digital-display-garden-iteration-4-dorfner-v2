@@ -103,6 +103,10 @@ server {
         ssl_certificate /etc/letsencrypt/live/yourdomainname/fullchain.pem;
         ssl_certificate_key /etc/letsencrypt/live/yourdomainname/privkey.pem;
         
+        # raise the limit for request for clients so that we can upload
+        # large images
+        client_max_body_size 300M;
+        
         # create location for certbot to use for 
         # certificate generation
         location /.well-known {
