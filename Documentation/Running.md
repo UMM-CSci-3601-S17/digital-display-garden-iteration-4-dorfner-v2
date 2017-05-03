@@ -32,8 +32,8 @@ you will need the following external dependencies
   which can take a lot of memory. If you wish to skip the tests, use `./gradlew assemble` instead.
 
 ## Running
-- Run `cp build/distributions/server.tar ~` to copy the built version of your server to the home directory.
-- Run `cd ~ to` move into the home directory.
+- Run `cp server/build/distributions/server.tar ~` to copy the built version of your server to the home directory.
+- Run `cd ~` to move into the home directory.
 - Run `tar xvf server.tar` to extract your server tarball.
 - Create a file called `config.properties`. See [ServerConfiguration.md](./ServerConfiguration.md) for what needs to go in the file. 
 - Run `server/bin/server config.properties` to start the server. 
