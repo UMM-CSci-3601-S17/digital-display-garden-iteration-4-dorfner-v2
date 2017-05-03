@@ -1,14 +1,16 @@
 # Using HTTPS with our server
 
-We made the decision to not add any SSL support
-directly to our server. Instead, we placed a simple
-proxy in front of it to handle all of that. Following
-all the instructions in this document should successfully
-redirect all HTTP requests to HTTPS, and cause all HTTPS requests
-to go to our server.
+This document describes how one can use NGINX as a reverse proxy in
+front our server to provide HTTPS and and redirect plain HTTP requests
+to HTTPS. These steps assume that you are running Ubuntu 16.04.2 LTS,
+but should be fairly easy to adapt to similar operating systems. This 
+document also assumes that you will use [certbot](https://certbot.eff.org/)
+ to get certificates from Let's Encrypt. You should configure certbot 
+ to automatically renew these certificates before they expire, but 
+ we don't document that here.
 
 You will need to be logged in as root on your server to perform
-these tasks. These steps assume that you are running Ubuntu 16.04.2 LTS.
+these tasks. 
 
 Throughout this guide, we write "yourdomainname" where you should
 put your domain name, e.g. "example.com" or "morris.umn.edu", etc.

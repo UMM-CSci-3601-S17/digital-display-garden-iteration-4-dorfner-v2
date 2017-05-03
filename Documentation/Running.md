@@ -40,7 +40,7 @@ you will need the following external dependencies
 
 Our server does not have any HTTPS capabilities and will happily serve everything over HTTP. 
 We _strongly_ recommend running this application behind a reverse proxy that provides HTTPS 
-to clients. An example of how to create one using NGINX can be found [here](./Https.md).
+to clients. An example of how to create a reverse proxy using NGINX can be found [here](./Https.md).
 
 After getting the site up and running, the first thing you will want to do is visit the admin
 page and populate the database. See the end user documentation for the formatting requirements
