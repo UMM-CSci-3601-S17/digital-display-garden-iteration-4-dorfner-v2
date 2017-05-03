@@ -131,9 +131,9 @@ public class QRCodes {
             FileWriter fWriter = new FileWriter (outputFile);
             PrintWriter pWriter = new PrintWriter (fWriter);
             for (int i = 0; i < bedURLs.length; i++) {
-                pWriter.println("URL for bed '" + bedNames[i] +"': " + bedURLs[i]);
+                pWriter.print("URL for bed '" + bedNames[i] +"': " + bedURLs[i] + "\r\n");
             }
-            pWriter.println("URL for homepage: " + homeURL);
+            pWriter.print("URL for homepage: " + homeURL + "\r\n");
             pWriter.close();
         } catch(IOException ioe) {
             ioe.printStackTrace();
