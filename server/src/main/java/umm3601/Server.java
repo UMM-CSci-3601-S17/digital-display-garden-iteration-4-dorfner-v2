@@ -175,59 +175,59 @@ public class Server {
         // List plants
         get("api/plants", (req, res) -> {
             res.type("application/json");
-            return plantController.listPlants(req.queryMap().toMap(), plantController.getLiveUploadId());
+            return plantController.listPlants(req.queryMap().toMap(), plantController.getLiveUploadID());
         });
 
         //Get a plant
         get("api/plants/:plantID", (req, res) -> {
             res.type("application/json");
             String id = req.params("plantID");
-            return plantController.getPlantByPlantID(id, plantController.getLiveUploadId(), false);
+            return plantController.getPlantByPlantID(id, plantController.getLiveUploadID(), false);
         });
 
         //Get a plant, WITHOUT leaving a visit count.
         get("api/plants/a/:plantID", (req, res) -> {
             res.type("application/json");
             String id = req.params("plantID");
-            return plantController.getPlantByPlantID(id, plantController.getLiveUploadId(), true);
+            return plantController.getPlantByPlantID(id, plantController.getLiveUploadID(), true);
         });
 
         //Get feedback counts for a plant
         get("api/plants/:plantID/counts", (req, res) -> {
             res.type("application/json");
             String id = req.params("plantID");
-            return plantController.getFeedbackForPlantByPlantID(id, plantController.getLiveUploadId());
+            return plantController.getFeedbackForPlantByPlantID(id, plantController.getLiveUploadID());
         });
 
         //List all Beds
         get("api/gardenLocations", (req, res) -> {
             res.type("application/json");
-            return plantController.getGardenLocationsAsJson(plantController.getLiveUploadId());
+            return plantController.getGardenLocationsAsJson(plantController.getLiveUploadID());
         });
 
-        // List all uploadIds
-        get("api/uploadIds", (req, res) -> {
+        // List all uploadIDs
+        get("api/uploadIDs", (req, res) -> {
             String cookie = req.cookie("ddg");
             if(!auth.authorized(cookie)) {
                 halt(403);
             }
             res.type("application/json");
-            return JSON.serialize(plantController.listUploadIds());
+            return JSON.serialize(plantController.listUploadIDs());
         });
 
         post("api/plants/rate", (req, res) -> {
             res.type("application/json");
-            return JSON.serialize(plantController.addFlowerRating(req.body(), plantController.getLiveUploadId()));
+            return JSON.serialize(plantController.addFlowerRating(req.body(), plantController.getLiveUploadID()));
         });
 
         post("api/plants/changeRate", (req, res) -> {
             res.type("application/json");
-            return plantController.changeRating(req.body(), plantController.getLiveUploadId());
+            return plantController.changeRating(req.body(), plantController.getLiveUploadID());
         });
 
         post("api/plants/deleteRate", (req, res) -> {
             res.type("application/json");
-            return plantController.deleteRating(req.body(), plantController.getLiveUploadId());
+            return plantController.deleteRating(req.body(), plantController.getLiveUploadID());
         });
 
         get("api/export", (req, res) -> {
@@ -242,7 +242,7 @@ public class Server {
                 // res.raw().getOutputStream(), the response can no longer be
                 // modified. Since exportCollectedData(..) closes the OutputStream
                 // when it is done, it needs to be the last line of this function.
-                plantController.exportCollectedData(res.raw().getOutputStream(), req.queryMap().toMap().get("uploadId")[0]);
+                plantController.exportCollectedData(res.raw().getOutputStream(), req.queryMap().toMap().get("uploadID")[0]);
                 return res;
             }
         });
@@ -251,17 +251,17 @@ public class Server {
            res.type("application/png");
            plantController.getImage(res.raw().getOutputStream(),
                                     req.params("plantID"),
-                                   plantController.getLiveUploadId());
+                                   plantController.getLiveUploadID());
            return res;
         });
 
-        get("api/liveUploadId", (req, res) -> {
+        get("api/liveUploadID", (req, res) -> {
             String cookie = req.cookie("ddg");
             if(!auth.authorized(cookie)) {
                 halt(403);
             }
             res.type("application/json");
-            return JSON.serialize(plantController.getLiveUploadId());
+            return JSON.serialize(plantController.getLiveUploadID());
         });
 
 
@@ -273,7 +273,7 @@ public class Server {
             }
             res.type("application/zip");
 
-            String liveUploadID = plantController.getLiveUploadId();
+            String liveUploadID = plantController.getLiveUploadID();
             System.err.println("liveUploadID=" + liveUploadID);
             String zipPath = QRCodes.CreateQRCodes(
                     liveUploadID,
@@ -298,7 +298,7 @@ public class Server {
         // Posting a comment
         post("api/plants/leaveComment", (req, res) -> {
             res.type("application/json");
-            return plantController.addComment(req.body(), plantController.getLiveUploadId());
+            return plantController.addComment(req.body(), plantController.getLiveUploadID());
         });
 
         // Accept an xls file
@@ -318,7 +318,7 @@ public class Server {
 
                 ExcelParser parser = new ExcelParser(part.getInputStream(), databaseName);
 
-                String id = ExcelParser.getAvailableUploadId();
+                String id = ExcelParser.getAvailableUploadID();
                 parser.parseExcel(id);
 
                 return JSON.serialize(id);
@@ -345,16 +345,16 @@ public class Server {
 
             String id = req.params("plantID");
 
-            return photos.saveImage(id, photo, plantController.getLiveUploadId());
+            return photos.saveImage(id, photo, plantController.getLiveUploadID());
         });
 
-        delete("api/deleteData/:uploadId", (req, res) -> {
+        delete("api/deleteData/:uploadID", (req, res) -> {
             String cookie = req.cookie("ddg");
             if(!auth.authorized(cookie)) {
                 halt(403);
             }
             res.type("application/json");
-            String uploadID = req.params("uploadId");
+            String uploadID = req.params("uploadID");
             try {
                 return JSON.serialize(plantController.deleteUploadID(uploadID));
             } catch (IllegalStateException e) {

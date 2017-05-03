@@ -11,8 +11,8 @@ export class ExportComponent implements OnInit {
 
     private url: string = API_URL + "export?uploadId=";
 
-    private uploadIds: string[];
-    private liveUploadId: string;
+    private uploadIDs: string[];
+    private liveUploadID: string;
     authorized: boolean;
 
     constructor(private adminService: AdminService) {
@@ -20,10 +20,10 @@ export class ExportComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.adminService.getUploadIds()
-            .subscribe(result => this.uploadIds = result, err => console.log(err));
-        this.adminService.getLiveUploadId()
-            .subscribe(result => this.liveUploadId = result, err => console.log(err));
+        this.adminService.getUploadIDs()
+            .subscribe(result => this.uploadIDs = result, err => console.log(err));
+        this.adminService.getLiveUploadID()
+            .subscribe(result => this.liveUploadID = result, err => console.log(err));
         this.adminService.authorized().subscribe(authorized => this.authorized = authorized);
 
     }

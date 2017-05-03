@@ -41,7 +41,7 @@ public class TestPlantComment {
         Document filterDoc = new Document();
 
         filterDoc.append("_id", new ObjectId("58d1c36efb0cac4e15afd278"));
-        filterDoc.append("uploadId", "second uploadId");
+        filterDoc.append("uploadID", "second uploadId");
 
         Iterator<Document> iter = plants.find(filterDoc).iterator();
 

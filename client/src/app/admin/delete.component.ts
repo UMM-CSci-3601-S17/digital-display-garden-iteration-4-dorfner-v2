@@ -16,8 +16,8 @@ export class DeleteComponent implements OnInit {
 
     // private url: string = API_URL + "deleteData/";
     authorized: boolean;
-    uploadIds: string[];
-    private liveUploadId: string;
+    uploadIDs: string[];
+    private liveUploadID: string;
 
     constructor(private adminService: AdminService) {
 
@@ -25,11 +25,11 @@ export class DeleteComponent implements OnInit {
 
     delete(uploadID : string)
     {
-        this.adminService.deleteUploadId(uploadID)
+        this.adminService.deleteUploadID(uploadID)
             .subscribe(
                 response => {
                     if (response.success === true) {
-                        this.uploadIds = response.uploadIds;
+                        this.uploadIDs = response.uploadIDs;
                     }
                 },
                 err => {
@@ -41,10 +41,10 @@ export class DeleteComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.adminService.getUploadIds()
-            .subscribe(result => this.uploadIds = result, err => console.log(err));
-        this.adminService.getLiveUploadId()
-            .subscribe(result => this.liveUploadId = result, err => console.log(err));
+        this.adminService.getUploadIDs()
+            .subscribe(result => this.uploadIDs = result, err => console.log(err));
+        this.adminService.getLiveUploadID()
+            .subscribe(result => this.liveUploadID = result, err => console.log(err));
         this.adminService.authorized().subscribe(authorized => this.authorized = authorized);
 
 

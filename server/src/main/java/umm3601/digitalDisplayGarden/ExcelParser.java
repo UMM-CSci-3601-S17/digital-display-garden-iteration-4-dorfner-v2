@@ -39,14 +39,14 @@ public class ExcelParser {
         this.stream = stream;
     }
 
-    public void parseExcel(String uploadId) throws FileNotFoundException{
+    public void parseExcel(String uploadID) throws FileNotFoundException{
 
         String[][] arrayRepresentation = extractFromXLSX(stream);
 
         String[][] horizontallyCollapsed = collapseHorizontally(arrayRepresentation);
         String[][] verticallyCollapsed = collapseVertically(horizontallyCollapsed);
         replaceNulls(verticallyCollapsed);
-        populateDatabase(verticallyCollapsed, uploadId);
+        populateDatabase(verticallyCollapsed, uploadID);
 
     }
 
@@ -190,7 +190,7 @@ public class ExcelParser {
 
     // Moves row by row through the 2D array and adds content for every flower paired with keys into a document
     // Uses the document to one at a time, add flower information into the database.
-    public void populateDatabase(String[][] cellValues, String uploadId){
+    public void populateDatabase(String[][] cellValues, String uploadID){
         MongoClient mongoClient = new MongoClient();
         MongoDatabase test = mongoClient.getDatabase(databaseName);
         MongoCollection plants = test.getCollection("plants");
@@ -213,7 +213,7 @@ public class ExcelParser {
             metadataDoc.append("comments", new BsonArray());
 
             doc.append("metadata", metadataDoc);
-            doc.append("uploadId", uploadId);
+            doc.append("uploadID", uploadID);
             doc.append("photoLocation","");
 
             plants.insertOne(doc);
@@ -222,7 +222,7 @@ public class ExcelParser {
 
 
 
-        setLiveUploadId(uploadId);
+        setLiveUploadID(uploadID);
     }
 
     /*
@@ -260,17 +260,17 @@ public class ExcelParser {
     --------------------------- SERVER UTILITIES -------------------------------
      */
 
-    public void setLiveUploadId(String uploadID){
+    public void setLiveUploadID(String uploadID){
 
         MongoClient mongoClient = new MongoClient();
         MongoDatabase test = mongoClient.getDatabase(databaseName);
         MongoCollection configCollection = test.getCollection("config");
 
-        configCollection.deleteMany(exists("liveUploadId"));
-        configCollection.insertOne(new Document().append("liveUploadId", uploadID));
+        configCollection.deleteMany(exists("liveUploadID"));
+        configCollection.insertOne(new Document().append("liveUploadID", uploadID));
     }
 
-    public static String getAvailableUploadId(){
+    public static String getAvailableUploadID(){
 
         StringBuilder sb = new StringBuilder();
         // Send all output to the Appendable object sb

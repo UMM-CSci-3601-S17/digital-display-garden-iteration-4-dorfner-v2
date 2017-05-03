@@ -44,7 +44,7 @@ public class QRCodes {
      * @return the path to the new .zip file or null if there was a disk IO issue
      */
 
-    public static String CreateQRCodes(String uploadId, String bedNames[], String urlPrefix){
+    public static String CreateQRCodes(String uploadID, String bedNames[], String urlPrefix){
         //Get all unique beds from Database
         //Create URLs for all unique beds
         //Create QRCode BufferedImages for all URLs
@@ -147,7 +147,7 @@ public class QRCodes {
 
         final int BUFFER_SIZE = 2048;
 
-        String zipPath = "QR Code Export " + uploadId + ".zip";
+        String zipPath = "QR Code Export " + uploadID + ".zip";
 
         System.err.println("ExportPath=" + zipPath);
 
