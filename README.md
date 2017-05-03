@@ -53,8 +53,8 @@ See [Documentation/Running.md](./Documentation/Running.md).
 
 
 ## Documentation
-* [Excel File Requirements](Documentation/ExcelFileRequirements.md)  
-* [Excel Parser Documentation](Documentation/ExcelParser.md) 
+See the [Administration Guide](./Documentation/AdministrationGuideforDigitalDisplayGarden.docx.docx)
+for a brief overview of how to use the site after you have it up and running.
 
 ## Languages used
 * **Typescript**
