@@ -32,7 +32,7 @@ import javax.servlet.http.Part;
 
 public class Server {
 
-    public static String databaseName = "test";
+    public static String databaseName;
 
     private static String excelTempDir = "/tmp/digital-display-garden";
 
@@ -403,18 +403,27 @@ public class Server {
             clientId = props.getProperty("clientID");
             if (null == clientId) {
                 System.err.println("Could not read Google OAuth Client ID (clientID) from properties file");
+                System.exit(1);
             }
             clientSecret = props.getProperty("clientSecret");
             if (null == clientSecret) {
-                System.err.println("Could not read Google OAuth Client secret (clientSecretz) from properties file");
+                System.err.println("Could not read Google OAuth Client secret (clientSecret) from properties file");
+                System.exit(1);
             }
             publicURL = props.getProperty("publicURL");
             if (null == publicURL) {
                 System.err.println("Could not read what url visitors access us at from the properties file");
+                System.exit(1);
             }
             callbackURL = props.getProperty("callbackURL");
             if (null == publicURL) {
                 System.err.println("Could not read what url to use for callback from the properties file");
+                System.exit(1);
+            }
+            databaseName = props.getProperty("databaseName");
+            if (null == databaseName) {
+                System.err.println("Could not read the Mongo database name properties file");
+                System.exit(1);
             }
 
         } catch (FileNotFoundException e) {
