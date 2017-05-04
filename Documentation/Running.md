@@ -43,7 +43,7 @@ We _strongly_ recommend running this application behind a reverse proxy that pro
 to clients. An example of how to create a reverse proxy using NGINX can be found [here](./Https.md).
 
 _**Warning**: the `DISPLAY` environment variable must either be unset or refer to a working X11 server. 
-If it refers to the non-existent X11 server, the server will fail when attempting to export
+If it refers to a non-existent X11 server, the server will fail when attempting to export
 collected data._
 
 After getting the site up and running, the first thing you will want to do is visit the admin
