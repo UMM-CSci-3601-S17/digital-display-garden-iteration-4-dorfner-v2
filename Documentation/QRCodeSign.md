@@ -1,9 +1,8 @@
 **Instructions**
 
-**There are two simple ways that a visitor can get to the _application_:**
+**There are two simple ways that a visitor can get to the application:**
  
  1. Use this URL on your browser
-
  2. Scan a bed's QR code (located next to each bed)
 
 **How to scan QR codes:**
