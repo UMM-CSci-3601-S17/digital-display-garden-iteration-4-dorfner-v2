@@ -1,51 +1,36 @@
 # WCROC Horticulture Display Garden Mobile Application and Administration Management
 
 ## User interface
-This application was created to allow the visitors to engage with the garden, and leave feedback. Visitors can navigate the plants virtually and leave comments on the ones that are the most interesting to them. The application also allows for the user to like or dislike the flowers. 
+This application was created to allow visitors to engage with the garden, and leave feedback. The feedback can 
+be used to help the Horticulturalists know which plants are popular and improve visitor experience.
 
-**There are two simple ways that a visitor can get to the _application_:**
+**There are two ways a visitor can access the application:**
 
-1. Enter homepage URL
+* Type a URL into a browser
+* Scan a QR code
 
-**or**
-2. Scan a bed's QR code (located next to each bed)
+You can enter the application at a bed or the homepage. 
 
-<br>
-<br>
-<br>
+**From the homepage, there are two ways a visitor can get to a flower:**
+* Use search bar to filter by a certain Common Name 
+* Use bed's dropdown menu to go to a bed that contains the flower
 
-**Then there are two ways that a visitor can get to a specific _flower_, from the homepage:**
-1. Search by common name on the search bar in the homepage
-<br>
-<br>
-   > There is a 'Find a flower' search bar that lets the user search for plants by their _Common name_ which are then displayed in order of beds.
-
-**or**
-2. Use bed's dropdown menu to go from a bed to a list of flowers
-<br>
-<br>
-<br>
-
-
-Once the visitor is in a specific flower page, they can then rate the flower by liking or disliking it, and/or leaving a comment. 
-<br>
-<br>
-The app is meant to help Steve and Esther gather information on preferences and suggestions about the garden. At the bottom of all the pages in the application, there are links to social media and to the WCROC official website.
+Once the visitor is at a flower, they have the option of liking or disliking it, and/or leaving a comment. 
 
 ## Administration side
 
-The admin side has features that only authorized WCROC staff can utilize. 
-<br>These features include: 
-* Import a spreadsheet with appropriate data (.xlsx)
+The administration side has features that are only accessible by authorized WCROC staff.
+These features provide a simple way for administrators to interact with the system and include:
+ 
+* Importing a spreadsheet with appropriate data (.xlsx)
     * Re-populating data with new spreadsheet annually 
-* Export data with four tabs:
+* Exporting data to an Excel file with four tabs:
     * Comments
-    * Counts (likes, dislikes, visits, and comments)
-    * Hourly timestamps 
-    * Daily timestamps (how visitors per day)
-* Generate and download QR codes for each bed
-* Upload an image for individually plants 
-    * Selectively by plant ID
-* Delete previous data
+    * Counts (number of likes, dislikes, visits, and comments for each plant)
+    * Hourly timestamps (shows what time visitors are in garden)
+    * Daily timestamps (shows number of visits for each day of the year)
+* Generating and downloading QR codes for each bed
+* Uploading an image for individual plants by plant ID 
+* Deleting previous data
 
-These features were created to help organize information, and connect them to specific times and dates.
+
