@@ -22,8 +22,6 @@
     * Some methods are not properly tested
     * The server sends the entire plant object each time the client
      requests the plant. This is not secure and only the Bed number, common name, and cultivar name 
-     need to be shared)
-    * the file "urls.txt" within the downloaded "QR Code Export" folder uses linux-specific line endings
-     and therefore causes the text file to be displayed as one line when viewed on Windows
+     need to be shared
     * On the import spreadsheet page, an unhelpful "File upload failed." This could be a more helpful message.
     * Once a bed is chosen, there is no obvious way to go back to having no bed selected.
