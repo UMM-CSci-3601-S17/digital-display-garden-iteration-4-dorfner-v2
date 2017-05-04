@@ -42,6 +42,10 @@ Our server does not have any HTTPS capabilities and will happily serve everythin
 We _strongly_ recommend running this application behind a reverse proxy that provides HTTPS 
 to clients. An example of how to create a reverse proxy using NGINX can be found [here](./Https.md).
 
+_**Warning**: the `DISPLAY` environment variable must either be unset or refer to a working X11 server. 
+If it refers to the non-existent X11 server, the server will fail when attempting to export
+collected data._
+
 After getting the site up and running, the first thing you will want to do is visit the admin
 page and populate the database. See the end user documentation for the formatting requirements
 on the file that you import.
