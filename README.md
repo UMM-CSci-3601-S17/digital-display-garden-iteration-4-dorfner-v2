@@ -96,4 +96,4 @@ for a brief overview of how to use the site after you have it up and running.
 
 
   
-_This project was developed as a part of Software Design course at University of Minnesota, Morris._
+_This project was developed as a part of a Software Design class at University of Minnesota, Morris._
