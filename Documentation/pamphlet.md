@@ -4,18 +4,18 @@
 This application was created to allow visitors to engage with the garden, and leave feedback. The feedback can 
 be used to help the Horticulturalists know which plants are popular and improve visitor experience.
 
-**There are two simple ways that a visitor can use to get to the application:**
+**There are two ways a visitor can access the application:**
 
 * Type a URL into a browser
 * Scan a QR code
 
-You can enter the application at either a bed or the homepage. 
+You can enter the application at a bed or the homepage. 
 
-**From the homepage, there are two ways that a visitor can get to a flower:**
+**From the homepage, there are two ways a visitor can get to a flower:**
 * Use search bar to filter by a certain Common Name 
 * Use bed's dropdown menu to go to a bed that contains the flower
 
-Once the visitor is at a flower, they can rate the flower by liking or disliking it, and/or leaving a comment. 
+Once the visitor is at a flower, they have the option of liking or disliking it, and/or leaving a comment. 
 
 ## Administration side
 
