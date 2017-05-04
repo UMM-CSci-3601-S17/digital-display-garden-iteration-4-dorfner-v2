@@ -1,11 +1,10 @@
-# Digital Display Garden
-[![Build Status](https://travis-ci.org/UMM-CSci-3601-S17/digital-display-garden-iteration-4-dorfner-v2.svg?branch=master)](https://travis-ci.org/UMM-CSci-3601-S17/digital-display-garden-iteration-4-dorfner-v2)
-Software Design S2017, Iteration 4, Team _dorfner-v2_ 
+# Digital Display Garden[![Build Status](https://travis-ci.org/UMM-CSci-3601-S17/digital-display-garden-iteration-4-dorfner-v2.svg?branch=master)](https://travis-ci.org/UMM-CSci-3601-S17/digital-display-garden-iteration-4-dorfner-v2)
+Software Design S2017, Iteration 4, Team _dorfner-v2_  
 
 This repository is a fork from [Iteration 3 , Team _dorfner_](https://github.com/UMM-CSci-3601-S17/digital-display-garden-iteration-3-dorfner).
 
 
-## Introduction
+## Introduction :tulip:
 This project's main goal is to develop a web application that provides visitors 
 the ability to leave feedback for a local horticulture garden, the West Central Research Outreach Center (WCROC).
 The application includes an administration side that allows certain garden employees to manage the website, and a visitor side
@@ -38,6 +37,7 @@ It is designed in a way that would make it fairly easy to be used by other inter
     * List of plants in the current bed
 * Plant Pages
     * Name of plant
+    * Uploaded picture
     * Ability to leave feedback on the plant
         * Like/Dislike
         * Leave a comment
@@ -93,3 +93,7 @@ for a brief overview of how to use the site after you have it up and running.
 [whats-webpack]: https://webpack.github.io/docs/what-is-webpack.html
 [bootstrap]: https://getbootstrap.com/components/ 
 [mongo-jdbc]: https://docs.mongodb.com/ecosystem/drivers/java/ 
+
+
+  
+_This project was developed as a part of Software Design course at University of Minnesota, Morris._
