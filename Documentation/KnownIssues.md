@@ -1,4 +1,4 @@
-##LIST OF KNOWN ISSUES
+## LIST OF KNOWN ISSUES
 
 * Plant Comments
     * Our system does not limit the comment size.
