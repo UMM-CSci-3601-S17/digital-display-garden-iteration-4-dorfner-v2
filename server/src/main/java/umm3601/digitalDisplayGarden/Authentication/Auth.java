@@ -72,19 +72,9 @@ public class Auth {
         this.clientSecret = clientSecret;
         this.gson = new Gson();
         this.authUsers = new ArrayList<>();
-        // todo: trim this list in June 2017
-        authUsers.add("gordo580@morris.umn.edu");
-        authUsers.add("schr1230@morris.umn.edu");
-        authUsers.add("songx823@morris.umn.edu");
-        authUsers.add("ferri082@morris.umn.edu");
-        authUsers.add("hoff0899@morris.umn.edu");
-        authUsers.add("lopez477@morris.umn.edu");
-        authUsers.add("chen4709@morris.umn.edu");
-        authUsers.add("mitch809@morris.umn.edu");
-        authUsers.add("ejordan@umn.edu");
-        authUsers.add("poppesr@umn.edu");
-        authUsers.add("lamberty@morris.umn.edu");
-        authUsers.add("mcphee@morris.umn.edu");
+        // TODO: this is where authorized users are hardcoded
+        // The email address must be one managed by Google
+        //authUsers.add("example-user@gmail.com");
         this.globalService = new ServiceBuilder()
                 .apiKey(clientId)
                 .apiSecret(clientSecret)
